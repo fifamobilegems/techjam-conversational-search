@@ -213,6 +213,8 @@ class HeuristicTurnExtractor:
             raw_value = _clean(value)
             cleaned = raw_value
             if attribute == "color":
+                # Preserve labelled catalog wording such as "color: grey".
+                # Only a standalone noisy colour alias is safe to canonicalize.
                 cleaned = COLOR_ALIASES.get(raw_value.lower(), raw_value.lower())
             elif attribute == "use_case":
                 cleaned = USE_CASE_ALIASES.get(raw_value.lower(), raw_value.lower())

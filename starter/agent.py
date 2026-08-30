@@ -66,6 +66,8 @@ class Agent:
             raise RuntimeError("reset must be called before respond")
 
         current_state = self.manager.get(session_id)
+        previous_constraints = dict(current_state.slots)
+        previous_no_preference = sorted(current_state.no_preference)
         extracted = self.extractor.extract(user_message, current_state)
         self.manager.update(session_id, extracted, turn)
         state = self.manager.export(session_id)
@@ -85,6 +87,7 @@ class Agent:
                     state["constraints"],
                     state["no_preference"],
                     top_k=top_k,
+                    raw_constraints=state["raw_constraints"],
                 )
             ]
         else:
@@ -103,8 +106,20 @@ class Agent:
             "user_message": user_message,
             "search_query": state["search_query"],
             "constraints": state["constraints"],
+            "previous_constraints": previous_constraints,
             "raw_constraints": state["raw_constraints"],
             "no_preference": state["no_preference"],
+            "previous_no_preference": previous_no_preference,
+            "extracted_operations": [
+                {
+                    "attribute": item.attribute,
+                    "action": item.action,
+                    "value": item.value,
+                    "raw_text": item.raw_text,
+                }
+                for item in extracted.operations
+            ],
+            "information_exhausted": extracted.information_exhausted,
             "ask_attribute": ask_attribute,
             "should_emit_recommendations": state["should_emit_recommendations"],
             "recommendations": [item["parent_asin"] for item in recommendations],

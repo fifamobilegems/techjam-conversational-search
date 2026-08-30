@@ -39,9 +39,26 @@ produced:
 The candidate trace found four misses. Every target was inside BM25's top-500
 (ranks 98, 135, 273, and 376) but ended at rerank positions 28--146. That
 rules out spending time on a larger candidate pool as the first next step.
-The strongest next experiment is a small, isolated reranker change that
-downweights boilerplate feature phrases such as `Imported`, `Pull On closure`,
-and `Zipper closure`; rerun the public evaluator after each change.
+The next experiment after the validated override fix is targeted boilerplate
+filtering for phrases such as `Imported`, `Pull On closure`, and `Zipper
+closure`; it must remain isolated and be evaluated independently.
+
+## Validated override reranker fix
+
+The first broad raw-phrase and boilerplate-filter experiment regressed the
+score to `0.869195`, so it was rejected. The narrow version retains only
+**demoted** multi-token spans after an override, at their state-manager weight
+(`0.4`), and leaves ordinary historic spans alone. It produced:
+
+- Hit@10: `0.990`
+- MRR: `0.783768`
+- MTTC: `2.40`
+- technical score: `0.902130`
+- reported model tokens: `0`
+
+This path is on by default. Set `RERANK_RAW_PHRASES=0` only to reproduce the
+older no-demoted-span baseline. `RERANK_FILTER_BOILERPLATE=1` remains an
+experimental A/B switch and is off by default.
 
 ## Important unresolved gaps
 
@@ -81,3 +98,7 @@ python scripts/analyze_trace.py debug/deterministic_trace.jsonl results.json dat
 
 Candidate IDs make the trace considerably larger.  Turn off
 `AGENT_TRACE_CANDIDATES` for ordinary runs.  The log path is ignored by Git.
+With candidate tracing enabled, each miss now includes the target's score
+components and the same components for rank 1 and rank 10, plus a per-turn
+extraction/state timeline. The analyzer recomputes those three explanations
+from `data/catalog.jsonl`; it refuses a gz catalog path.
