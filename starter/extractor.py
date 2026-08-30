@@ -16,6 +16,7 @@ MATERIALS = {
     "silk",
     "rayon",
     "fabric",
+    "alloy",
 }
 
 COLORS = {
@@ -32,6 +33,9 @@ COLORS = {
     "yellow",
     "orange",
 }
+
+COLOR_ALIASES = {"navy": "blue", "beige": "brown", "tan": "brown", "grey": "gray"}
+USE_CASE_ALIASES = {"jogging": "running"}
 
 ATTRIBUTE_WORDS = (
     "category",
@@ -152,6 +156,10 @@ def _last_non_category_attribute(state: object | None) -> str | None:
 
 def classify_constraint(value: str) -> str:
     lowered = value.lower()
+    if re.search(r"\bmaterial\s*:", lowered):
+        return "material"
+    if re.search(r"\bcolou?r\s*:", lowered):
+        return "color"
     if "budget" in lowered or re.search(r"(?:\$|<=|<|under|below|less than|around)\s*\d", lowered):
         return "budget"
     if _first_word_match(MATERIALS, lowered):
@@ -184,7 +192,9 @@ class HeuristicTurnExtractor:
             for phrase in ("actually", "instead", "ignore earlier", "ignore my earlier")
         )
 
-        def add_operation(attribute: str, action: str, value: str | None = None) -> None:
+        def add_operation(
+            attribute: str, action: str, value: str | None = None, raw_text: str | None = None
+        ) -> None:
             cleaned = _clean(value or "") if value is not None else None
             key = (attribute, action, cleaned or "")
             if key in seen:
@@ -195,12 +205,19 @@ class HeuristicTurnExtractor:
                     attribute=attribute,
                     action=action,
                     value=cleaned,
-                    raw_text=cleaned,
+                    raw_text=_clean(raw_text or cleaned or "") or None,
                 )
             )
 
         def add_set(attribute: str, value: str) -> None:
-            cleaned = _clean(value)
+            raw_value = _clean(value)
+            cleaned = raw_value
+            if attribute == "color":
+                # Preserve labelled catalog wording such as "color: grey".
+                # Only a standalone noisy colour alias is safe to canonicalize.
+                cleaned = COLOR_ALIASES.get(raw_value.lower(), raw_value.lower())
+            elif attribute == "use_case":
+                cleaned = USE_CASE_ALIASES.get(raw_value.lower(), raw_value.lower())
             if (
                 override_requested
                 and attribute != "category"
@@ -208,7 +225,7 @@ class HeuristicTurnExtractor:
                 and str(slots[attribute]) != cleaned
             ):
                 add_operation(attribute, "demote", str(slots[attribute]))
-            add_operation(attribute, "set", cleaned)
+            add_operation(attribute, "set", cleaned, raw_value)
 
         def has_set(attribute: str) -> bool:
             return any(item.attribute == attribute and item.action == "set" for item in operations)
@@ -305,7 +322,7 @@ class HeuristicTurnExtractor:
                         direct_need_spans.append(value)
 
         for value in direct_need_spans:
-            color = _first_word_match(COLORS, value)
+            color = _first_word_match(COLORS | set(COLOR_ALIASES), value)
             if color:
                 add_set("color", color)
 
@@ -313,7 +330,7 @@ class HeuristicTurnExtractor:
             if material:
                 add_set("material", material)
 
-            use_case = _first_word_match(USE_CASE_WORDS, value)
+            use_case = _first_word_match(USE_CASE_WORDS | set(USE_CASE_ALIASES), value)
             if use_case:
                 add_set("use_case", use_case)
 
@@ -333,7 +350,7 @@ class HeuristicTurnExtractor:
             ):
                 add_set("budget", _clean(budget_match.group(0)))
 
-            color = _first_word_match(COLORS, user_message)
+            color = _first_word_match(COLORS | set(COLOR_ALIASES), user_message)
             if color and not has_set("color"):
                 add_set("color", color)
 

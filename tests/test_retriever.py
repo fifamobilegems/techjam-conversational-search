@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from starter.retriever import CatalogRetriever
 
@@ -64,6 +66,9 @@ class RetrieverTest(unittest.TestCase):
                 top_k=3,
             )
             self.assertEqual(result[0], "B")
+            explanation = retriever.last_diagnostics["candidate_scores"]["B"]
+            self.assertIn("final_score", explanation)
+            self.assertIn("material", explanation["constraint_details"])
 
     def test_budget_penalizes_clearly_expensive_products(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -99,6 +104,25 @@ class RetrieverTest(unittest.TestCase):
             self.assertLessEqual(len(result), 10)
             self.assertEqual(len(result), len(set(result)))
             self.assertTrue(set(result).issubset({"A", "B", "C"}))
+
+    def test_boilerplate_is_neutral_and_demoted_raw_evidence_is_scored(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            with patch.dict(os.environ, {
+                "RERANK_FILTER_BOILERPLATE": "1",
+                "RERANK_RAW_PHRASES": "1",
+            }):
+                retriever = CatalogRetriever(write_catalog(Path(directory)))
+            retriever.retrieve_and_rerank(
+                "black boot imported",
+                {"feature": "Imported", "category": "boots"},
+                raw_constraints=[
+                    {"attribute": "feature", "match_phrase": "warm lining", "weight": 0.4}
+                ],
+                top_k=3,
+            )
+            details = retriever.last_diagnostics["candidate_scores"]["B"]["constraint_details"]
+            self.assertEqual(details["feature"], 0.0)
+            self.assertEqual(details["raw:feature:warm lining"], 7.2)
 
 
 if __name__ == "__main__":
