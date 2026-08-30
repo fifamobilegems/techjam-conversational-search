@@ -74,6 +74,17 @@ class ExtractorTest(unittest.TestCase):
         )
         self.assertIsNone(extracted.scenario)
 
+    def test_normalizes_noisy_aliases_without_losing_raw_evidence(self) -> None:
+        extracted = HeuristicTurnExtractor().extract("I need navy jogging shoes")
+        actions = {item.attribute: item for item in extracted.operations if item.action == "set"}
+        self.assertEqual(actions["color"].value, "blue")
+        self.assertEqual(actions["color"].raw_text, "navy")
+        self.assertEqual(actions["use_case"].value, "running")
+
+    def test_material_label_is_not_misclassified_as_feature(self) -> None:
+        extracted = HeuristicTurnExtractor().extract("What matters is: Material:alloy")
+        self.assertIn(("material", "set", "Material:alloy"), operations_of(extracted))
+
 
 if __name__ == "__main__":
     unittest.main()

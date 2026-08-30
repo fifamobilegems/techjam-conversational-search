@@ -173,6 +173,10 @@ class ConversationState:
         default_factory=list
     )
 
+    # Compact transcript for optional model extraction and trace inspection.
+    # Retrieval still consumes only explicit constraints, never free-form chat.
+    messages: list[dict] = field(default_factory=list)
+
     def record_span(
         self,
         attribute: str,
@@ -566,6 +570,14 @@ class StateManager:
             attribute
         )
 
+    def record_message(self, session_id: str, role: str, content: str, turn: int) -> None:
+        """Keep a bounded, non-authoritative transcript for the LLM/debugger."""
+        if role not in {"user", "assistant"}:
+            return
+        state = self.get(session_id)
+        state.messages.append({"turn": turn, "role": role, "content": str(content)[:600]})
+        del state.messages[:-20]
+
     def get_missing_attributes(
         self,
         session_id: str,
@@ -832,4 +844,5 @@ class StateManager:
                 decision["should_emit_recommendations"],
 
             "turn": state.turn,
+            "conversation": [dict(message) for message in state.messages],
         }

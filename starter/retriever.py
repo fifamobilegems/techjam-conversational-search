@@ -3,6 +3,7 @@ from __future__ import annotations
 import gzip
 import json
 import math
+import os
 import re
 import sqlite3
 from dataclasses import dataclass
@@ -73,6 +74,18 @@ MATERIALS = {
     "fabric",
 }
 
+# These are ubiquitous listing fields, not meaningful differentiators.  A
+# product should not receive a feature bonus merely for being "Imported".
+BOILERPLATE_PHRASES = {
+    "imported",
+    "machine wash",
+    "pull on closure",
+    "zipper closure",
+    "button closure",
+    "snap closure",
+    "hook and eye closure",
+}
+
 FIELD_WEIGHTS = (0.0, 6.0, 5.0, 4.0, 2.5, 3.0, 1.0, 1.5)
 
 
@@ -115,11 +128,27 @@ def _normalized_text(text: str) -> str:
     return " ".join(_terms(text))
 
 
+def _is_boilerplate(value: object) -> bool:
+    return _normalized_text(str(value)) in BOILERPLATE_PHRASES
+
+
+def _remove_boilerplate(text: str) -> str:
+    result = text
+    for phrase in BOILERPLATE_PHRASES:
+        result = re.sub(rf"\b{re.escape(phrase)}\b", " ", result, flags=re.IGNORECASE)
+    return re.sub(r"\s+", " ", result).strip()
+
+
 def _match_strength(value: object, text: str) -> float:
     needle = _normalized_text(str(value))
+    haystack = _normalized_text(text)
+    return _match_strength_normalized(needle, haystack)
+
+
+def _match_strength_normalized(needle: str, haystack: str) -> float:
+    """Match already-normalized strings; avoids repeated catalog tokenization."""
     if not needle:
         return 0.0
-    haystack = _normalized_text(text)
     if not haystack:
         return 0.0
     if needle in haystack:
@@ -167,10 +196,20 @@ class CatalogRetriever:
     def __init__(self, catalog_path: str | Path = "data/catalog.jsonl", candidate_limit: int = 500) -> None:
         self.catalog_path = Path(catalog_path)
         self.candidate_limit = candidate_limit
+        # The narrow demoted-span route is the validated override fix. The
+        # broader boilerplate filter remains opt-in because it regressed the
+        # public score in its first full-corpus test.
+        self.enable_boilerplate_filter = os.environ.get("RERANK_FILTER_BOILERPLATE", "").lower() in {
+            "1", "true", "yes"
+        }
+        self.enable_raw_phrase_scoring = os.environ.get("RERANK_RAW_PHRASES", "1").lower() in {
+            "1", "true", "yes"
+        }
         self.connection = sqlite3.connect(":memory:")
         self.products: dict[str, ProductRecord] = {}
         self.valid_ids: set[str] = set()
         self.popular_ids: list[str] = []
+        self.last_diagnostics: dict[str, object] = {}
         self._build()
 
     def retrieve_and_rerank(
@@ -180,6 +219,7 @@ class CatalogRetriever:
         no_preference: Iterable[str] = (),
         raw_constraints: Iterable[dict] = (),
         top_k: int = 10,
+        raw_constraints: Iterable[dict] = (),
     ) -> list[str]:
         no_preference_set = {str(item) for item in no_preference}
         active_constraints = {
@@ -187,11 +227,17 @@ class CatalogRetriever:
             for key, value in constraints.items()
             if key not in no_preference_set and value not in (None, "", [])
         }
-        evidence = self._usable_evidence(raw_constraints, no_preference_set)
-        query_text = self._query_text(search_query, active_constraints, evidence)
-        candidate_scores: dict[str, dict[str, float | int | None]] = {}
+        active_raw_constraints = [
+            dict(span)
+            for span in raw_constraints
+            if isinstance(span, dict)
+            and str(span.get("attribute", "")) not in no_preference_set
+        ]
+        query_text = self._query_text(search_query, active_constraints)
+        candidate_scores: dict[str, dict[str, object]] = {}
 
-        for rank, parent_asin in enumerate(self._bm25_search(query_text), start=1):
+        bm25_ids = self._bm25_search(query_text)
+        for rank, parent_asin in enumerate(bm25_ids, start=1):
             candidate = candidate_scores.setdefault(
                 parent_asin,
                 {"bm25_rank": None, "fusion_score": 0.0, "constraint_score": 0.0, "quality_score": 0.0},
@@ -204,16 +250,34 @@ class CatalogRetriever:
         ranked: list[tuple[str, float]] = []
         for parent_asin, scores in candidate_scores.items():
             record = self.products[parent_asin]
-            constraint_score = self._constraint_score(record, active_constraints)
-            constraint_score += self._evidence_score(record, evidence)
+            constraint_details = self._constraint_score_details(record, active_constraints)
+            if self.enable_raw_phrase_scoring:
+                raw_details = self._raw_constraint_score_details(
+                    record, active_constraints, active_raw_constraints
+                )
+                constraint_details.update(raw_details)
+            constraint_score = sum(constraint_details.values())
             quality_score = self._quality_score(record)
             final_score = float(scores["fusion_score"]) + constraint_score + quality_score
             scores["constraint_score"] = constraint_score
+            scores["constraint_details"] = constraint_details
             scores["quality_score"] = quality_score
+            scores["final_score"] = final_score
             ranked.append((parent_asin, final_score))
 
         ranked.sort(key=lambda item: item[1], reverse=True)
-        return self._sanitize([parent_asin for parent_asin, _ in ranked], top_k)
+        ranked_ids = [parent_asin for parent_asin, _ in ranked]
+        self.last_diagnostics = {
+            "query_text": query_text,
+            "candidate_count": len(candidate_scores),
+            "bm25_candidate_ids": bm25_ids,
+            "candidate_ids": ranked_ids,
+            # Retained in memory for local inspection. The trace deliberately
+            # does not serialize this 500-product mapping every turn; the
+            # offline analyzer recomputes just the three relevant products.
+            "candidate_scores": candidate_scores,
+        }
+        return self._sanitize(ranked_ids, top_k)
 
     def _build(self) -> None:
         cursor = self.connection.cursor()
@@ -292,10 +356,15 @@ class CatalogRetriever:
             all_terms=frozenset(_terms(all_text)),
         )
 
-    def _query_text(self, search_query: str, constraints: dict, evidence: Iterable[dict] = ()) -> str:
-        parts = [search_query]
-        parts.extend(str(value) for value in constraints.values() if value not in (None, "", []))
-        parts.extend(str(item["text"]) for item in evidence)
+    def _query_text(self, search_query: str, constraints: dict) -> str:
+        clean = _remove_boilerplate if self.enable_boilerplate_filter else str
+        parts = [clean(search_query)]
+        parts.extend(
+            clean(str(value))
+            for value in constraints.values()
+            if value not in (None, "", [])
+            and (not self.enable_boilerplate_filter or not _is_boilerplate(value))
+        )
         return " ".join(part for part in parts if part).strip()
 
     def _usable_evidence(self, raw_constraints: Iterable[dict], no_preference: set[str]) -> list[dict]:
@@ -360,7 +429,7 @@ class CatalogRetriever:
         ).fetchall()
         return [str(row[0]) for row in rows]
 
-    def _add_popular_backfill(self, candidate_scores: dict[str, dict[str, float | int | None]]) -> None:
+    def _add_popular_backfill(self, candidate_scores: dict[str, dict[str, object]]) -> None:
         needed = max(0, min(self.candidate_limit, 50) - len(candidate_scores))
         if needed == 0:
             return
@@ -379,29 +448,100 @@ class CatalogRetriever:
                 break
 
     def _constraint_score(self, record: ProductRecord, constraints: dict) -> float:
-        score = 0.0
+        return sum(self._constraint_score_details(record, constraints).values())
+
+    def explain_candidate(
+        self,
+        parent_asin: str,
+        constraints: dict,
+        bm25_rank: int | None,
+        raw_constraints: Iterable[dict] = (),
+    ) -> dict[str, object] | None:
+        """Return deterministic score components for offline debugging only."""
+        record = self.products.get(parent_asin)
+        if record is None:
+            return None
+        details = self._constraint_score_details(record, constraints)
+        if self.enable_raw_phrase_scoring:
+            details.update(self._raw_constraint_score_details(record, constraints, raw_constraints))
+        fusion_score = 100.0 / (60.0 + bm25_rank) if bm25_rank else 0.0
+        constraint_score = sum(details.values())
+        quality_score = self._quality_score(record)
+        return {
+            "bm25_rank": bm25_rank,
+            "bm25_fusion": fusion_score,
+            "constraint_total": constraint_score,
+            "constraint_details": details,
+            "quality": quality_score,
+            "final": fusion_score + constraint_score + quality_score,
+        }
+
+    def _constraint_score_details(self, record: ProductRecord, constraints: dict) -> dict[str, float]:
+        details: dict[str, float] = {}
         for attribute, value in constraints.items():
             if attribute == "category":
-                score += self._category_score(record, value)
+                details[attribute] = self._category_score(record, value)
             elif attribute == "brand":
-                score += self._brand_score(record, value)
+                details[attribute] = self._brand_score(record, value)
             elif attribute == "material":
-                score += self._word_constraint_score(record, value, MATERIALS, 40.0)
+                details[attribute] = self._word_constraint_score(record, value, MATERIALS, 40.0)
             elif attribute == "color":
-                score += self._word_constraint_score(record, value, COLORS, 35.0)
+                details[attribute] = self._word_constraint_score(record, value, COLORS, 35.0)
             elif attribute == "size":
-                score += self._generic_constraint_score(record, value, 35.0)
+                details[attribute] = self._generic_constraint_score(record, value, 35.0)
             elif attribute == "budget":
-                score += self._budget_score(record, value)
+                details[attribute] = self._budget_score(record, value)
             elif attribute == "feature":
-                score += self._generic_constraint_score(record, value, 25.0)
+                details[attribute] = self._generic_constraint_score(record, value, 25.0)
             elif attribute == "use_case":
-                score += self._generic_constraint_score(record, value, 25.0)
+                details[attribute] = self._generic_constraint_score(record, value, 25.0)
             elif attribute == "style":
-                score += self._generic_constraint_score(record, value, 20.0)
+                details[attribute] = self._generic_constraint_score(record, value, 20.0)
             elif attribute == "other":
-                score += self._generic_constraint_score(record, value, 22.0)
-        return score
+                details[attribute] = self._generic_constraint_score(record, value, 22.0)
+        return details
+
+    def _raw_constraint_score_details(
+        self,
+        record: ProductRecord,
+        active_constraints: dict,
+        raw_constraints: Iterable[dict],
+    ) -> dict[str, float]:
+        """Use non-slot evidence without double-counting the current slot.
+
+        This matters for overrides: an old phrase is demoted rather than
+        thrown away, and can still distinguish the target if the new phrase
+        is broad. Only demoted multi-token, non-boilerplate phrases qualify;
+        ordinary historic spans caused a public-score regression.
+        """
+        active_phrases = {_normalized_text(str(value)) for value in active_constraints.values()}
+        details: dict[str, float] = {}
+        normalized_product_text = _normalized_text(record.all_text)
+        for span in raw_constraints:
+            phrase = str(span.get("match_phrase") or span.get("text") or "")
+            normalized = _normalized_text(phrase)
+            if (
+                len(normalized.split()) < 2
+                or normalized in active_phrases
+                or _is_boilerplate(normalized)
+            ):
+                continue
+            try:
+                weight = float(span.get("weight", 1.0))
+            except (TypeError, ValueError):
+                weight = 1.0
+            if weight <= 0 or weight >= 1.0:
+                continue
+            strength = _match_strength_normalized(normalized, normalized_product_text)
+            if strength >= 1.0:
+                score = 18.0 * min(weight, 1.0)
+            elif strength >= 0.8:
+                score = 8.0 * min(weight, 1.0)
+            else:
+                continue
+            key = f"raw:{span.get('attribute', 'feature')}:{normalized[:48]}"
+            details[key] = score
+        return details
 
     def _category_score(self, record: ProductRecord, value: object) -> float:
         category_strength = _match_strength(value, f"{record.categories} {record.title} {record.details}")
@@ -439,6 +579,8 @@ class CatalogRetriever:
         return self._generic_constraint_score(record, value, boost)
 
     def _generic_constraint_score(self, record: ProductRecord, value: object, boost: float) -> float:
+        if self.enable_boilerplate_filter and _is_boilerplate(value):
+            return 0.0
         strength = _match_strength(value, record.all_text)
         if strength >= 0.8:
             return boost
