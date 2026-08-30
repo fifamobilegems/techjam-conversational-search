@@ -48,6 +48,21 @@ ATTRIBUTE_WORDS = (
 
 TOKEN_RE = re.compile(r"[a-z0-9]+", re.IGNORECASE)
 
+# The customer signals it has nothing further to disclose with
+# "I don't have an additional preference for X." That is NOT the same as
+# the boundary reply "I don't have a preference for X; please use your
+# judgment." -- the first ends the questioning, the second only rules out
+# one field.
+EXHAUSTED_RE = re.compile(
+    r"\b(?:do not|don't|dont)\s+have\s+an\s+additional\s+preference\b",
+    re.IGNORECASE,
+)
+
+# Scenario markers, taken from the opening message wording. These are
+# observable text patterns, not inferred "moods".
+BUYING_MARKER = "a key requirement is:"
+BROWSING_MARKER = "but i'm still exploring"
+
 USE_CASE_WORDS = {
     "hiking",
     "running",
@@ -159,6 +174,8 @@ class HeuristicTurnExtractor:
 
     def extract(self, user_message: str, state: object | None = None) -> ExtractedTurn:
         lowered = user_message.lower()
+        information_exhausted = bool(EXHAUSTED_RE.search(lowered))
+        scenario = self._scenario(lowered, state)
         operations: list[AttributeUpdate] = []
         seen: set[tuple[str, str, str]] = set()
         slots = _state_slots(state)
@@ -173,7 +190,14 @@ class HeuristicTurnExtractor:
             if key in seen:
                 return
             seen.add(key)
-            operations.append(AttributeUpdate(attribute=attribute, action=action, value=cleaned))
+            operations.append(
+                AttributeUpdate(
+                    attribute=attribute,
+                    action=action,
+                    value=cleaned,
+                    raw_text=cleaned,
+                )
+            )
 
         def add_set(attribute: str, value: str) -> None:
             cleaned = _clean(value)
@@ -183,7 +207,7 @@ class HeuristicTurnExtractor:
                 and attribute in slots
                 and str(slots[attribute]) != cleaned
             ):
-                add_operation(attribute, "clear")
+                add_operation(attribute, "demote", str(slots[attribute]))
             add_operation(attribute, "set", cleaned)
 
         def has_set(attribute: str) -> bool:
@@ -202,7 +226,7 @@ class HeuristicTurnExtractor:
         if re.search(r"\bignore\s+(?:my\s+)?(?:earlier|previous)\s+preference\b", lowered):
             attribute = _last_non_category_attribute(state)
             if attribute:
-                add_operation(attribute, "clear")
+                add_operation(attribute, "demote")
 
         for pattern in (
             r"\bignore\s+([^;,.]+)",
@@ -213,7 +237,7 @@ class HeuristicTurnExtractor:
                 ignored = _clean(match.group(1))
                 if re.search(r"\b(?:my\s+)?(?:earlier|previous)\s+preference\b", ignored, flags=re.I):
                     continue
-                add_operation(classify_constraint(ignored), "clear")
+                add_operation(classify_constraint(ignored), "demote", ignored)
 
         clear_match = re.search(
             r"\b(?:clear|remove|drop)\s+(category|material|color|size|style|brand|budget|feature|use_case|other)\b",
@@ -222,11 +246,15 @@ class HeuristicTurnExtractor:
         if clear_match:
             add_operation(clear_match.group(1), "clear")
 
-        for pattern in (
+        no_preference_patterns = (
             r"\b(?:no preference|no pref)\s+(?:for|on|about)\s+([a-z_ ]+)",
-            r"\b(?:do not|don't|dont)\s+have\s+(?:an?\s+)?(?:additional\s+)?preference\s+for\s+([a-z_ ]+)",
+            r"\b(?:do not|don't|dont)\s+have\s+(?:a\s+)?preference\s+for\s+([a-z_ ]+)",
             r"\b(?:do not|don't|dont)\s+care\s+(?:about|for)\s+([a-z_ ]+)",
-        ):
+        )
+
+        # "no additional preference" means the customer is done talking,
+        # not that this field is irrelevant. Do not blacklist the field.
+        for pattern in () if information_exhausted else no_preference_patterns:
             no_pref_match = re.search(pattern, lowered)
             if no_pref_match:
                 attribute = no_pref_match.group(1).strip().replace(" ", "_")
@@ -313,4 +341,32 @@ class HeuristicTurnExtractor:
             if material and not has_set("material"):
                 add_set("material", material)
 
-        return ExtractedTurn(intent=intent, operations=operations)
+        return ExtractedTurn(
+            intent=intent,
+            operations=operations,
+            information_exhausted=information_exhausted,
+            scenario=scenario,
+        )
+
+    def _scenario(self, lowered: str, state: object | None) -> str | None:
+        """
+        Label the session from the opening message only.
+
+        The three openings are textually distinct, so this needs no
+        guessing. Browsing and boundary share an opening; boundary
+        identifies itself later, on the first question it declines.
+        """
+
+        if getattr(state, "scenario", "unknown") != "unknown":
+            return None
+
+        if not lowered.startswith("i'm looking for"):
+            return None
+
+        if BUYING_MARKER in lowered:
+            return "buying"
+
+        if BROWSING_MARKER in lowered:
+            return "browsing_or_boundary"
+
+        return "intent_override"
