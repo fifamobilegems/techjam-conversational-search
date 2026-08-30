@@ -103,6 +103,7 @@ class ProductRecord:
     rating: float
     rating_count: int
     all_text: str
+    all_terms: frozenset[str]
 
 
 def _text(value: object) -> str:
@@ -216,6 +217,7 @@ class CatalogRetriever:
         search_query: str,
         constraints: dict,
         no_preference: Iterable[str] = (),
+        raw_constraints: Iterable[dict] = (),
         top_k: int = 10,
         raw_constraints: Iterable[dict] = (),
     ) -> list[str]:
@@ -351,6 +353,7 @@ class CatalogRetriever:
             rating=rating,
             rating_count=rating_count,
             all_text=all_text,
+            all_terms=frozenset(_terms(all_text)),
         )
 
     def _query_text(self, search_query: str, constraints: dict) -> str:
@@ -363,6 +366,55 @@ class CatalogRetriever:
             and (not self.enable_boilerplate_filter or not _is_boilerplate(value))
         )
         return " ".join(part for part in parts if part).strip()
+
+    def _usable_evidence(self, raw_constraints: Iterable[dict], no_preference: set[str]) -> list[dict]:
+        """Keep every distinct disclosed fact, including colliding slot values.
+
+        Conversation slots intentionally keep one current value per attribute. Retrieval
+        must not use that lossy representation: a shopper can disclose two independent
+        features in the same reply, and both are evidence for the target.
+        """
+        evidence: list[dict] = []
+        seen: set[str] = set()
+        for item in raw_constraints:
+            if not isinstance(item, dict):
+                continue
+            attribute = str(item.get("attribute") or "feature")
+            text = str(item.get("text") or "").strip()
+            if not text or attribute in no_preference:
+                continue
+            key = _normalized_text(text)
+            if not key or key in seen:
+                continue
+            seen.add(key)
+            evidence.append({
+                "attribute": attribute,
+                "text": text,
+                "terms": frozenset(_terms(text)),
+                "weight": max(0.0, min(1.0, float(item.get("weight", 1.0)))),
+            })
+        return evidence
+
+    def _evidence_score(self, record: ProductRecord, evidence: Iterable[dict]) -> float:
+        score = 0.0
+        for item in evidence:
+            # Raw spans are corroborating evidence, not a replacement for typed
+            # constraints. Cap each contribution so verbose metadata cannot dominate.
+            terms = item["terms"]
+            if not terms:
+                continue
+            # Product terms are indexed once at catalog-load time.  The previous
+            # implementation normalized the entire product description for every
+            # evidence span and candidate, making multi-turn evaluation needlessly
+            # expensive.
+            strength = len(terms & record.all_terms) / len(terms)
+            if strength >= 0.8:
+                score += 14.0 * item["weight"]
+            elif strength >= 0.5:
+                score += 7.0 * item["weight"]
+            elif strength > 0:
+                score += 2.0 * item["weight"]
+        return score
 
     def _bm25_search(self, query_text: str) -> list[str]:
         terms = list(dict.fromkeys(_terms(query_text)))[:50]

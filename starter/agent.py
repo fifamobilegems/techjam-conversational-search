@@ -86,6 +86,7 @@ class Agent:
                     state["search_query"],
                     state["constraints"],
                     state["no_preference"],
+                    raw_constraints=state["raw_constraints"],
                     top_k=top_k,
                     raw_constraints=state["raw_constraints"],
                 )

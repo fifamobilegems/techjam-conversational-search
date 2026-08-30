@@ -8,11 +8,8 @@ from typing import Any, Literal
 # Hard session limit imposed by the evaluator.
 MAX_TURNS = 10
 
-# Weight applied to a constraint the user has superseded.
-#
-# The simulator builds the "old" and "new" values of an override from the
-# SAME target product, so a superseded preference is still evidence about
-# the target. Demote it, never delete it.
+# Weight applied to a constraint the user has superseded.  It remains weak
+# retrieval evidence, but cannot stay an active hard constraint.
 DEMOTED_WEIGHT = 0.4
 
 
@@ -438,6 +435,11 @@ class StateManager:
                 text=operation.raw_text or value,
             )
 
+            # An explicit override invalidates the old active slot.  Keeping it in
+            # ``slots`` made an "ignore my earlier preference" message continue to
+            # steer ranking toward the superseded value.
+            old_value = state.slots.pop(attribute, None)
+
             # The slot value is deliberately left in place: an overridden
             # preference still describes the same target product.
             if demoted:
@@ -446,7 +448,7 @@ class StateManager:
                         "turn": turn,
                         "attribute": attribute,
                         "action": "demote",
-                        "old_value": state.slots.get(attribute),
+                        "old_value": old_value,
                         "new_value": None,
                     }
                 )
@@ -634,22 +636,9 @@ class StateManager:
 
         if not state.information_exhausted:
             return HIGHEST_YIELD_ATTRIBUTE
-
-        for attribute in CLARIFICATION_PRIORITY:
-
-            if attribute == HIGHEST_YIELD_ATTRIBUTE:
-                continue
-
-            # User explicitly does not care.
-            if attribute in state.no_preference:
-                continue
-
-            # Already asked before.
-            if attribute in state.asked_attributes:
-                continue
-
-            return attribute
-
+        # The deterministic customer has explicitly said it has no further
+        # information. Cycling through every remaining attribute only repeats an
+        # identical ranking and wastes the remaining turns.
         return None
 
     def should_emit_recommendations(
