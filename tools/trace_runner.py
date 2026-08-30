@@ -47,7 +47,7 @@ from evaluator.local_evaluator import (
     normalize_recommendations,
 )
 from starter.agent import Agent
-from tools.customer_sim import RealisticCustomer
+from tools.customer_sim import EsciCustomer, RealisticCustomer
 
 
 LOGGER = logging.getLogger("trace")
@@ -214,6 +214,25 @@ class RealisticCustomerAdapter:
         }
 
 
+class EsciCustomerAdapter(RealisticCustomerAdapter):
+    """Real-ESCI-query shopper from ``tools.customer_sim``, same interface."""
+
+    kind = "esci"
+
+    def __init__(self, sample: dict, product: dict, coarse: str) -> None:
+        self.inner = EsciCustomer(sample, product, coarse)
+        self.override_turn = (
+            self.inner.override_turn if sample.get("scenario_type") == "intent_override" else None
+        )
+        self._sample = sample
+
+    def describe(self) -> dict:
+        described = super().describe()
+        described["esci_query"] = self._sample.get("esci_query")
+        described["provenance"] = self._sample.get("provenance")
+        return described
+
+
 def build_customer(
     simulator: str,
     sample: dict,
@@ -223,6 +242,8 @@ def build_customer(
 ) -> OfficialCustomer | RealisticCustomerAdapter:
     if simulator == "realistic":
         return RealisticCustomerAdapter(sample, products.get(target, {}), coarse)
+    if simulator == "esci":
+        return EsciCustomerAdapter(sample, products.get(target, {}), coarse)
     intent_card, behavior = materialize_hidden_fields(sample, products)
     return OfficialCustomer({**sample, "intent_card": intent_card, "behavior": behavior}, coarse)
 
@@ -586,9 +607,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--select", choices=("stratified", "head"), default="stratified")
     parser.add_argument(
         "--simulator",
-        choices=("official", "realistic"),
+        choices=("official", "realistic", "esci"),
         default="official",
-        help="official = evaluator templates; realistic = human-phrased shopper",
+        help="official = evaluator templates; realistic = human-phrased shopper; "
+        "esci = verbatim real ESCI query opener (needs a dataset with esci_query)",
     )
     parser.add_argument("--scenario", default=None, help="filter to one scenario_type before selection")
     parser.add_argument("--sample-ids", default=None, help="comma-separated sample_ids; overrides --limit/--select")
