@@ -170,6 +170,7 @@ class CatalogRetriever:
         self.products: dict[str, ProductRecord] = {}
         self.valid_ids: set[str] = set()
         self.popular_ids: list[str] = []
+        self.last_diagnostics: dict[str, object] = {}
         self._build()
 
     def retrieve_and_rerank(
@@ -188,7 +189,8 @@ class CatalogRetriever:
         query_text = self._query_text(search_query, active_constraints)
         candidate_scores: dict[str, dict[str, float | int | None]] = {}
 
-        for rank, parent_asin in enumerate(self._bm25_search(query_text), start=1):
+        bm25_ids = self._bm25_search(query_text)
+        for rank, parent_asin in enumerate(bm25_ids, start=1):
             candidate = candidate_scores.setdefault(
                 parent_asin,
                 {"bm25_rank": None, "fusion_score": 0.0, "constraint_score": 0.0, "quality_score": 0.0},
@@ -209,7 +211,14 @@ class CatalogRetriever:
             ranked.append((parent_asin, final_score))
 
         ranked.sort(key=lambda item: item[1], reverse=True)
-        return self._sanitize([parent_asin for parent_asin, _ in ranked], top_k)
+        ranked_ids = [parent_asin for parent_asin, _ in ranked]
+        self.last_diagnostics = {
+            "query_text": query_text,
+            "candidate_count": len(candidate_scores),
+            "bm25_candidate_ids": bm25_ids,
+            "candidate_ids": ranked_ids,
+        }
+        return self._sanitize(ranked_ids, top_k)
 
     def _build(self) -> None:
         cursor = self.connection.cursor()

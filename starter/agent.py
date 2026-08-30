@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from starter.debug import candidates_enabled, write_trace
+from starter.env import load_project_env
 from starter.extractor import HeuristicTurnExtractor
 from starter.retriever import CatalogRetriever
 from state.llm_extractor import LLMTurnExtractor, is_enabled as llm_enabled
@@ -34,6 +36,7 @@ class Agent:
         catalog_path: str | Path = "data/catalog.jsonl",
         hold_until_turn: int = 2,
     ) -> None:
+        load_project_env()
         self.retriever = CatalogRetriever(catalog_path)
         self.manager = StateManager(hold_until_turn=hold_until_turn)
         # The rules extractor is authoritative. The LLM layer, when enabled,
@@ -44,10 +47,12 @@ class Agent:
             self.extractor = LLMTurnExtractor(self.extractor)
         self._sessions: set[str] = set()
         self._profiles: dict[str, dict] = {}
+        self._runs: dict[str, int] = {}
 
     def reset(self, session_id: str, user_profile: dict) -> None:
         self._sessions.add(session_id)
         self._profiles[session_id] = user_profile
+        self._runs[session_id] = self._runs.get(session_id, 0) + 1
         self.manager.reset(session_id)
 
     def respond(
@@ -85,8 +90,33 @@ class Agent:
         else:
             recommendations = []
 
+        message = self._message(ask_attribute, bool(recommendations))
+        self.manager.record_message(session_id, "user", user_message, turn)
+        self.manager.record_message(session_id, "assistant", message, turn)
+        diagnostics = self.retriever.last_diagnostics if recommendations else {}
+        trace_event = {
+            "session_id": session_id,
+            "run_index": self._runs.get(session_id, 0),
+            "turn": turn,
+            "scenario": state["scenario"],
+            "intent": state["intent"],
+            "user_message": user_message,
+            "search_query": state["search_query"],
+            "constraints": state["constraints"],
+            "raw_constraints": state["raw_constraints"],
+            "no_preference": state["no_preference"],
+            "ask_attribute": ask_attribute,
+            "should_emit_recommendations": state["should_emit_recommendations"],
+            "recommendations": [item["parent_asin"] for item in recommendations],
+            "candidate_count": diagnostics.get("candidate_count", 0),
+            "extractor": type(self.extractor).__name__,
+        }
+        if candidates_enabled():
+            trace_event["bm25_candidate_ids"] = diagnostics.get("bm25_candidate_ids", [])
+            trace_event["candidate_ids"] = diagnostics.get("candidate_ids", [])
+        write_trace(trace_event)
         return {
-            "message": self._message(ask_attribute, bool(recommendations)),
+            "message": message,
             "ask_attribute": ask_attribute,
             "recommendations": recommendations,
             "usage": dict(

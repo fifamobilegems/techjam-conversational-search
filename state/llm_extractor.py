@@ -26,7 +26,7 @@ from typing import Any
 from state.state_manager import ALLOWED_ATTRIBUTES, AttributeUpdate, ExtractedTurn
 
 
-MODEL = os.environ.get("TECHJAM_LLM_MODEL", "claude-opus-5")
+DEFAULT_MODEL = "claude-opus-5"
 
 ENV_FLAG = "TECHJAM_LLM_EXTRACTOR"
 
@@ -73,9 +73,11 @@ def is_enabled() -> bool:
 class LLMTurnExtractor:
     """Wraps a deterministic extractor and augments its output."""
 
-    def __init__(self, fallback: Any, model: str = MODEL) -> None:
+    def __init__(self, fallback: Any, model: str | None = None) -> None:
         self.fallback = fallback
-        self.model = model
+        # Read at construction time: Agent loads .env immediately before it
+        # constructs this wrapper.
+        self.model = model or os.environ.get("TECHJAM_LLM_MODEL", DEFAULT_MODEL)
         self.last_usage = {"prompt_tokens": 0, "completion_tokens": 0}
         self._client = self._build_client()
 
@@ -90,7 +92,7 @@ class LLMTurnExtractor:
             return extracted
 
         try:
-            constraints = self._call(user_message)
+            constraints = self._call(user_message, state)
         except Exception:
             # Any failure -- no network, no credentials, bad JSON, rate limit
             # -- leaves the deterministic result untouched.
@@ -138,12 +140,19 @@ class LLMTurnExtractor:
         except Exception:
             return None
 
-    def _call(self, user_message: str) -> list[dict]:
+    def _call(self, user_message: str, state: object | None = None) -> list[dict]:
+        conversation = getattr(state, "messages", [])
+        context = "\n".join(
+            f"{item.get('role', 'user')}: {item.get('content', '')}"
+            for item in conversation[-8:]
+            if isinstance(item, dict)
+        )
+        content = user_message if not context else f"Conversation context (do not extract from it):\n{context}\n\nCurrent message:\n{user_message}"
         response = self._client.messages.create(
             model=self.model,
             max_tokens=MAX_TOKENS,
             system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": user_message}],
+            messages=[{"role": "user", "content": content}],
             output_config={"format": {"type": "json_schema", "schema": OUTPUT_SCHEMA}},
         )
 
