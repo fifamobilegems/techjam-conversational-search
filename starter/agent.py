@@ -4,21 +4,9 @@ from pathlib import Path
 
 from starter.extractor import HeuristicTurnExtractor
 from starter.retriever import CatalogRetriever
+from state.llm_extractor import LLMTurnExtractor, is_enabled as llm_enabled
 from state.state_manager import StateManager
 
-
-QUESTION_PRIORITY = [
-    "other",
-    "feature",
-    "material",
-    "color",
-    "size",
-    "use_case",
-    "budget",
-    "brand",
-    "style",
-    "category",
-]
 
 QUESTION_TEXT = {
     "category": "What product category should I focus on?",
@@ -33,14 +21,27 @@ QUESTION_TEXT = {
     "other": "What other must-have detail should I prioritize?",
 }
 
+HOLDING_MESSAGE = "Let me narrow this down first. {question}"
+RESULTS_MESSAGE = "Here are the closest matches I found. {question}"
+NO_QUESTION_MESSAGE = "Here are the closest matches I found."
+
 
 class Agent:
     """Conversational shopping agent with deterministic retrieval and reranking."""
 
-    def __init__(self, catalog_path: str | Path = "data/catalog.jsonl") -> None:
+    def __init__(
+        self,
+        catalog_path: str | Path = "data/catalog.jsonl",
+        hold_until_turn: int = 2,
+    ) -> None:
         self.retriever = CatalogRetriever(catalog_path)
-        self.manager = StateManager()
+        self.manager = StateManager(hold_until_turn=hold_until_turn)
+        # The rules extractor is authoritative. The LLM layer, when enabled,
+        # only adds spans the rules missed -- scoring must not depend on it,
+        # because official scoring may run without network access.
         self.extractor = HeuristicTurnExtractor()
+        if llm_enabled():
+            self.extractor = LLMTurnExtractor(self.extractor)
         self._sessions: set[str] = set()
         self._profiles: dict[str, dict] = {}
 
@@ -64,39 +65,50 @@ class Agent:
         self.manager.update(session_id, extracted, turn)
         state = self.manager.export(session_id)
 
-        recommendations = [
-            {"parent_asin": parent_asin}
-            for parent_asin in self.retriever.retrieve_and_rerank(
-                state["search_query"],
-                state["constraints"],
-                state["no_preference"],
-                top_k=top_k,
-            )
-        ]
+        ask_attribute = state["ask_attribute"]
+        if ask_attribute:
+            self.manager.mark_asked(session_id, ask_attribute)
 
-        ask_attribute = self._choose_ask_attribute(session_id, turn)
-        message = QUESTION_TEXT[ask_attribute] if ask_attribute else "Here are the closest matches I found."
+        # Asking and retrieving are not alternatives: the contract carries
+        # both fields and the evaluator reads both every turn. The only
+        # decision is whether the ranking is worth a permanent rank record.
+        if state["should_emit_recommendations"]:
+            recommendations = [
+                {"parent_asin": parent_asin}
+                for parent_asin in self.retriever.retrieve_and_rerank(
+                    state["search_query"],
+                    state["constraints"],
+                    state["no_preference"],
+                    top_k=top_k,
+                )
+            ]
+        else:
+            recommendations = []
 
         return {
-            "message": message,
+            "message": self._message(ask_attribute, bool(recommendations)),
             "ask_attribute": ask_attribute,
             "recommendations": recommendations,
-            "usage": {"prompt_tokens": 0, "completion_tokens": 0},
+            "usage": dict(
+                getattr(
+                    self.extractor,
+                    "last_usage",
+                    {"prompt_tokens": 0, "completion_tokens": 0},
+                )
+            ),
         }
 
-    def _choose_ask_attribute(self, session_id: str, turn: int) -> str | None:
-        if turn >= 10:
-            return None
+    def _message(self, ask_attribute: str | None, has_results: bool) -> str:
+        """
+        Prose for the human reading a transcript.
 
-        state = self.manager.get(session_id)
-        for attribute in QUESTION_PRIORITY:
-            if attribute in state.slots:
-                continue
-            if attribute in state.no_preference:
-                continue
-            if attribute in state.asked_attributes:
-                continue
-            self.manager.mark_asked(session_id, attribute)
-            return attribute
+        The simulator reads `ask_attribute` and ignores this string, so the
+        wording carries no score. It still has to make sense in the demo.
+        """
 
-        return None
+        if not ask_attribute:
+            return NO_QUESTION_MESSAGE
+
+        question = QUESTION_TEXT.get(ask_attribute, QUESTION_TEXT["other"])
+        template = RESULTS_MESSAGE if has_results else HOLDING_MESSAGE
+        return template.format(question=question)

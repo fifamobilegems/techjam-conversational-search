@@ -1,7 +1,19 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from typing import Any, Literal
+
+
+# Hard session limit imposed by the evaluator.
+MAX_TURNS = 10
+
+# Weight applied to a constraint the user has superseded.
+#
+# The simulator builds the "old" and "new" values of an override from the
+# SAME target product, so a superseded preference is still evidence about
+# the target. Demote it, never delete it.
+DEMOTED_WEIGHT = 0.4
 
 
 ALLOWED_ATTRIBUTES = {
@@ -22,6 +34,7 @@ AttributeAction = Literal[
     "set",
     "clear",
     "no_preference",
+    "demote",
 ]
 
 
@@ -40,19 +53,44 @@ NextAction = Literal[
 ]
 
 
-# Initial heuristic, tune later based on dev-set results.
+# Ask order by measured information yield, not intuition.
+#
+# Regenerate with: python -m scripts.measure_attribute_yield
+#
+# "other" is the argmax: the simulator answers it without classifying the
+# attribute, so it returns undisclosed constraints of ANY class and can be
+# re-asked every turn. The remainder is the fallback order for the case
+# where a simulator classifies replies differently from the public one.
+HIGHEST_YIELD_ATTRIBUTE = "other"
+
 CLARIFICATION_PRIORITY = [
-    "use_case",
-    "size",
-    "category",
+    "other",
+    "feature",
     "material",
     "color",
-    "feature",
+    "style",
+    "size",
+    "use_case",
+    "category",
     "budget",
     "brand",
-    "style",
-    "other",
 ]
+
+
+def normalize_phrase(value: str) -> str:
+    """
+    Normalize a constraint span for substring matching against catalog text.
+
+    The catalog flattens `details` as "key value" while the simulator
+    discloses constraints as "key: value", so punctuation must go or the
+    colon breaks every match.
+    """
+
+    return re.sub(
+        r"\s+",
+        " ",
+        re.sub(r"[^a-z0-9 ]", " ", value.lower()),
+    ).strip()
 
 
 @dataclass
@@ -64,6 +102,13 @@ class AttributeUpdate:
     attribute: str
     action: AttributeAction
     value: Any = None
+
+    # Verbatim text the value was taken from.
+    #
+    # Slots keep one value per attribute, so colliding constraints
+    # overwrite each other. The raw span survives that collision and is
+    # what retrieval actually matches on.
+    raw_text: str | None = None
 
 
 @dataclass
@@ -79,6 +124,12 @@ class ExtractedTurn:
     operations: list[AttributeUpdate] = field(
         default_factory=list
     )
+
+    # Set when the customer signals there is nothing left to disclose.
+    information_exhausted: bool = False
+
+    # Observable scenario label, derived from message wording only.
+    scenario: str | None = None
 
 
 @dataclass
@@ -107,12 +158,79 @@ class ConversationState:
         default_factory=set
     )
 
+    # Every constraint span disclosed so far, in order, with no collisions.
+    raw_constraints: list[dict] = field(
+        default_factory=list
+    )
+
+    # True once the customer has nothing further to disclose.
+    information_exhausted: bool = False
+
+    # buying | browsing_or_boundary | intent_override | unknown
+    scenario: str = "unknown"
+
     turn: int = 0
 
     # Useful for debugging and presentation.
     history: list[dict] = field(
         default_factory=list
     )
+
+    def record_span(
+        self,
+        attribute: str,
+        text: str,
+        turn: int,
+    ) -> None:
+        """
+        Store one disclosed constraint verbatim.
+
+        Unlike `slots`, this never overwrites: two constraints that both
+        classify as "feature" both survive here.
+        """
+
+        phrase = normalize_phrase(text)
+
+        if not phrase:
+            return
+
+        for span in self.raw_constraints:
+            if span["match_phrase"] == phrase:
+                return
+
+        self.raw_constraints.append(
+            {
+                "text": text,
+                "match_phrase": phrase,
+                "attribute": attribute,
+                "turn": turn,
+                "weight": 1.0,
+            }
+        )
+
+    def demote_spans(
+        self,
+        attribute: str | None = None,
+        text: str | None = None,
+    ) -> int:
+        """
+        Reduce the weight of superseded spans without discarding them.
+        """
+
+        phrase = normalize_phrase(text or "")
+        demoted = 0
+
+        for span in self.raw_constraints:
+            matches_attribute = attribute is not None and span["attribute"] == attribute
+            matches_text = bool(phrase) and (
+                phrase in span["match_phrase"] or span["match_phrase"] in phrase
+            )
+
+            if matches_attribute or matches_text:
+                span["weight"] = DEMOTED_WEIGHT
+                demoted += 1
+
+        return demoted
 
 
 class StateManager:
@@ -131,7 +249,27 @@ class StateManager:
     8. Decide whether to retrieve or clarify
     """
 
-    def __init__(self):
+    def __init__(
+        self,
+        hold_until_turn: int = 2,
+    ):
+        """
+        `hold_until_turn` controls when recommendations are first emitted.
+
+        The evaluator ends a session at the FIRST turn the target appears
+        in the top 10 and records that rank permanently, so an early weak
+        list locks in a poor reciprocal rank. Holding while the constraints
+        are still arriving trades MTTC for MRR at a profit.
+
+        The optimum depends on how fast ranking improves per constraint, so
+        re-run the sweep after any retrieval change:
+
+            public set, current retriever
+            1 -> .8560   2 -> .8892   3 -> .8814   4 -> .8656
+        """
+
+        self.hold_until_turn = hold_until_turn
+
         self.sessions: dict[
             str,
             ConversationState,
@@ -226,6 +364,13 @@ class StateManager:
 
             state.slots[attribute] = value
 
+            # Slots collide; spans do not. Keep both.
+            state.record_span(
+                attribute,
+                str(operation.raw_text or value),
+                turn,
+            )
+
             if old_value is None:
                 change_type = "add"
 
@@ -277,6 +422,30 @@ class StateManager:
         # -----------------------------------------------------
         # NO PREFERENCE
         # -----------------------------------------------------
+
+        # -----------------------------------------------------
+        # DEMOTE
+        # -----------------------------------------------------
+
+        elif action == "demote":
+
+            demoted = state.demote_spans(
+                attribute=attribute,
+                text=operation.raw_text or value,
+            )
+
+            # The slot value is deliberately left in place: an overridden
+            # preference still describes the same target product.
+            if demoted:
+                state.history.append(
+                    {
+                        "turn": turn,
+                        "attribute": attribute,
+                        "action": "demote",
+                        "old_value": state.slots.get(attribute),
+                        "new_value": None,
+                    }
+                )
 
         elif action == "no_preference":
 
@@ -333,6 +502,14 @@ class StateManager:
         state = self.get(session_id)
 
         state.turn = turn
+
+        # Latching flag: the customer never un-exhausts.
+        if extracted.information_exhausted:
+            state.information_exhausted = True
+
+        # Scenario is fixed by the opening message.
+        if extracted.scenario and state.scenario == "unknown":
+            state.scenario = extracted.scenario
 
         # Update intent if extractor has meaningful evidence.
         if (
@@ -427,16 +604,61 @@ class StateManager:
     ) -> str | None:
         """
         Select one clarification attribute.
+
+        While the customer still has undisclosed constraints, the highest
+        yield attribute is asked every turn. It is answered without being
+        classified, so it never returns the empty reply and never runs out
+        the way a per-class question does.
+
+        Once the customer reports nothing further, fall back to the
+        measured class order. That costs nothing here and keeps the policy
+        working if a simulator classifies replies differently.
         """
 
-        missing = self.get_missing_attributes(
-            session_id
-        )
+        state = self.get(session_id)
 
-        if not missing:
+        if state.turn >= MAX_TURNS:
             return None
 
-        return missing[0]
+        if not state.information_exhausted:
+            return HIGHEST_YIELD_ATTRIBUTE
+
+        for attribute in CLARIFICATION_PRIORITY:
+
+            if attribute == HIGHEST_YIELD_ATTRIBUTE:
+                continue
+
+            # User explicitly does not care.
+            if attribute in state.no_preference:
+                continue
+
+            # Already asked before.
+            if attribute in state.asked_attributes:
+                continue
+
+            return attribute
+
+        return None
+
+    def should_emit_recommendations(
+        self,
+        session_id: str,
+    ) -> bool:
+        """
+        Decide whether this turn may return a ranked list.
+
+        Asking and retrieving are NOT alternatives -- the response contract
+        carries both fields and the evaluator reads both every turn. The
+        only real decision is whether the list is good enough yet to accept
+        a permanently recorded rank.
+        """
+
+        state = self.get(session_id)
+
+        if state.information_exhausted:
+            return True
+
+        return state.turn >= self.hold_until_turn
 
     # =========================================================
     # SEARCH CONTEXT
@@ -514,67 +736,29 @@ class StateManager:
         session_id: str,
     ) -> dict:
         """
-        Decide whether this turn should:
+        Produce this turn's two independent decisions:
 
-            retrieve
+            ask_attribute
+                which question to attach, if any
 
-        or:
+            should_emit_recommendations
+                whether to expose a ranked list this turn
 
-            clarify
-
-        This is intentionally simple for the first version.
+        These are not mutually exclusive. A turn normally does both.
         """
 
-        state = self.get(session_id)
-
-        known_attributes = len(
-            state.slots
-        )
-
-        # -----------------------------------------------------
-        # Buying mode
-        #
-        # If the user already has concrete buying intent,
-        # retrieve immediately instead of wasting turns.
-        # -----------------------------------------------------
-
-        if state.intent in {"buying", "override"}:
-
-            return {
-                "next_action": "retrieve",
-                "ask_attribute": None,
-            }
-
-        # -----------------------------------------------------
-        # Enough information already accumulated
-        # -----------------------------------------------------
-
-        if known_attributes >= 2:
-
-            return {
-                "next_action": "retrieve",
-                "ask_attribute": None,
-            }
-
-        # -----------------------------------------------------
-        # Browsing / vague request -> clarify
-        # -----------------------------------------------------
-
-        attribute = self.choose_next_attribute(
+        ask_attribute = self.choose_next_attribute(
             session_id
         )
 
-        if attribute is None:
-
-            # Nothing useful left to ask.
-            return {
-                "next_action": "retrieve",
-                "ask_attribute": None,
-            }
+        emit = self.should_emit_recommendations(
+            session_id
+        )
 
         return {
-            "next_action": "clarify",
-            "ask_attribute": attribute,
+            "next_action": "retrieve" if emit else "clarify",
+            "ask_attribute": ask_attribute,
+            "should_emit_recommendations": emit,
         }
 
     # =========================================================
@@ -603,6 +787,8 @@ class StateManager:
         return {
             "intent": state.intent,
 
+            # ---- stable keys consumed by retrieval ----
+
             "constraints": dict(
                 state.slots
             ),
@@ -611,20 +797,50 @@ class StateManager:
                 state.no_preference
             ),
 
-            "asked_attributes": sorted(
-                state.asked_attributes
-            ),
-
             "search_query":
                 self.build_search_context(
                     session_id
                 ),
+
+            # ---- lossless view of the same evidence ----
+            #
+            # `constraints` keeps one value per attribute. Roughly half of
+            # the disclosed constraints classify into an attribute that
+            # already holds a value, so they are only visible here.
+
+            "raw_constraints": [
+                dict(span)
+                for span in state.raw_constraints
+            ],
+
+            "match_phrases": [
+                span["match_phrase"]
+                for span in state.raw_constraints
+            ],
+
+            # ---- dialogue control ----
+
+            "asked_attributes": sorted(
+                state.asked_attributes
+            ),
+
+            "category": state.slots.get(
+                "category"
+            ),
+
+            "scenario": state.scenario,
+
+            "information_exhausted":
+                state.information_exhausted,
 
             "next_action":
                 decision["next_action"],
 
             "ask_attribute":
                 decision["ask_attribute"],
+
+            "should_emit_recommendations":
+                decision["should_emit_recommendations"],
 
             "turn": state.turn,
         }
