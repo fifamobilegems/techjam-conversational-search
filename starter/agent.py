@@ -1,78 +1,53 @@
 from __future__ import annotations
 
-import json
-import re
-import sqlite3
 from pathlib import Path
 
+from starter.extractor import HeuristicTurnExtractor
+from starter.retriever import CatalogRetriever
+from state.state_manager import StateManager
 
-TOKEN_RE = re.compile(r"[a-z0-9]+", re.IGNORECASE)
-STOPWORDS = {
-    "a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "from",
-    "i", "in", "is", "it", "me", "my", "of", "on", "or", "please", "some",
-    "that", "the", "this", "to", "want", "with", "would", "you", "looking",
+
+QUESTION_PRIORITY = [
+    "other",
+    "feature",
+    "material",
+    "color",
+    "size",
+    "use_case",
+    "budget",
+    "brand",
+    "style",
+    "category",
+]
+
+QUESTION_TEXT = {
+    "category": "What product category should I focus on?",
+    "material": "Do you have a material preference?",
+    "color": "Do you have a color preference?",
+    "size": "What size or fit detail matters most?",
+    "style": "What style should I prioritize?",
+    "brand": "Is there a brand you prefer?",
+    "budget": "What budget range should I stay within?",
+    "feature": "What product feature matters most?",
+    "use_case": "What will you mainly use it for?",
+    "other": "What other must-have detail should I prioritize?",
 }
 
 
-def _text(value: object) -> str:
-    if value is None:
-        return ""
-    if isinstance(value, dict):
-        return " ".join(f"{key} {item}" for key, item in value.items())
-    if isinstance(value, list):
-        return " ".join(str(item) for item in value)
-    return str(value)
-
-
-def _terms(text: str) -> list[str]:
-    return [
-        token.lower()
-        for token in TOKEN_RE.findall(text)
-        if len(token) > 1 and token.lower() not in STOPWORDS
-    ]
-
-
 class Agent:
-    """Editable weak baseline: stateless BM25 retrieval with no LLM dependency."""
+    """Conversational shopping agent with deterministic retrieval and reranking."""
 
     def __init__(self, catalog_path: str | Path = "data/catalog.jsonl") -> None:
-        self.catalog_path = Path(catalog_path)
-        self.connection = sqlite3.connect(":memory:")
+        self.retriever = CatalogRetriever(catalog_path)
+        self.manager = StateManager()
+        self.extractor = HeuristicTurnExtractor()
         self._sessions: set[str] = set()
-        self._build_index()
-
-    def _build_index(self) -> None:
-        cursor = self.connection.cursor()
-        cursor.execute(
-            "CREATE VIRTUAL TABLE products USING fts5("
-            "parent_asin UNINDEXED, title, categories, features, details, store, description, "
-            "tokenize='unicode61 remove_diacritics 2')"
-        )
-        batch: list[tuple[str, str, str, str, str, str, str]] = []
-        with self.catalog_path.open(encoding="utf-8") as handle:
-            for line in handle:
-                product = json.loads(line)
-                batch.append(
-                    (
-                        str(product["parent_asin"]),
-                        _text(product.get("title")),
-                        _text(product.get("categories")),
-                        _text(product.get("features")),
-                        _text(product.get("details")),
-                        _text(product.get("store")),
-                        _text(product.get("description")),
-                    )
-                )
-                if len(batch) >= 1000:
-                    cursor.executemany("INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?)", batch)
-                    batch.clear()
-        if batch:
-            cursor.executemany("INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?)", batch)
-        self.connection.commit()
+        self._profiles: dict[str, dict] = {}
 
     def reset(self, session_id: str, user_profile: dict) -> None:
-        # The profile is anonymized and may be used for personalization.
         self._sessions.add(session_id)
+        self._profiles[session_id] = user_profile
+        self.manager.reset(session_id)
 
     def respond(
         self,
@@ -83,20 +58,45 @@ class Agent:
     ) -> dict:
         if session_id not in self._sessions:
             raise RuntimeError("reset must be called before respond")
-        unique_terms = list(dict.fromkeys(_terms(user_message)))[:40]
-        expression = " OR ".join(f'"{term}"' for term in unique_terms)
-        if not expression:
-            recommendations: list[dict] = []
-        else:
-            rows = self.connection.execute(
-                "SELECT parent_asin FROM products WHERE products MATCH ? "
-                "ORDER BY bm25(products, 0.0, 6.0, 4.0, 2.5, 2.5, 1.5, 1.0) LIMIT ?",
-                (expression, top_k),
-            ).fetchall()
-            recommendations = [{"parent_asin": str(row[0])} for row in rows]
+
+        current_state = self.manager.get(session_id)
+        extracted = self.extractor.extract(user_message, current_state)
+        self.manager.update(session_id, extracted, turn)
+        state = self.manager.export(session_id)
+
+        recommendations = [
+            {"parent_asin": parent_asin}
+            for parent_asin in self.retriever.retrieve_and_rerank(
+                state["search_query"],
+                state["constraints"],
+                state["no_preference"],
+                top_k=top_k,
+            )
+        ]
+
+        ask_attribute = self._choose_ask_attribute(session_id, turn)
+        message = QUESTION_TEXT[ask_attribute] if ask_attribute else "Here are the closest matches I found."
+
         return {
-            "message": "Here are the closest matches I found.",
-            "ask_attribute": None,
+            "message": message,
+            "ask_attribute": ask_attribute,
             "recommendations": recommendations,
             "usage": {"prompt_tokens": 0, "completion_tokens": 0},
         }
+
+    def _choose_ask_attribute(self, session_id: str, turn: int) -> str | None:
+        if turn >= 10:
+            return None
+
+        state = self.manager.get(session_id)
+        for attribute in QUESTION_PRIORITY:
+            if attribute in state.slots:
+                continue
+            if attribute in state.no_preference:
+                continue
+            if attribute in state.asked_attributes:
+                continue
+            self.manager.mark_asked(session_id, attribute)
+            return attribute
+
+        return None

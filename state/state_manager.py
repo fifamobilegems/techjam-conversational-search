@@ -29,6 +29,7 @@ Intent = Literal[
     "buying",
     "browsing",
     "boundary",
+    "override",
     "unknown",
 ]
 
@@ -41,15 +42,15 @@ NextAction = Literal[
 
 # Initial heuristic, tune later based on dev-set results.
 CLARIFICATION_PRIORITY = [
-    "category",
     "use_case",
     "size",
-    "budget",
-    "brand",
+    "category",
     "material",
     "color",
-    "style",
     "feature",
+    "budget",
+    "brand",
+    "style",
     "other",
 ]
 
@@ -537,7 +538,7 @@ class StateManager:
         # retrieve immediately instead of wasting turns.
         # -----------------------------------------------------
 
-        if state.intent == "buying":
+        if state.intent in {"buying", "override"}:
 
             return {
                 "next_action": "retrieve",
