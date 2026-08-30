@@ -84,34 +84,18 @@ class WorkflowPolicyTest(unittest.TestCase):
         self.assertEqual(weights["wool"], 1.0)
         self.assertEqual(weights["leather"], 0.4)
 
-    def test_no_preference_field_is_never_asked_again(self) -> None:
+    def test_exhausted_customer_is_not_asked_more_questions(self) -> None:
         self.turn("No preference for color", 1)
         self.turn("I don't have an additional preference for other.", 2)
 
         self.assertIn("color", self.manager.export(self.session_id)["no_preference"])
 
-        asked = []
-        for turn in range(3, 11):
-            attribute = self.manager.choose_next_attribute(self.session_id)
-            if attribute is None:
-                break
-            asked.append(attribute)
-            self.manager.mark_asked(self.session_id, attribute)
-            self.manager.get(self.session_id).turn = turn
+        self.assertIsNone(self.manager.choose_next_attribute(self.session_id))
 
-        self.assertNotIn("color", asked)
-
-    def test_classifying_attributes_are_never_asked_twice(self) -> None:
-        # "other" is exempt: the simulator answers it without classifying
-        # it, so it returns fresh constraints every time it is asked.
+    def test_exhaustion_stops_the_fallback_question_cycle(self) -> None:
         self.turn("I don't have an additional preference for other.", 1)
 
-        first = self.manager.choose_next_attribute(self.session_id)
-        self.manager.mark_asked(self.session_id, first)
-        second = self.manager.choose_next_attribute(self.session_id)
-
-        self.assertNotEqual(first, "other")
-        self.assertNotEqual(first, second)
+        self.assertIsNone(self.manager.choose_next_attribute(self.session_id))
 
     def test_other_is_re_asked_while_information_remains(self) -> None:
         self.assertEqual(self.turn("I'm exploring shoes", 1)["ask_attribute"], "other")

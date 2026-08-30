@@ -100,6 +100,20 @@ class RetrieverTest(unittest.TestCase):
             self.assertEqual(len(result), len(set(result)))
             self.assertTrue(set(result).issubset({"A", "B", "C"}))
 
+    def test_raw_evidence_survives_colliding_feature_slots(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            retriever = CatalogRetriever(write_catalog(Path(directory)))
+            result = retriever.retrieve_and_rerank(
+                "shoe",
+                {"feature": "lightweight"},
+                raw_constraints=[
+                    {"attribute": "feature", "text": "mesh upper", "weight": 1.0},
+                    {"attribute": "feature", "text": "lightweight", "weight": 1.0},
+                ],
+                top_k=3,
+            )
+            self.assertEqual(result[0], "A")
+
 
 if __name__ == "__main__":
     unittest.main()
