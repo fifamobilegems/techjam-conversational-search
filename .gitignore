@@ -5,6 +5,11 @@ __pycache__/
 results.json
 logs/
 data/catalog.jsonl
+# Dense-retrieval build products. Rebuild with:
+#   python -m scripts.build_embeddings
+data/embeddings/
+.venv/
+venv/
 data/releases/
 # Organizer-only code, private evaluation data, manifests, and build reports.
 organizer/
