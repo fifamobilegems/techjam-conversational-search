@@ -217,7 +217,6 @@ class CatalogRetriever:
         search_query: str,
         constraints: dict,
         no_preference: Iterable[str] = (),
-        raw_constraints: Iterable[dict] = (),
         top_k: int = 10,
         raw_constraints: Iterable[dict] = (),
     ) -> list[str]:

@@ -67,6 +67,33 @@ class Agent:
 
 `ask_attribute` is one of `category`, `material`, `color`, `size`, `style`, `brand`, `budget`, `feature`, `use_case`, `other`, or `null`. See `docs/agent_api_contract.json`.
 
+## Dense Retrieval Foundation
+
+The `retrieval/` package embeds the frozen catalog and serves an exact,
+in-memory cosine index over it. It is scaffolding only: **no dense route is
+wired into the agent yet**, so the scored path is still BM25 plus the
+constraint reranker and `docs/baseline_results.json` still reproduces exactly.
+
+```bash
+pip install -r requirements-embeddings.txt   # or requirements.txt for the no-torch backend
+python -m scripts.build_embeddings           # writes data/embeddings/<encoder>/
+python -m scripts.probe_embeddings --ceiling # oracle dense Hit Rate@K on the public set
+```
+
+```python
+from retrieval import VectorIndex
+
+index = VectorIndex.load_optional()          # None when the artifact is absent
+hits = index.search("black leather ankle boots", top_k=50)
+```
+
+The artifact is gitignored and rebuilt from the catalog; the manifest records
+the encoder, the document format version, and the catalog checksum, and a
+stale artifact is rejected on load rather than silently degrading recall.
+
+`docs/rag_foundation.md` has the API reference, the integration seam in
+`starter/retriever.py`, and the open work items.
+
 ## Technical Metrics
 
 - **Hit Rate@10:** fraction of sessions that find the target within 10 turns.
@@ -96,6 +123,11 @@ docs/agent_api_contract.json      machine-readable Agent contract
 docs/evaluation_config.json       scoring configuration
 docs/baseline_results.json        reproducible weak-starter reference score
 starter/agent.py                  editable weak starter
+state/state_manager.py            multi-turn slot state and dialogue control
+retrieval/                        dense-retrieval foundation (document, encoders, index)
+scripts/build_embeddings.py       builds the catalog embedding artifact
+scripts/probe_embeddings.py       artifact sanity checks and oracle recall ceiling
+docs/rag_foundation.md            dense-retrieval handover and integration contract
 evaluator/local_evaluator.py      public-set simulator and scorer
 ```
 

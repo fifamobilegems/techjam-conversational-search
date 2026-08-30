@@ -1,0 +1,8 @@
+# Runtime dependencies for the dense-retrieval foundation (`retrieval/`).
+#
+# The scored agent path -- BM25 over SQLite FTS5 plus the rule extractor --
+# is standard library only and still runs with none of this installed.
+# `VectorIndex.load_optional()` returns None when the artifact is absent, so
+# a bare checkout degrades to the current keyword behaviour instead of
+# failing to start.
+numpy>=1.24
