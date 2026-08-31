@@ -27,7 +27,6 @@ partial
 Recall@500 expected from 1.1 is 0.030 → 0.823 (+0.793), but it is not yet
 measurable in the live path because Agent records the current user message after
 state export. No fabricated before/after result is reported.
-|---|---|---|
 
 ## What I could NOT do, and why
 
@@ -37,6 +36,8 @@ state export. No fabricated before/after result is reported.
   only class yields, not the specified fitted artifact.
 - Re-sweep credibility floors: it requires the two-stage Agent path and live
   current-turn scores.
+- The local bench/evaluator invocations did not return results and were stopped
+  after leaving orphan Python processes; no benchmark outcome is claimed.
 
 ## Requests I filed in REQUESTS.md
 
@@ -49,3 +50,9 @@ state export. No fabricated before/after result is reported.
 The compatibility fallback retains `other` only while Agent has not provided
 `attribute_stats`. Once it does, the adaptive policy takes over and the official
 simulator score decrease must be reported explicitly as the accepted trade.
+
+Autonomy re-check: the local `origin/main` ref still lacks A/D integration, the
+network fetch was blocked by SSL issuer validation, and the prescribed raw-query
+self-check still returned `''`. Role C's commits were rebased against available
+local `main` and fast-forward merged there; A and D have unfinished TODO items,
+so Role C is not the final integrator.
