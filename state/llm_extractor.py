@@ -14,7 +14,13 @@ dependency.
 Enable with:
 
     export TECHJAM_LLM_EXTRACTOR=1
-    export ANTHROPIC_API_KEY=...
+    export OPENAI_API_KEY=...
+
+The client speaks the OpenAI Chat Completions protocol, so it works against
+OpenAI directly or against any compatible gateway. For OpenRouter also set:
+
+    export OPENAI_BASE_URL=https://openrouter.ai/api/v1
+    export TECHJAM_LLM_MODEL=openai/gpt-4o-mini   # gateway ids are namespaced
 """
 
 from __future__ import annotations
@@ -27,7 +33,11 @@ from typing import Any
 from state.state_manager import ALLOWED_ATTRIBUTES, AttributeUpdate, ExtractedTurn
 
 
-DEFAULT_MODEL = "claude-opus-5"
+# Chat-completions model. Override with TECHJAM_LLM_MODEL. Note that gateways
+# namespace their ids ("openai/gpt-4o-mini" on OpenRouter) and that the bare
+# form 404s there -- which this module swallows silently, so check token usage
+# rather than assuming a clean run means the tier fired.
+DEFAULT_MODEL = "gpt-4o-mini"
 
 ENV_FLAG = "TECHJAM_LLM_EXTRACTOR"
 
@@ -200,11 +210,25 @@ class LLMTurnExtractor:
         if not is_enabled():
             return None
         try:
-            import anthropic
+            import openai
         except ImportError:
+            # Keeps the scored path dependency-free: no package, no tier, no
+            # error. The deterministic extractor still runs.
             return None
         try:
-            return anthropic.Anthropic(max_retries=1, timeout=10.0)
+            # The SDK reads OPENAI_API_KEY and OPENAI_BASE_URL from the
+            # environment, so a compatible gateway needs no code change.
+            #
+            # Accept-Encoding excludes zstd deliberately. The SDK's vendored
+            # httpx2 calls ZstdDecompressor.decompress(output_buffer_limit=...),
+            # which no released backports.zstd accepts, so any zstd-encoded
+            # response dies as an opaque "Connection error". Asking for gzip
+            # sidesteps the whole incompatibility at negligible bandwidth cost.
+            return openai.OpenAI(
+                max_retries=1,
+                timeout=10.0,
+                default_headers={"Accept-Encoding": "gzip, deflate"},
+            )
         except Exception:
             return None
 
@@ -216,24 +240,33 @@ class LLMTurnExtractor:
             if isinstance(item, dict)
         )
         content = user_message if not context else f"Conversation context (do not extract from it):\n{context}\n\nCurrent message:\n{user_message}"
-        response = self._client.messages.create(
+        response = self._client.chat.completions.create(
             model=self.model,
             max_tokens=MAX_TOKENS,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": content}],
-            output_config={"format": {"type": "json_schema", "schema": OUTPUT_SCHEMA}},
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": content},
+            ],
+            # OUTPUT_SCHEMA already satisfies strict mode: additionalProperties
+            # is false on every object and every property is required.
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "constraints",
+                    "strict": True,
+                    "schema": OUTPUT_SCHEMA,
+                },
+            },
         )
 
         usage = getattr(response, "usage", None)
         if usage is not None:
             self.last_usage = {
-                "prompt_tokens": int(getattr(usage, "input_tokens", 0) or 0),
-                "completion_tokens": int(getattr(usage, "output_tokens", 0) or 0),
+                "prompt_tokens": int(getattr(usage, "prompt_tokens", 0) or 0),
+                "completion_tokens": int(getattr(usage, "completion_tokens", 0) or 0),
             }
 
-        text = "".join(
-            block.text for block in response.content if getattr(block, "type", "") == "text"
-        )
+        text = response.choices[0].message.content or ""
         payload = json.loads(text)
         constraints = payload.get("constraints", [])
         return constraints if isinstance(constraints, list) else []

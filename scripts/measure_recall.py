@@ -73,10 +73,18 @@ def _hit_at(retriever: CatalogRetriever, query: str, target: str) -> dict:
 
 
 def _pipeline_query_turn1(extractor: HeuristicTurnExtractor, message: str) -> str:
-    """Reproduce the turn-1 ``state['search_query']`` the Agent would build."""
+    """Reproduce the turn-1 ``state['search_query']`` the Agent would build.
+
+    The message is recorded *before* export, mirroring the live ``Agent.respond``
+    ordering (fixed in agent.py so the current turn's words reach
+    ``build_search_context``). Before that fix this probe reported ~68% empty
+    turn-1 queries on real phrasing; recording the message here keeps the tool
+    honest about what the agent actually searches.
+    """
     manager = StateManager()
     session_id = "recall_probe"
     manager.reset(session_id)
+    manager.record_message(session_id, "user", message, 1)
     extracted = extractor.extract(message, manager.get(session_id))
     manager.update(session_id, extracted, 1)
     return manager.export(session_id).get("search_query", "") or ""

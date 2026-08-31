@@ -30,7 +30,7 @@ raw text, so C's `build_search_context()` cannot meet its non-empty-query
 contract in the live flow. Move that user-message record before extraction/state
 export (or provide `user_message` to the state update) while preserving one
 record per message.
-Status: open
+Status: done — Role A 2026-08-31 (see A → B/C/D entry at end)
 
 ### 2026-08-31 · C → A · Make retrieval policy diagnostics available in-turn
 `choose_next_attribute()` and `should_emit_recommendations()` currently execute
@@ -159,7 +159,7 @@ keyword-safe and defaults to `None`, so adding it is a one-line change with no
 behavioural risk. Note `RerankWeights.profile_scale` currently defaults to
 `0.0`: profile scoring stays off until it can be measured against a live
 profile, so wiring it up alone changes nothing until that default is raised.
-Status: open
+Status: done — Role A 2026-08-31 passes `self._profiles.get(session_id)`; stage stays inert until D raises `profile_scale`
 
 ### 2026-08-31 · D → A · Decide whether to adopt `RERANK_WEIGHTS=calibrated`
 `scripts/calibrate_rerank.py` fitted the ~30 reranker weights on
@@ -186,7 +186,10 @@ the primary objective and they gain +0.11 each — but the branch ships with
 with `RERANK_WEIGHTS=calibrated`. Re-run
 `python3 -m scripts.calibrate_rerank` after any extractor or query-builder
 change; the fitted values are not portable across those.
-Status: open
+Status: done — Role A 2026-08-31 ADOPTED. `Agent.__init__` sets
+`os.environ.setdefault("RERANK_WEIGHTS","calibrated")` (overridable). Re-measured
+on this branch with items 1&3 applied, n=150 head: realistic/esci +0.076 mean
+technical, official −0.030 mean (public200-official −0.063). Robustness-first.
 
 ### 2026-08-31 · D → A · Measured cost of the `record_message` ordering bug
 Reinforcing C's open request with a number, since it caps what retrieval can do.
@@ -198,7 +201,12 @@ pipeline 0.152). Turn 1 is therefore wasted on most real-query sessions, which
 shows up as MTTC 3.37 and caps both MRR (30% of the score) and efficiency (20%).
 No reranker change can recover a turn that retrieved nothing. This is the
 highest-value remaining item D can see and it is not in a D-owned file.
-Status: open
+Status: done — Role A 2026-08-31. Fixed in `agent.py` (record user message
+before export). `measure_recall` now updated to mirror the live flow: esci×esci
+turn-1 pipeline recall@500 0.152 → 0.833, empty 67.8% → 0.0%. Live-agent score
+gain is smaller than the recall gain because `hold_until_turn=2` already skips
+turn-1 emission; item 3 mainly adds the current turn's words immediately and
+unblocks a credibility-based turn-1 emit (C's Phase 5).
 
 ### 2026-08-31 · C → D · `attribute_stats` reconciliation
 Verified D's published `attribute_stats` contract is present on
@@ -206,3 +214,88 @@ Verified D's published `attribute_stats` contract is present on
 `instability` field against observed value support and consumes the mapping
 directly. The original C → D request is satisfied; no D action remains.
 Status: done
+
+### 2026-08-31 · A → B · LLM tier switched to the OpenAI protocol (I edited your file)
+**Heads-up: Role A edited `state/llm_extractor.py`, which is B-owned.** Done on
+explicit instruction from the team lead, who has an OpenRouter key and no
+Anthropic one. Flagging it rather than hiding it; revert freely if you disagree.
+
+Only the transport changed — 7 lines across `_build_client` and `_call`. The
+extraction contract, structural gate, verbatim guard, additive-merge logic,
+`OUTPUT_SCHEMA`, and cost guard are all untouched.
+
+- `import anthropic` → `import openai`; `anthropic.Anthropic(...)` →
+  `openai.OpenAI(...)` (SDK reads `OPENAI_API_KEY` / `OPENAI_BASE_URL`).
+- `messages.create` → `chat.completions.create`; `SYSTEM_PROMPT` moves into the
+  messages array as a `system` role; `output_config` → `response_format`
+  with `{"type":"json_schema","json_schema":{"name","strict","schema"}}`.
+- usage `input_tokens`/`output_tokens` → `prompt_tokens`/`completion_tokens`.
+- parsing `response.content[].text` → `response.choices[0].message.content`.
+- `DEFAULT_MODEL` `claude-opus-5` → `gpt-4o-mini`.
+- New optional `requirements-llm.txt` (`openai>=1.40`); `.env_example` updated.
+
+`OUTPUT_SCHEMA` needed no change — it already met OpenAI strict mode
+(`additionalProperties:false` everywhere, all properties in `required`).
+
+Verified: client constructs; request carries system+user roles and a strict
+json_schema; response parsing and token accounting correct (mocked, no live key
+available); `OPENAI_BASE_URL` honoured for OpenRouter; **flag off leaves the
+scored path byte-identical** (esci1000×esci 0.8238, 0 tokens) and 197 tests green.
+
+Two things B should know. The tier had **never actually run** — neither
+`anthropic` nor `openai` was installed, so `_build_client` always returned `None`
+at the `ImportError`; every measured number is pure-offline. And the bare
+`except Exception` in `extract()` means a wrong key, wrong model id, or an
+unsupported `response_format` are all indistinguishable from success: no error,
+0 tokens. On a gateway the model id must be namespaced (`openai/gpt-4o-mini`) or
+it 404s into that silent no-op. Verify by asserting non-zero token usage, never
+by "it ran clean". Plan and gotchas: `docs/plan_openai_migration.md`.
+Status: done
+
+### 2026-08-31 · A → B/C/D · Second-part integration landed (branch role_A_second_part)
+Addressed the four A-facing requests above, all in Role-A-owned files
+(`starter/agent.py`, `scripts/measure_recall.py`, `.env_example`), no edits to
+`extractor.py` / `retriever.py` / `state/*` / `evaluator/*`.
+
+1. **Item 3 — record user message before export** (`agent.py`). `record_message`
+   moved ahead of extraction/state export; assistant record unchanged (one per
+   message). `measure_recall` updated to mirror the live ordering. Effect:
+   esci×esci turn-1 pipeline recall@500 0.15 → 0.83, empty% 68 → 0. Live score
+   +0.012 technical on esci×esci (smaller than recall gain — `hold_until_turn=2`
+   skips turn-1 emit; this unblocks C's credibility emit / Phase 5).
+2. **Item 1 — user_profile passed** into `retrieve_and_rerank` (`agent.py`).
+   Inert until D raises `RerankWeights.profile_scale` (currently 0.0). No risk.
+3. **Item 2 — RERANK_WEIGHTS=calibrated adopted** via overridable setdefault.
+4. **`.env_example`** added at repo root documenting all env vars by owner.
+
+Combined before→after vs pristine main@458fdee (n=150 head, technical):
+esci×esci 0.775→0.824, synth800-realistic 0.762→0.911, esci1000-realistic
+0.740→0.865, public200-realistic 0.800→0.867; official cost: public200-official
+0.900→0.846, esci1000-official 0.869→0.848, synth800-official ≈flat. 197 tests
+green. Robustness-first trade is deliberate and reversible (`RERANK_WEIGHTS=default`).
+Status: done
+
+### 2026-08-31 · A → B · LLM tier measured and NOT recommended for scoring runs
+Role B's Tier-2 layer now works end to end against the OpenAI protocol (see the
+migration entry above). Measured on the real agent loop, esci1000 x esci,
+identical head-selected samples, `RERANK_WEIGHTS=calibrated`:
+
+| n | flag | technical | HR@10 | MRR | tokens | est. cost | wall clock |
+|--:|---|--:|--:|--:|--:|--:|--:|
+| 50 | on | 0.7911 | 0.900 | — | 46,893 | $0.009 | 96s |
+| 50 | off | 0.7572 | 0.860 | — | 0 | $0 | 7s |
+| 200 | on | 0.8206 | 0.920 | 0.6817 | 154,265 | $0.029 | 289s |
+| 200 | off | **0.8256** | **0.930** | 0.6754 | 0 | $0 | 18s |
+
+**The n=50 result (+0.034) did not replicate.** It rested on two extra sessions
+out of fifty. At n=200 the tier is neutral-to-slightly-negative: −0.005
+technical, −0.010 HR@10, +0.006 MRR, for 16x the wall clock and ~$0.14 per 1000
+sessions. Anyone re-running this: n=50 is far too small for a 0.03-scale claim
+on this metric.
+
+Recommendation: keep `TECHJAM_LLM_EXTRACTOR` unset for scoring and benchmarking.
+The gate, the verbatim guard and the additive-only design are all sound — the
+model simply is not adding spans that change ranking on this catalog. Nothing to
+fix in B's code; this is a deployment decision, and it is also a defensible
+submission story (tried, measured at n=200, rejected on evidence).
+Status: done (informational)

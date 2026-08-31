@@ -93,10 +93,18 @@ def run_matrix(
     limit: int | None,
     select: str,
     full_matrix: bool,
+    hold_until_turn: int | None = None,
 ) -> dict:
     catalog_ids, categories, products = catalog_index(catalog_path)
     build_started = time.perf_counter()
-    agent = Agent(catalog_path)  # built once, reused across every cell
+    # hold_until_turn is the emit policy's only live lever (the credibility test
+    # is inert until retrieval diagnostics are published in-turn), so it is worth
+    # sweeping. None keeps the Agent's own default.
+    agent = (
+        Agent(catalog_path)
+        if hold_until_turn is None
+        else Agent(catalog_path, hold_until_turn=hold_until_turn)
+    )  # built once, reused across every cell
     build_ms = round((time.perf_counter() - build_started) * 1000, 1)
     print(f"catalog indexed: {len(catalog_ids)} products | agent built in {build_ms:.0f}ms\n")
 
@@ -138,6 +146,7 @@ def run_matrix(
         "catalog": str(catalog_path),
         "limit": limit,
         "select": select,
+        "hold_until_turn": hold_until_turn,
         "datasets": datasets,
         "simulators": simulators,
         "cells": cells,
@@ -236,10 +245,22 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="force incompatible cells (e.g. esci sim on a dataset without esci_query)",
     )
+    parser.add_argument(
+        "--hold-until-turn",
+        type=int,
+        default=None,
+        help="override the emit-policy hold turn (default: the Agent's own value)",
+    )
     args = parser.parse_args(argv)
 
     result = run_matrix(
-        args.catalog, args.datasets, args.simulators, args.limit, args.select, args.full_matrix
+        args.catalog,
+        args.datasets,
+        args.simulators,
+        args.limit,
+        args.select,
+        args.full_matrix,
+        args.hold_until_turn,
     )
 
     out_dir = Path(args.out_dir)
