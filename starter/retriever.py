@@ -454,7 +454,18 @@ class RerankConfig:
     # barely reaches the final order. 16 of 21 esci misses were targets BM25
     # ranked #1. Reserves the tail of the Top-10 rather than the head, so a
     # confident constraint-driven ranking keeps its good ranks.
-    hard_floor: bool = False
+    #
+    # ON by default, on measurement -- the first ranking experiment here to
+    # earn it. Full size, 2000 sessions per side: mean 0.8370 -> 0.8526 over
+    # seven cells, esci x esci 0.8158 -> 0.8614 (HR 0.915 -> 0.983), and the
+    # official columns gain rather than pay (+0.0044). No cell regressed, so
+    # this is not the robustness-for-official trade the calibrated weights are.
+    # Disable with RERANK_HARD_FLOOR=0.
+    hard_floor: bool = True
+    # 2 is the knee. esci keeps climbing to reserve~7 (0.8747) but the official
+    # column falls monotonically past 2 -- 0.8482 / 0.8427 / 0.8358 / 0.8288 /
+    # 0.8221 at reserve 2/3/5/7/9. Two slots take 89% of the available esci
+    # gain at zero official cost; more buys esci at the scorer's expense.
     hard_floor_reserve: int = 2
 
 
