@@ -643,6 +643,7 @@ class StateManager:
             attribute_stats=attribute_stats,
             asked_attributes=state.asked_attributes,
             no_preference=state.no_preference,
+            mission=state.intent,
         )
 
     def should_emit_recommendations(

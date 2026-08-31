@@ -199,3 +199,10 @@ shows up as MTTC 3.37 and caps both MRR (30% of the score) and efficiency (20%).
 No reranker change can recover a turn that retrieved nothing. This is the
 highest-value remaining item D can see and it is not in a D-owned file.
 Status: open
+
+### 2026-08-31 · C → D · `attribute_stats` reconciliation
+Verified D's published `attribute_stats` contract is present on
+`CatalogRetriever.last_diagnostics`. C now normalizes D's Shannon-entropy
+`instability` field against observed value support and consumes the mapping
+directly. The original C → D request is satisfied; no D action remains.
+Status: done
