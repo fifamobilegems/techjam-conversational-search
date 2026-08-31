@@ -87,8 +87,15 @@ OUTPUT_SCHEMA = {
 
 
 def is_enabled() -> bool:
-    """True when the optional LLM tier has been switched on by env flag."""
-    return os.environ.get(ENV_FLAG, "").strip().lower() in {"1", "true", "yes"}
+    """Tier 2 is part of the shipped configuration, so this defaults ON.
+
+    Degradation stays total and silent: without `OPENAI_API_KEY`, without the
+    `openai` package, or without network, `_build_client()` returns None and
+    the deterministic cascade is the entire agent. Verified in a real run --
+    two bench cells lost network mid-matrix and scored identically to the
+    deterministic baseline. Set `TECHJAM_LLM_EXTRACTOR=0` to disable it.
+    """
+    return os.environ.get(ENV_FLAG, "1").strip().lower() in {"1", "true", "yes"}
 
 
 class LLMTurnExtractor:
