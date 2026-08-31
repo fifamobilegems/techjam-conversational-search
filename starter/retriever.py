@@ -125,6 +125,12 @@ FIELD_WEIGHTS = (0.0, 6.0, 5.0, 4.0, 2.5, 3.0, 1.0, 1.5)
 GENERIC_MID_FRACTION = 0.55
 GENERIC_LOW_FRACTION = 0.2
 
+# Structured `details` keys retained per product for `attribute_stats`.
+# Coverage is low by design of the source data -- Color 4.9%, Material 4.1%,
+# Style 3.5%, Size 1.9% -- which is exactly what the clarification policy
+# needs to know before spending a turn asking about one.
+FACET_KEYS = ("Color", "Material", "Size", "Style")
+
 
 # =============================================================================
 # DEPARTMENT
@@ -362,6 +368,11 @@ class ProductRecord:
     all_terms: frozenset[str]
     normalized_text: str
     department: str | None
+    # Only the keys Role C's clarification policy asks about. `details` is
+    # flattened to a string for BM25; recovering values from that string with a
+    # regex is not possible -- there is no delimiter between one key's value
+    # and the next key's name.
+    facets: dict[str, str]
 
 
 class Contribution(NamedTuple):
@@ -538,8 +549,6 @@ class RetrievalPlan:
     budget_soft: bool
     brand: object | None
     brand_soft: bool
-    category: object | None
-    category_soft: bool
     profile_terms: frozenset[str]
     profile_rating: float | None
 
@@ -657,7 +666,6 @@ class CatalogRetriever:
 
         budget_value = active.get("budget")
         brand_value = active.get("brand")
-        category_value = active.get("category")
 
         profile_terms: frozenset[str] = frozenset()
         profile_rating: float | None = None
@@ -680,8 +688,6 @@ class CatalogRetriever:
             budget_soft="budget" in soft_attributes,
             brand=brand_value,
             brand_soft="brand" in soft_attributes,
-            category=category_value,
-            category_soft="category" in soft_attributes,
             profile_terms=profile_terms,
             profile_rating=profile_rating,
         )
@@ -1156,15 +1162,14 @@ class CatalogRetriever:
             stats[attribute] = {
                 "coverage": round(present / len(sample), 4),
                 "value_counts": dict(sorted(counts.items(), key=lambda kv: -kv[1])[:12]),
-                "instability": round(entropy, 4),
+                "instability": max(0.0, round(entropy, 4)),
             }
         return stats
 
     def _structured_value(self, record: ProductRecord, key: str) -> str:
         if key == "store":
             return record.store.strip().lower()[:40]
-        match = re.search(rf"{re.escape(key)}\s+([^|]{{1,40}})", record.details, flags=re.IGNORECASE)
-        return match.group(1).strip().lower() if match else ""
+        return record.facets.get(key, "")
 
     # --------------------------------------------------------------- build
 
@@ -1234,8 +1239,13 @@ class CatalogRetriever:
             if part
         )
         department = None
+        facets: dict[str, str] = {}
         if isinstance(raw_details, dict):
             department = _canonical_department(raw_details.get("Department"))
+            for key in FACET_KEYS:
+                value = raw_details.get(key)
+                if isinstance(value, str) and value.strip():
+                    facets[key] = value.strip().lower()[:40]
         return ProductRecord(
             parent_asin=str(product["parent_asin"]),
             title=title,
@@ -1252,6 +1262,7 @@ class CatalogRetriever:
             all_terms=frozenset(_terms(all_text)),
             normalized_text=_normalized_text(all_text),
             department=department,
+            facets=facets,
         )
 
     def _quality_score(self, record: ProductRecord) -> float:
