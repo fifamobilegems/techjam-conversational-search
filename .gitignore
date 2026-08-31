@@ -2,6 +2,9 @@ __pycache__/
 *.py[cod]
 .DS_Store
 .env
+# Any local variant (.env.bak, .env.local, ...). Does NOT match .env_example,
+# which is the tracked template and carries no real values.
+.env.*
 results.json
 logs/
 data/catalog.jsonl
