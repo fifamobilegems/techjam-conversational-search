@@ -447,6 +447,15 @@ class RerankConfig:
     # constraints are supposed to correct. Off, and kept only as a documented
     # negative result.
     rank_consensus: bool = False
+    # Guarantee the strongest lexical matches a Top-10 slot.
+    # Diagnosed from traces: constraint scoring contributes 20-75 points while
+    # reciprocal-rank fusion contributes ~1.6 across the whole pool (RRF k=60
+    # puts rank 1 at 1.639 and rank 3 at 1.587), so 'BM25 ranked it first'
+    # barely reaches the final order. 16 of 21 esci misses were targets BM25
+    # ranked #1. Reserves the tail of the Top-10 rather than the head, so a
+    # confident constraint-driven ranking keeps its good ranks.
+    hard_floor: bool = False
+    hard_floor_reserve: int = 2
 
 
 def _env_flag(name: str, default: bool) -> bool:
@@ -469,6 +478,10 @@ def config_from_env() -> RerankConfig:
         coverage_bonus=_env_flag("RERANK_COVERAGE", base.coverage_bonus),
         idf_evidence=_env_flag("RERANK_IDF", base.idf_evidence),
         rank_consensus=_env_flag("RERANK_CONSENSUS", base.rank_consensus),
+        hard_floor=_env_flag("RERANK_HARD_FLOOR", base.hard_floor),
+        hard_floor_reserve=int(
+            os.environ.get("RERANK_HARD_FLOOR_RESERVE", base.hard_floor_reserve)
+        ),
         overfetch=int(os.environ.get("RERANK_OVERFETCH", base.overfetch)),
         min_survivors=int(os.environ.get("RERANK_MIN_SURVIVORS", base.min_survivors)),
     )
@@ -760,7 +773,34 @@ class CatalogRetriever:
             "candidate_scores": candidate_scores,
             "attribute_stats": self._attribute_stats(ranked_ids, plan),
         }
+        if self.config.hard_floor:
+            ranked_ids = self._apply_hard_floor(ranked_ids, top_k)
         return self._sanitize(ranked_ids, top_k)
+
+    def _apply_hard_floor(self, ranked_ids: list[str], top_k: int) -> list[str]:
+        """Guarantee the strongest BM25 matches a place in the returned Top-K.
+
+        Constraint scoring outweighs reciprocal-rank fusion by roughly fifty to
+        one, so a product BM25 ranked first can finish outside the Top-10 on a
+        constraint total that is merely unremarkable -- not on any violation.
+        Reserved slots are taken from the *tail* of the Top-K, so a ranking the
+        reranker is confident about keeps its leading positions and only its
+        weakest entries are displaced.
+        """
+        reserve = max(0, int(self.config.hard_floor_reserve))
+        if reserve <= 0 or top_k <= reserve:
+            return ranked_ids
+        head = ranked_ids[:top_k]
+        promote = [
+            parent_asin
+            for parent_asin in self._last_bm25_ids[:reserve]
+            if parent_asin in self.valid_ids and parent_asin not in head
+        ]
+        if not promote:
+            return ranked_ids
+        kept = head[: top_k - len(promote)]
+        keep_set = set(kept) | set(promote)
+        return kept + promote + [a for a in ranked_ids if a not in keep_set]
 
     def build_plan(
         self,
