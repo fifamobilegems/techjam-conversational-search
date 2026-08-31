@@ -115,29 +115,46 @@ class _RecordingRetriever:
 
 
 def capture_tapes(agent: Agent, samples, catalog_ids, categories, products, simulator: str):
-    """Replay every session with retrieval stubbed, returning per-turn requests."""
+    """Replay every session with retrieval stubbed, returning per-turn requests.
+
+    The agent calls the retriever only on turns it means to emit, so requests
+    cannot be zipped against turns positionally -- a held turn would shift every
+    later request one turn earlier and silently flatter MTTC. `Agent.respond` is
+    wrapped to record the call count at each turn boundary, which maps requests
+    to turns exactly.
+    """
     real = agent.retriever
     recorder = _RecordingRetriever()
+    original_respond = type(agent).respond
+    marks: list[int] = []
+
+    def respond(self, session_id, user_message, turn, top_k):
+        try:
+            return original_respond(self, session_id, user_message, turn, top_k)
+        finally:
+            marks.append(len(recorder.calls))
+
     agent.retriever = recorder  # type: ignore[assignment]
+    type(agent).respond = respond  # type: ignore[method-assign]
     tapes = []
     try:
         for sample in samples:
             recorder.calls = []
+            marks.clear()
             trace = run_session(agent, sample, catalog_ids, categories, products, simulator)
             turns = []
-            call_index = 0
-            for record in trace["turns"]:
-                emitted = record["recommendations"] is not None and call_index < len(recorder.calls)
-                # The agent only calls the retriever on turns it means to emit.
+            previous = 0
+            for index, record in enumerate(trace["turns"]):
+                mark = marks[index] if index < len(marks) else previous
                 request = None
-                if emitted and call_index < len(recorder.calls):
-                    request = recorder.calls[call_index]
-                    call_index += 1
+                if mark > previous:
+                    request = recorder.calls[mark - 1]
                     # `starter/agent.py` stores `user_profile` and does not pass
                     # it (filed with Role A). Supplying it here is what lets
                     # `profile_scale` be calibrated against real profiles
                     # instead of shipped as a guess.
                     request["user_profile"] = sample.get("user_profile")
+                previous = mark
                 turns.append({"scored": bool(record["scored"]), "request": request})
             tapes.append({
                 "sample_id": trace["sample_id"],
@@ -148,6 +165,7 @@ def capture_tapes(agent: Agent, samples, catalog_ids, categories, products, simu
             })
     finally:
         agent.retriever = real
+        type(agent).respond = original_respond  # type: ignore[method-assign]
     return tapes
 
 

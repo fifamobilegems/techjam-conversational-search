@@ -2,8 +2,22 @@
 
 ## Status
 
-partial — 6.1, 7.1, 7.2 and 7.4 complete; 6.2 **deliberately not built**, gate
-result below. One measurement I could not run is blocked on an A-owned file.
+complete — 6.1, 7.1, 7.2 and 7.4 delivered and measured; 6.2 **deliberately not
+built**, with the gate measurement that says so. One decision is left open for
+Role A on purpose (whether to adopt the calibrated weights), and one measurement
+is blocked on an A-owned file.
+
+**One-paragraph version.** The staged rerank and the prefilter are correct,
+tested, and worth almost nothing on these benchmarks — the datasets do not
+contain enough determinate constraint violations to exercise them. What did pay
+was adding a signal nobody had listed (`details.Department`, 87% covered,
+applied as a *penalty* rather than a filter) and calibrating the existing
+weights. Shipped defaults move the paraphrased columns +0.0327 and +0.0134
+technical with the verbatim columns flat, and lift hard-constraint
+coverage in the Top-10 by **18 points** on `esci/realistic`. The calibrated
+weight preset is worth a further +0.11 on both realistic columns but costs
+−0.0548 on `public200/official`, so it ships **off by default** for Role A to
+decide at integration.
 
 ## The baseline in my brief was stale, and that changed what the work was
 
@@ -19,7 +33,7 @@ calibration address. I re-derived this rather than assuming it; numbers below.
 
 ## What I changed
 
-- `starter/retriever.py`: ranking keyed on `(-hard_violations, score)` so a
+- `starter/retriever.py`: `CALIBRATED_WEIGHTS` preset (opt-in, see 7.4); ranking keyed on `(-hard_violations, score)` so a
   determinate violation cannot be traded away (7.1); prefilter over a 3× BM25
   over-fetch with a survivor floor (6.1); negated spans excluded *and* stripped
   from the query text; `strength="soft"` constraints abstain instead of
@@ -51,7 +65,8 @@ work. I edited no file owned by A, B or C.
 - Env switches, all defaulting to the shipped behaviour: `RERANK_STAGED`,
   `RERANK_PREFILTER`, `RERANK_EXCLUDE_NEGATED`, `RERANK_SOFT_ABSTAIN`,
   `RERANK_DEPARTMENT_PENALTY`, `RERANK_DEPARTMENT_GATE`,
-  `RERANK_PROFILE_TIEBREAK`, `RERANK_OVERFETCH`, `RERANK_MIN_SURVIVORS`.
+  `RERANK_PROFILE_TIEBREAK`, `RERANK_OVERFETCH`, `RERANK_MIN_SURVIVORS`, and
+  `RERANK_WEIGHTS=default|calibrated`.
 
 ## Feature ablation — n=200 stratified per cell, technical score
 
@@ -131,6 +146,126 @@ So `department_miss` ships as a calibratable weight and
 measured gain in my branch, and it comes from adding *evidence*, not from
 re-ordering the arithmetic.
 
+## Bench results — before vs after
+
+n=200 stratified per cell. **before** = every switch off (bit-identical to the
+pre-change reranker); **after** = shipped defaults, default weights.
+
+| dataset x simulator | HR@10 before | after | MRR before | after | MTTC before | after | technical before | after | delta |
+|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+| esci1000/esci | 0.9150 | 0.9150 | 0.5372 | 0.5386 | 3.370 | 3.365 | 0.7713 | 0.7718 | +0.0005 |
+| esci1000/realistic | 0.8350 | 0.8750 | 0.5035 | 0.5204 | 4.135 | 3.755 | 0.7059 | **0.7385** | **+0.0327** |
+| esci1000/official | 0.9750 | 0.9750 | 0.7347 | 0.7308 | 2.565 | 2.565 | 0.8766 | 0.8754 | −0.0011 |
+| synth800/official | 0.9800 | 0.9800 | 0.7020 | 0.6979 | 2.560 | 2.565 | 0.8694 | 0.8681 | −0.0013 |
+| synth800/realistic | 0.8850 | 0.9000 | 0.4797 | 0.4899 | 3.515 | 3.375 | 0.7361 | **0.7495** | **+0.0134** |
+| public200/official | 0.9900 | 0.9900 | 0.7814 | 0.7847 | 2.410 | 2.410 | 0.9012 | 0.9022 | +0.0010 |
+
+Robustness-first shape: the paraphrased columns gain, the verbatim columns are
+flat to within a thousandth.
+
+## Hard-constraint coverage in the Top-10
+
+HR@10 asks whether the one labelled product appeared. It says nothing about
+whether the other nine respected the request, which is what staging exists to
+protect — so this is the diagnostic that actually measures my change.
+
+- **violation-free@10** — share of returned products with zero determinate hard
+  violations.
+- **satisfied@10** — share of stated hard constraints each returned product
+  positively satisfies, averaged over the Top-10.
+
+Both arms are scored against **one fixed yardstick**
+(`RerankConfig(department_gate=True)`, a measurement choice, not the shipped
+ranking config). Judging each arm by its own definition of "violation" would
+make the before column perfect by construction, which is the first version of
+this metric I wrote and had to throw away.
+
+| dataset x simulator | violation-free@10 before | after | satisfied@10 before | after |
+|---|--:|--:|--:|--:|
+| esci1000/esci | 0.8475 | **0.9982** | 0.9553 | 0.9820 |
+| esci1000/realistic | 0.8084 | **0.9882** | 0.8214 | 0.8876 |
+| esci1000/official | 0.9782 | 0.9981 | 0.9897 | 0.9893 |
+| synth800/official | 0.9604 | 0.9922 | 0.9903 | 0.9903 |
+| synth800/realistic | 0.8600 | **0.9831** | 0.8538 | 0.8790 |
+| public200/official | 0.9675 | 0.9979 | 0.9954 | 0.9954 |
+
+**This is the real result of the branch.** On `esci/realistic`, HR@10 moves 4
+points while violation-free@10 moves **18** — the competition metric was blind
+to most of what the list was doing wrong, because it only ever looks at one
+product. A shopper who says "for men" was previously shown women's listings in
+roughly one slot in five.
+
+## Phase 7.4 — weight calibration, held out by generator
+
+`scripts/calibrate_rerank.py`. Coordinate search over the ~30 named weights,
+fitted on `synth800/realistic` and evaluated on the **234 `provenance=="gold"`
+ESCI rows** carrying real human E/S/C/I judgments — a different generator, which
+is the whole point of the experiment.
+
+| set | spec | n | technical before | after | delta |
+|---|---|--:|--:|--:|--:|
+| fit | synth800/realistic | 200 | 0.7495 | 0.8692 | +0.1197 |
+| **eval (held out)** | **esci1000/esci, gold only** | **234** | **0.7651** | **0.8120** | **+0.0469** |
+
+**Verdict: it transfers.** Roughly 40% of the fitted gain survives the change of
+generator, which is the signature of real signal — pure circularity transfers at
+zero, which is exactly what a 25-session pilot showed before there were enough
+sessions to fit anything.
+
+*Fidelity check:* the harness reports the fit set's "before" as **0.7495**,
+matching the real bench's `synth800/realistic` at **0.7495** to four decimals.
+The replay reproduces the official evaluator rather than approximating it.
+
+### What the search learned
+
+Two directions, both the same lesson:
+
+- **Trust BM25 rank far more.** `fusion_scale` 100 → 774, `popularity_scale`
+  1 → 0.24, `rating_coefficient` 0.4 → 0.07. The old weights let a popularity
+  bonus spanning 0–1.9 compete against a fusion range of **1.46 across the
+  entire 500-candidate pool**; rating count was quietly reordering BM25's
+  output.
+- **Stop punishing absent metadata.** `generic_miss` −12 → 0,
+  `budget_loose_miss` −20 → 0, `vocabulary_miss` −20 → −12.8. On a catalog where
+  `Color` is present on 4.9% of products, penalising "no color match" penalises
+  **sparse metadata, not bad products**. The one penalty the search made
+  *stronger* is `department_miss` (−25 → −55) — the only one backed by a
+  well-covered field.
+
+That is the department finding again, reached independently by search: **a
+penalty should scale with how reliably the field is populated.**
+
+### Validated on the real agent loop — and NOT made the default
+
+The harness prunes candidate pools, so nothing it finds is believed until it
+reproduces in the loop the evaluator actually runs:
+
+| dataset x simulator | technical default | calibrated | delta |
+|---|--:|--:|--:|
+| esci1000/realistic | 0.7385 | **0.8440** | **+0.1055** |
+| synth800/realistic | 0.7495 | **0.8690** | **+0.1195** |
+| esci1000/esci | 0.7718 | **0.8161** | **+0.0443** |
+| synth800/official | 0.8681 | 0.8668 | −0.0012 |
+| esci1000/official | 0.8754 | 0.8616 | −0.0138 |
+| public200/official | 0.9012 | 0.8474 | **−0.0548** |
+| | | mean | **+0.0332** |
+
+The gain is large and it holds outside the harness. But `docs/ARCHITECTURE.md`
+names the ~0.89 official column **"the constraint to not destroy"**, and −0.0548
+on the closest proxy to the official leaderboard is a trade the team should take
+deliberately. I have therefore shipped the weights as a named preset,
+**default off**:
+
+```bash
+RERANK_WEIGHTS=calibrated python3 -m tools.bench --limit 200
+```
+
+Recommendation: take it. Under robustness-first the two realistic columns are
+the primary objective and they gain +0.11 each. But that is Role A's call at
+integration, not one for the retriever to make silently — which is also why the
+`before`/`after` bench table above is reported on the *default* weights, so the
+two decisions stay separable.
+
 ## Phase 6.2 gate — dense retrieval, not built
 
 The condition in my brief was "only if, after 1.1 lands, re-measured recall
@@ -151,10 +286,18 @@ artifact of verbatim phrasing. `scripts/build_embeddings.py` and the
 `retrieval/` package are already in the tree and working, so this is a decision
 not to spend the budget, not a missing capability.
 
-The miss breakdown from `scripts.calibrate_rerank` (reported per run under
-"Where the misses come from") splits misses into *target never in the pool*
-versus *target in the pool and out-ranked*, and is the number to re-check if
-anyone wants to revisit this.
+The calibration harness settles it beyond argument. Splitting every miss into
+*target never in the pool* versus *target in the pool and out-ranked*:
+
+| set | sessions | target reachable | misses | ranking misses | recall misses |
+|---|--:|--:|--:|--:|--:|
+| synth800/realistic | 200 | **1.000** | 20 | 20 | **0** |
+| esci1000/esci (gold) | 234 | **1.000** | 21 | 21 | **0** |
+
+The target is in the candidate pool in **100%** of sessions, and **every single
+miss is a ranking miss**. A dense channel buys candidates; there are no
+candidates left to buy. Re-run `python3 -m scripts.calibrate_rerank` if the
+extractor or the query builder changes materially — that table is the gate.
 
 ## What I could NOT do, and why
 

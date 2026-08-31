@@ -290,6 +290,72 @@ class RerankWeights:
 
 WEIGHT_NAMES: tuple[str, ...] = tuple(item.name for item in fields(RerankWeights))
 
+
+# Output of `python3 -m scripts.calibrate_rerank` -- coordinate search fitted on
+# synth800/realistic and held out on the 234 ESCI provenance=="gold" rows, which
+# carry real human E/S/C/I judgments. It transfers (held-out technical
+# 0.7651 -> 0.8120), so the weights carry signal about shopper intent rather
+# than about the generator that wrote the fitting queries.
+#
+# Validated on the real agent loop, n=200 stratified, technical score:
+#
+#     esci1000/realistic   0.7385 -> 0.8440   +0.1055
+#     synth800/realistic   0.7495 -> 0.8690   +0.1195
+#     esci1000/esci        0.7718 -> 0.8161   +0.0443
+#     synth800/official    0.8681 -> 0.8668   -0.0012
+#     esci1000/official    0.8754 -> 0.8616   -0.0138
+#     public200/official   0.9022 -> 0.8474   -0.0548   <-- the cost
+#                                       mean  +0.0332
+#
+# NOT the default. `docs/ARCHITECTURE.md` names the ~0.89 official column "the
+# constraint to not destroy", and -0.0548 on the closest proxy to the official
+# leaderboard is a trade for the team to take deliberately, not one for the
+# retriever to take silently. Opt in with `RERANK_WEIGHTS=calibrated`.
+#
+# What it learned, in one line: trust BM25 rank far more (fusion_scale 100 ->
+# 774) and stop punishing absent metadata (generic_miss -12 -> 0,
+# budget_loose_miss -20 -> 0). The old weights let a popularity bonus spanning
+# 0..1.9 compete against a fusion range of 1.46 across the whole pool, and
+# penalized products for lacking a Color field that only 4.9% of the catalog
+# has. The one penalty the search made *stronger* is department_miss
+# (-25 -> -55), which is also the only one backed by a well-covered field.
+CALIBRATED_WEIGHTS = RerankWeights(
+    fusion_scale=774.4,
+    rating_coefficient=0.0704,
+    popularity_scale=0.24,
+    category_exact=50.625,
+    category_partial=18.0,
+    category_weak=4.4,
+    category_miss=-44.0,
+    brand_store=30.0,
+    color_boost=18.9,
+    feature_boost=3.6,
+    use_case_boost=10.0,
+    style_boost=70.4,
+    vocabulary_miss=-12.8,
+    generic_miss=0.0,
+    budget_near=12.0,
+    budget_near_miss=-56.0,
+    budget_loose=2.4,
+    budget_loose_miss=0.0,
+    department_miss=-55.0,
+    department_match=0.1,
+    demoted_exact=7.2,
+    profile_scale=0.1,
+)
+
+WEIGHT_PRESETS: dict[str, RerankWeights] = {
+    "default": RerankWeights(),
+    "calibrated": CALIBRATED_WEIGHTS,
+}
+
+
+def weights_from_env() -> RerankWeights:
+    """Pick a weight preset by name; unknown names fall back to the default."""
+    return WEIGHT_PRESETS.get(
+        os.environ.get("RERANK_WEIGHTS", "default").strip().lower(), RerankWeights()
+    )
+
 # Which attribute feeds which boost knob.
 _ATTRIBUTE_BOOST = {
     "material": "material_boost",
@@ -564,7 +630,7 @@ class CatalogRetriever:
         self.catalog_path = Path(catalog_path)
         self.candidate_limit = candidate_limit
         self.config = config if config is not None else config_from_env()
-        self.weights = weights if weights is not None else RerankWeights()
+        self.weights = weights if weights is not None else weights_from_env()
         # The narrow demoted-span route is the validated override fix. The
         # broader boilerplate filter remains opt-in because it regressed the
         # public score in its first full-corpus test.
