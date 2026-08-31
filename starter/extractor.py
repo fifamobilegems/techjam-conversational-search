@@ -239,6 +239,11 @@ TIER1_ATTRIBUTES = tuple(
     if item.strip()
 )
 
+# Membership form, built once. `_coverage` runs on every turn and the agent's
+# no-escalation latency budget is 65 ms; rebuilding a set per call is free
+# individually and pointless in aggregate.
+_TIER1_SET = frozenset(TIER1_ATTRIBUTES)
+
 # Tokens plus their offsets in the original message, so a canonical value can
 # be stored in the slot while the shopper's own wording survives as raw_text.
 TOKEN_SPAN_RE = re.compile(r"[a-z0-9]+")
@@ -701,7 +706,7 @@ class HeuristicTurnExtractor:
                     covered.update(TOKEN_SPAN_RE.findall(str(field).lower()))
 
         residual = [token for token in content if token not in covered]
-        tier1 = [item for item in matches if item.attribute in set(TIER1_ATTRIBUTES)]
+        tier1 = [item for item in matches if item.attribute in _TIER1_SET]
         return {
             "content_tokens": len(content),
             "residual_tokens": len(residual),

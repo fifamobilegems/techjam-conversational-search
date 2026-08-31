@@ -54,7 +54,8 @@ Two things worth noting about the composition. The existing 234 rows carry only
 E and S labels — no negatives at all. The wider join brings in **62 Irrelevant
 judgments**, which are products a human looked at and rejected *for that query*.
 Those are the only human-verified negatives in this project; everything else we
-have ever treated as a negative was merely unlabelled.
+have ever treated as a negative was merely unlabelled. (30 of the 62 survive
+retrieval into a candidate pool and so are the ones that actually train.)
 
 And only 21 queries have two or more judged catalog products, so there are
 almost no within-query human *pairs*. That rules out learning directly from
@@ -93,6 +94,8 @@ Ranking metrics are step functions of the weights with no useful gradient; this
 is the standard smooth surrogate and it pushes mass onto the judged product
 relative to the pool it actually competes against. The 62 Irrelevant judgments
 carry gain 0 but stay in the denominator, doing their work as hard negatives.
+Of the 62, **30 actually reach a candidate pool** — the rest were never
+retrieved for their query, so they influence nothing.
 
 The score is *bilinear*, not linear, because `soft_scale` multiplies a stage
 instead of entering the dot product. `scripts/calibrate_rerank.py` handles that

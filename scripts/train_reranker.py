@@ -38,7 +38,8 @@ This is the standard smooth surrogate, and it optimises the right thing: it
 pushes probability mass onto the judged-relevant product relative to *the pool
 it actually competes against*, which is what MRR measures. The 62 Irrelevant
 judgments carry gain 0 but stay in the denominator, where they act as human-
-verified hard negatives rather than presumed ones.
+verified hard negatives rather than presumed ones -- 30 of them reach a
+candidate pool and so actually train.
 
 Determinate violations key the production sort ahead of any score, so training
 mirrors that with a large fixed penalty rather than letting the model discover

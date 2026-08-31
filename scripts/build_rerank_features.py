@@ -34,7 +34,8 @@ stops this being circular:
 *   Irrelevant judgments are kept. 62 of them are products a human looked at
     and rejected for that query, and they stay in the softmax denominator as
     hard negatives. Unlabelled pool members are only *presumed* negative;
-    these are known ones.
+    these are known ones. 30 survive retrieval into a pool, which is the
+    number that trains anything.
 
 Usage::
 
