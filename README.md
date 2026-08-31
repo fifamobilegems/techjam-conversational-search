@@ -160,11 +160,21 @@ python3 -m tools.bench --limit 200
 Other reproducible artifacts:
 
 ```bash
-python3 -m unittest discover tests            # 198 tests
+python3 -m unittest discover tests            # 209 tests
 python3 -m scripts.measure_recall             # BM25 recall gate -> docs/recall.md
 python3 -m scripts.calibrate_rerank           # weight calibration + miss classification
 python3 -m scripts.measure_attribute_yield    # answerability -> docs/attribute_yield.json
+python3 -m scripts.measure_gate               # Tier-2 escalation rate -> docs/gate_sweep.json
 python3 -m tools.trace_runner --simulator esci -v   # full turn-by-turn transcripts
+```
+
+Offline experiments (need `requirements-training.txt`; nothing here is imported
+by the agent):
+
+```bash
+python3 -m scripts.build_esci_gold            # 770 human ESCI judgments -> data/
+python3 -m scripts.build_rerank_features      # coefficient matrices -> data/
+python3 -m scripts.train_reranker --epochs 500   # -> docs/reranker_training.json
 ```
 
 ### Environment variables
@@ -176,7 +186,9 @@ python3 -m tools.trace_runner --simulator esci -v   # full turn-by-turn transcri
 | `TECHJAM_LLM_MODEL` | `gpt-4o-mini` | Any OpenAI-protocol chat model |
 | `OPENAI_BASE_URL` | unset | Point at a compatible gateway (e.g. OpenRouter) |
 | `TECHJAM_LLM_MAX_CALLS` | `250` | Per-process cost guard |
-| `RERANK_WEIGHTS` | `calibrated` | `default` restores pre-calibration weights |
+| `TECHJAM_LLM_GATE` | `empty` | `low_confidence` also escalates thin Tier-1 reads (`docs/tier2_gate.md`) |
+| `TECHJAM_LLM_GATE_COVERAGE` / `_RESIDUAL` | `0.5` / `2` | Thresholds for the widened gate |
+| `RERANK_WEIGHTS` | `calibrated` | `default` restores pre-calibration weights; `esci`, `esci_soft`, `esci_anchored` are the human-label fits, all measured worse (`docs/esci_reranker.md`) |
 | `CLARIFY_POLICY` | `other` | `formula` uses the candidate-reduction question policy |
 | `RERANK_HARD_FLOOR` / `_RESERVE` | `1` / `2` | Top-K slots reserved for best BM25 matches |
 | `RERANK_STAGED`, `RERANK_PREFILTER`, `RERANK_EXCLUDE_NEGATED`, `RERANK_SOFT_ABSTAIN`, `RERANK_DEPARTMENT_PENALTY`, `RERANK_PROFILE_TIEBREAK` | `1` | Individual reranker ablations |
@@ -262,10 +274,14 @@ evaluator/local_evaluator.py   Official scorer — UNMODIFIED
 tools/bench.py             3 datasets x 3 simulators matrix
 tools/customer_sim.py      `realistic` and `esci` adversarial simulators
 tools/trace_runner.py      Turn-by-turn transcripts
-scripts/                   Lexicon build, recall gate, calibration, yield
+scripts/                   Lexicon build, recall gate, calibration, yield, gate sweep
+scripts/build_esci_gold.py     ESCI human judgments joined onto the frozen catalog
+scripts/train_reranker.py      PyTorch fit of the 37 reranker weights (offline)
+docs/tier2_gate.md         Escalation-rate sweep for the widened Tier-2 gate
+docs/esci_reranker.md      Human-label reranker: why it did not ship
 docs/fix_report.md         Code-review fixes and ranking ablations
 docs/ARCHITECTURE.md       Full design rationale
-tests/                     198 tests
+tests/                     209 tests
 ```
 
 ---
