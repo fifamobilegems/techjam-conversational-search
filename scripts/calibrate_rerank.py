@@ -133,6 +133,11 @@ def capture_tapes(agent: Agent, samples, catalog_ids, categories, products, simu
                 if emitted and call_index < len(recorder.calls):
                     request = recorder.calls[call_index]
                     call_index += 1
+                    # `starter/agent.py` stores `user_profile` and does not pass
+                    # it (filed with Role A). Supplying it here is what lets
+                    # `profile_scale` be calibrated against real profiles
+                    # instead of shipped as a guess.
+                    request["user_profile"] = sample.get("user_profile")
                 turns.append({"scored": bool(record["scored"]), "request": request})
             tapes.append({
                 "sample_id": trace["sample_id"],
@@ -343,7 +348,9 @@ def coverage_report(compiled: list[list[CompiledTurn]], weights: np.ndarray) -> 
 def _candidates(name: str, value: float) -> list[float]:
     """Multiplicative steps, plus a sign-preserving fallback for zeros."""
     if value == 0.0:
-        return [0.0, 0.25, 0.5, 1.0]
+        # Multiplicative steps cannot leave zero, and `profile_scale` ships at
+        # zero precisely so calibration decides whether it earns a value.
+        return [0.0, 0.1, 0.25, 0.5, 1.0, 2.0]
     steps = (0.4, 0.6, 0.8, 0.9, 1.1, 1.25, 1.6, 2.2)
     out = [value * step for step in steps]
     if name.endswith("_miss") or name.endswith("_over") or value < 0:
