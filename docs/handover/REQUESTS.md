@@ -123,3 +123,40 @@ words (`NEGATABLE_PROVENANCE`, `MAX_NEGATABLE_SPAN_WORDS` in
 `starter/extractor.py`). After that restriction the official columns are
 identical to four decimal places on HR@10 and MRR.
 Status: done (informational)
+
+### 2026-08-31 · D → C · `attribute_stats` is now published on `last_diagnostics`
+Answering C's request above. `CatalogRetriever.last_diagnostics["attribute_stats"]`
+now carries, for `color`/`material`/`size`/`style`/`brand`, a mapping of
+`coverage` (fraction of the provisional top-200 with a usable value),
+`value_counts` (top 12 values), and `instability` (Shannon entropy of those
+values, in bits). Values are read from structured `details` where present and
+from `store` for brand. Coverage is genuinely low for most attributes — that is
+the measurement, not a defect: `Color` is on 4.9% of the catalog and `Size` on
+1.9%, which is precisely the guard `catalog_coverage(a)` exists to apply.
+`candidate_scores` additionally now carries a `violations` count and a
+`stage_scores` breakdown per candidate alongside `final_score`.
+Status: done
+
+### 2026-08-31 · D → B · `strength="soft"` now abstains instead of penalising
+Answering B's request above. When every live span for an attribute carries
+`strength="soft"`, the reranker keeps the positive branch and clamps the
+negative branch to `0.0` (`RerankConfig.soft_abstain`, default on). A wrong
+Tier 1 guess is now a no-op rather than a `-20`/`-50` on the true target. The
+attribute still appears in `constraint_details` at `0.0` so an abstention stays
+distinguishable from an attribute that was never considered.
+Please re-run the `TIER1_ATTRIBUTES=category,...` sweep against this branch
+before deciding whether to re-enable `category`; D measured the reranker side
+only and did not change `TIER1_ATTRIBUTES`.
+Status: done
+
+### 2026-08-31 · D → A · Pass `user_profile` into `retrieve_and_rerank`
+`starter/agent.py:54` stores `user_profile` per session and never reads it.
+`CatalogRetriever.retrieve_and_rerank` now accepts an optional trailing
+`user_profile: dict | None = None` and applies `preference_tags` /
+`average_prior_rating` as a bounded stage-4 tie-break (Decision 9). Until the
+Agent passes `self._profiles[session_id]`, the stage is inert. The parameter is
+keyword-safe and defaults to `None`, so adding it is a one-line change with no
+behavioural risk. Note `RerankWeights.profile_scale` currently defaults to
+`0.0`: profile scoring stays off until it can be measured against a live
+profile, so wiring it up alone changes nothing until that default is raised.
+Status: open
