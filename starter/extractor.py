@@ -63,7 +63,8 @@ TOKEN_RE = re.compile(r"[a-z0-9]+", re.IGNORECASE)
 # judgment." -- the first ends the questioning, the second only rules out
 # one field.
 EXHAUSTED_RE = re.compile(
-    r"\b(?:do not|don't|dont)\s+have\s+an\s+additional\s+preference\b",
+    r"\b(?:do not|don't|dont)\s+have\s+an\s+additional\s+preference"
+    r"(?:\s+for\s+(?P<attribute>[a-z_ ]+))?",
     re.IGNORECASE,
 )
 
@@ -631,7 +632,23 @@ class HeuristicTurnExtractor:
 
     def _extract_tier0(self, user_message: str, state: object | None = None) -> ExtractedTurn:
         lowered = user_message.lower()
-        information_exhausted = bool(EXHAUSTED_RE.search(lowered))
+        # "I don't have an additional preference for X" is scoped to X.
+        #
+        # It only means the CONVERSATION is over when X was the universal
+        # question -- `other` is answered without being classified, so nothing
+        # further to say about `other` means nothing further at all. For a
+        # typed question it means only that one field is empty, and latching
+        # global exhaustion there ends the session after the first
+        # unanswerable attribute. That was invisible while the policy asked
+        # `other` every turn, and collapses the official columns the moment
+        # typed questions ship.
+        exhausted_match = EXHAUSTED_RE.search(lowered)
+        exhausted_attribute = (
+            (exhausted_match.group("attribute") or "").strip().replace(" ", "_")
+            if exhausted_match
+            else ""
+        )
+        information_exhausted = bool(exhausted_match) and exhausted_attribute in {"", "other"}
         scenario = self._scenario(lowered, state)
         operations: list[AttributeUpdate] = []
         seen: set[tuple[str, str, str]] = set()
@@ -709,6 +726,13 @@ class HeuristicTurnExtractor:
                 if re.search(r"\b(?:my\s+)?(?:earlier|previous)\s+preference\b", ignored, flags=re.I):
                     continue
                 add_operation(classify_constraint(ignored), "demote", ignored)
+
+        if (
+            exhausted_match
+            and not information_exhausted
+            and exhausted_attribute in ATTRIBUTE_WORDS
+        ):
+            add_operation(exhausted_attribute, "no_preference")
 
         clear_match = re.search(
             r"\b(?:clear|remove|drop)\s+(category|material|color|size|style|brand|budget|feature|use_case|other)\b",

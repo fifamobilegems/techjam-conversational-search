@@ -10,6 +10,12 @@ from state.clarification import choose_question
 # Hard session limit imposed by the evaluator.
 MAX_TURNS = 10
 
+# Reciprocal-rank fusion across turns. `K` damps the head so a single
+# lucky turn cannot dominate; `DEPTH` bounds the memory to the part of the
+# ranking that could plausibly become a Top-10.
+RANK_MEMORY_K = 10.0
+RANK_MEMORY_DEPTH = 50
+
 # Weight applied to a constraint the user has superseded.  It remains weak
 # retrieval evidence, but cannot stay an active hard constraint.
 DEMOTED_WEIGHT = 0.4
@@ -249,6 +255,10 @@ class ConversationState:
     # User messages are also retained as lexical retrieval evidence. Extracted
     # constraints complement the shopper's words; they must not replace them.
     messages: list[dict] = field(default_factory=list)
+
+    # Accumulated reciprocal rank per product across the session's turns.
+    # A derived cache like `retrieval_diagnostics`, not a user event.
+    rank_memory: dict[str, float] = field(default_factory=dict)
 
     # Latest provisional retrieval summary. Rankings are a derived cache, not
     # user events, and must be refreshed by the Agent each turn.
@@ -648,6 +658,32 @@ class StateManager:
         state = self.get(session_id)
         state.messages.append({"turn": turn, "role": role, "content": str(content)[:600]})
         del state.messages[:-20]
+
+    def remember_ranking(self, session_id: str, ranked_ids: list[str]) -> None:
+        """Fold one turn's ranking into the session's rank memory."""
+        state = self.get(session_id)
+        for rank, parent_asin in enumerate(ranked_ids[:RANK_MEMORY_DEPTH], start=1):
+            state.rank_memory[parent_asin] = (
+                state.rank_memory.get(parent_asin, 0.0) + 1.0 / (RANK_MEMORY_K + rank)
+            )
+
+    def prior_ranks(self, session_id: str) -> dict[str, float]:
+        """Rank memory from EARLIER turns, normalized to [0, 1].
+
+        Read before this turn's retrieval and written after it, so a turn
+        never scores itself -- otherwise the fusion would just re-assert the
+        current ranking and add no independent evidence.
+        """
+        state = self.get(session_id)
+        if not state.rank_memory:
+            return {}
+        ceiling = max(state.rank_memory.values())
+        if ceiling <= 0.0:
+            return {}
+        return {
+            parent_asin: value / ceiling
+            for parent_asin, value in state.rank_memory.items()
+        }
 
     def set_retrieval_diagnostics(self, session_id: str, diagnostics: dict[str, Any]) -> None:
         """Store current provisional retrieval statistics for policy decisions."""

@@ -113,10 +113,16 @@ class Agent:
             top_k=top_k,
             raw_constraints=[dict(span) for span in live.raw_constraints],
             user_profile=self._profiles.get(session_id),
+            # Earlier turns only: read before this turn's ranking is folded in
+            # below, so the fusion carries independent evidence.
+            prior_ranks=self.manager.prior_ranks(session_id),
         )
         self.manager.set_retrieval_diagnostics(
             session_id, self.retriever.last_diagnostics
         )
+        candidate_ids = self.retriever.last_diagnostics.get("candidate_ids") or []
+        if isinstance(candidate_ids, list):
+            self.manager.remember_ranking(session_id, [str(x) for x in candidate_ids])
 
         state = self.manager.export(session_id)
 
