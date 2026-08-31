@@ -218,7 +218,17 @@ class LLMTurnExtractor:
         try:
             # The SDK reads OPENAI_API_KEY and OPENAI_BASE_URL from the
             # environment, so a compatible gateway needs no code change.
-            return openai.OpenAI(max_retries=1, timeout=10.0)
+            #
+            # Accept-Encoding excludes zstd deliberately. The SDK's vendored
+            # httpx2 calls ZstdDecompressor.decompress(output_buffer_limit=...),
+            # which no released backports.zstd accepts, so any zstd-encoded
+            # response dies as an opaque "Connection error". Asking for gzip
+            # sidesteps the whole incompatibility at negligible bandwidth cost.
+            return openai.OpenAI(
+                max_retries=1,
+                timeout=10.0,
+                default_headers={"Accept-Encoding": "gzip, deflate"},
+            )
         except Exception:
             return None
 
