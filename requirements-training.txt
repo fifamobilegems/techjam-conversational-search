@@ -1,0 +1,16 @@
+# Offline dependencies for fitting the reranker on human ESCI judgments.
+#
+# NOTHING here is imported by the agent. `starter/`, `state/` and the scored
+# retrieval path stay standard-library only, and CI blocks `torch` at the
+# import hook to keep that true. These are needed by three scripts that run
+# before a commit, never during one:
+#
+#   scripts/build_esci_gold.py       pyarrow  -- reads the ESCI parquet release
+#   scripts/build_rerank_features.py numpy    -- compiles coefficient matrices
+#   scripts/train_reranker.py        torch    -- fits the weight vector
+#
+# Their only output that reaches the agent is a `RerankWeights(...)` literal in
+# `starter/retriever.py`: 37 floats, no runtime dependency.
+pyarrow>=14.0
+numpy>=1.24
+torch>=2.0

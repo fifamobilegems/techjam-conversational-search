@@ -27,3 +27,9 @@ tests/test_organizer_pipeline.py
 *.log
 debug/
 results_*.json
+# Raw ESCI release (~1.2 GB) cached by scripts/build_esci_gold.py. The derived
+# join, data/esci_gold_relevance.jsonl, is committed; the source is not.
+data/esci_raw/
+# Reranker training tensors. Rebuild in ~1 min with:
+#   python -m scripts.build_rerank_features
+data/rerank_features.npz

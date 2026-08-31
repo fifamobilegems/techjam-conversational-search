@@ -1,0 +1,770 @@
+{"query_id": 124, "query": "'all-star' jordan why not zer0.2", "parent_asin": "B08HJ4XLMH", "esci_label": "S", "esci_product_id": "B08G159TXW", "join": "title", "esci_split": "train"}
+{"query_id": 475, "query": "000 black jeans not ripped", "parent_asin": "B08PPD8FYB", "esci_label": "E", "esci_product_id": "B07D9J79DS", "join": "title", "esci_split": "train"}
+{"query_id": 591, "query": "0g earrings not tapered", "parent_asin": "B0182OKCD0", "esci_label": "I", "esci_product_id": "B0182OKCD0", "join": "asin", "esci_split": "train"}
+{"query_id": 611, "query": "1 '' leather belts without buckles", "parent_asin": "B07NP8HDFY", "esci_label": "E", "esci_product_id": "B012ZX5R8E", "join": "title", "esci_split": "train"}
+{"query_id": 677, "query": "1 belt strap without buckle", "parent_asin": "B07NP8HDFY", "esci_label": "E", "esci_product_id": "B012ZX5R8E", "join": "title", "esci_split": "train"}
+{"query_id": 1004, "query": "1.5 web belts for men without buket", "parent_asin": "B076GQ4P5X", "esci_label": "S", "esci_product_id": "B078TNHD7W", "join": "title", "esci_split": "train"}
+{"query_id": 1135, "query": "1/4 zip pullover women", "parent_asin": "B07Y81T13F", "esci_label": "E", "esci_product_id": "B07QFPZXZ1", "join": "title", "esci_split": "test"}
+{"query_id": 2388, "query": "18w women evening gown", "parent_asin": "B07ZH9ZWCJ", "esci_label": "E", "esci_product_id": "B07ZH9ZWCJ", "join": "asin", "esci_split": "train"}
+{"query_id": 2639, "query": "2 piece workout sets for women", "parent_asin": "B07ZJ6816Y", "esci_label": "E", "esci_product_id": "B07VB8WQ9D", "join": "title", "esci_split": "train"}
+{"query_id": 2822, "query": "20\" stockings", "parent_asin": "B0735V67KT", "esci_label": "I", "esci_product_id": "B0735V67KT", "join": "asin", "esci_split": "test"}
+{"query_id": 3991, "query": "3x cotton shirts for men", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B000EC11R0", "join": "title", "esci_split": "train"}
+{"query_id": 4006, "query": "3xl tshirts for men big and tall", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B000EC11R0", "join": "title", "esci_split": "train"}
+{"query_id": 4477, "query": "4xl tshirts for men big and tall soft", "parent_asin": "B0BXP6MG3X", "esci_label": "S", "esci_product_id": "B000EC11R0", "join": "title", "esci_split": "test"}
+{"query_id": 4478, "query": "4xlt dress shirts for men big and tall", "parent_asin": "B083KPMWFM", "esci_label": "E", "esci_product_id": "B083KPMWFM", "join": "asin", "esci_split": "train"}
+{"query_id": 4560, "query": "5 star fall season xxl shirts", "parent_asin": "B07G1TC1X8", "esci_label": "E", "esci_product_id": "B07G286Q7N", "join": "title", "esci_split": "train"}
+{"query_id": 4594, "query": "5.11 shoulder bag", "parent_asin": "B000AL9CUI", "esci_label": "I", "esci_product_id": "B000AL9CUI", "join": "asin", "esci_split": "test"}
+{"query_id": 4596, "query": "5.11 tactical", "parent_asin": "B000AL9CUI", "esci_label": "E", "esci_product_id": "B000AL9CUI", "join": "asin", "esci_split": "test"}
+{"query_id": 4820, "query": "5xl underwear for men big and tall", "parent_asin": "B07HBJG7QJ", "esci_label": "E", "esci_product_id": "B07HBJG7QJ", "join": "asin", "esci_split": "test"}
+{"query_id": 5038, "query": "68 inch umbrella free one-day", "parent_asin": "B071JL6C9N", "esci_label": "S", "esci_product_id": "B071ZRMLWB", "join": "title", "esci_split": "train"}
+{"query_id": 5344, "query": "80s theme party decorations for adults", "parent_asin": "B07FVWK5CR", "esci_label": "E", "esci_product_id": "B07FVWK5CR", "join": "asin", "esci_split": "train"}
+{"query_id": 5618, "query": "A long (mid calf length), lightweight beige/brown single breasted trench jacket ", "parent_asin": "B07QZ4Q68W", "esci_label": "E", "esci_product_id": "B07QZ4Q68W", "join": "asin", "esci_split": "train"}
+{"query_id": 5623, "query": "A new jacket which is green in colour and lightweight ", "parent_asin": "B07VYGB7M6", "esci_label": "I", "esci_product_id": "B07VYGB7M6", "join": "asin", "esci_split": "train"}
+{"query_id": 5643, "query": "Dark blue denim jackets with a fluffy inside and collar similar to aviator jacket", "parent_asin": "B07WDMJ6LK", "esci_label": "E", "esci_product_id": "B07WDMJ6LK", "join": "asin", "esci_split": "test"}
+{"query_id": 5879, "query": "a plus", "parent_asin": "B082PJVXQY", "esci_label": "I", "esci_product_id": "B082PHZH8X", "join": "title", "esci_split": "test"}
+{"query_id": 5933, "query": "a-shirts undershirts", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B00LSRU1QW", "join": "title", "esci_split": "train"}
+{"query_id": 6753, "query": "adidas soccer cleats black", "parent_asin": "B07KX9JZY3", "esci_label": "E", "esci_product_id": "B07KX9JZY3", "join": "asin", "esci_split": "train"}
+{"query_id": 6982, "query": "adult unicorn costume", "parent_asin": "B07TCWF1Z2", "esci_label": "E", "esci_product_id": "B07TCXT68Q", "join": "title", "esci_split": "train"}
+{"query_id": 7069, "query": "af1 laces", "parent_asin": "B013YRRFJ4", "esci_label": "I", "esci_product_id": "B013YRRFJ4", "join": "asin", "esci_split": "train"}
+{"query_id": 7595, "query": "airport security belts", "parent_asin": "B076GQ4P5X", "esci_label": "E", "esci_product_id": "B078TNHD7W", "join": "title", "esci_split": "train"}
+{"query_id": 7652, "query": "aiyuan", "parent_asin": "B081BBMV54", "esci_label": "I", "esci_product_id": "B08BFG5GJQ", "join": "title", "esci_split": "train"}
+{"query_id": 8073, "query": "all color handbag", "parent_asin": "B07TB9L1FF", "esci_label": "E", "esci_product_id": "B07TB9L1FF", "join": "asin", "esci_split": "test"}
+{"query_id": 8096, "query": "all lace dresses", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B07GFGF27V", "join": "title", "esci_split": "train"}
+{"query_id": 8167, "query": "allen iverson questions", "parent_asin": "B01N0210HL", "esci_label": "S", "esci_product_id": "B01N0210HL", "join": "asin", "esci_split": "train"}
+{"query_id": 8482, "query": "amazin choice small handbags with compartments", "parent_asin": "B01D16O56O", "esci_label": "E", "esci_product_id": "B01D16O56O", "join": "asin", "esci_split": "train"}
+{"query_id": 8596, "query": "amazon polo shirts for men", "parent_asin": "B077ZH6ZVF", "esci_label": "E", "esci_product_id": "B077ZH6ZVF", "join": "asin", "esci_split": "train"}
+{"query_id": 9552, "query": "apartment sweet apartment keychain", "parent_asin": "B07X544N7G", "esci_label": "E", "esci_product_id": "B07X544N7G", "join": "asin", "esci_split": "train"}
+{"query_id": 9957, "query": "appreciation gifts for coworkers", "parent_asin": "B07KWZVB83", "esci_label": "E", "esci_product_id": "B07KWZVB83", "join": "asin", "esci_split": "test"}
+{"query_id": 10179, "query": "arctic hat uv", "parent_asin": "B07TN1845M", "esci_label": "E", "esci_product_id": "B07TN1845M", "join": "asin", "esci_split": "test"}
+{"query_id": 10265, "query": "ariat square toe boots mens", "parent_asin": "B0078J9E44", "esci_label": "E", "esci_product_id": "B00748Z0BA", "join": "title", "esci_split": "train"}
+{"query_id": 10269, "query": "ariat work boots mens sierra", "parent_asin": "B0078J9E44", "esci_label": "E", "esci_product_id": "B00748Z0BA", "join": "title", "esci_split": "train"}
+{"query_id": 10515, "query": "art tube pipe", "parent_asin": "B07WVBSBD6", "esci_label": "E", "esci_product_id": "B088R6PL3B", "join": "title", "esci_split": "train"}
+{"query_id": 10631, "query": "ash ketchum hat 1 day shipping", "parent_asin": "B00FBNKH0E", "esci_label": "E", "esci_product_id": "B00FBNKH0E", "join": "asin", "esci_split": "train"}
+{"query_id": 10675, "query": "asics pickleball shoes men", "parent_asin": "B07KDLR7S3", "esci_label": "E", "esci_product_id": "B07KDLR7S3", "join": "asin", "esci_split": "train"}
+{"query_id": 10681, "query": "asics tiger kill bill", "parent_asin": "B004VTP9TI", "esci_label": "E", "esci_product_id": "B004VTP9TI", "join": "asin", "esci_split": "train"}
+{"query_id": 10684, "query": "asics walking shoes for women", "parent_asin": "B07KM9RTKV", "esci_label": "E", "esci_product_id": "B07KM9RTKV", "join": "asin", "esci_split": "train"}
+{"query_id": 11060, "query": "audemars piguet mens watches", "parent_asin": "B01KIKLVVS", "esci_label": "S", "esci_product_id": "B01KIKLVVS", "join": "asin", "esci_split": "train"}
+{"query_id": 11138, "query": "auntie necklaces for women", "parent_asin": "B07T339TLF", "esci_label": "E", "esci_product_id": "B07T339TLF", "join": "asin", "esci_split": "train"}
+{"query_id": 11735, "query": "baby basics", "parent_asin": "B083WGBK79", "esci_label": "E", "esci_product_id": "B083WGBK79", "join": "asin", "esci_split": "train"}
+{"query_id": 11857, "query": "baby christmas sleeper", "parent_asin": "B07PSV7DX8", "esci_label": "S", "esci_product_id": "B07PSVQTZF", "join": "title", "esci_split": "test"}
+{"query_id": 11971, "query": "baby girl clothes photoshoot", "parent_asin": "B07KXL5H8J", "esci_label": "E", "esci_product_id": "B07RFQKH7B", "join": "title", "esci_split": "train"}
+{"query_id": 12258, "query": "baby tutu", "parent_asin": "B072BX4GQ4", "esci_label": "E", "esci_product_id": "B072BX4GQ4", "join": "asin", "esci_split": "train"}
+{"query_id": 12367, "query": "back cocktail dress", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N5JHXW8", "join": "title", "esci_split": "train"}
+{"query_id": 12440, "query": "backpack aesthetic", "parent_asin": "B0842X79MC", "esci_label": "S", "esci_product_id": "B07V1H5P45", "join": "title", "esci_split": "train"}
+{"query_id": 12474, "query": "backpack with laptop compartment", "parent_asin": "B07L6RCMN6", "esci_label": "E", "esci_product_id": "B07SQGT7DB", "join": "title", "esci_split": "train"}
+{"query_id": 12575, "query": "bag coach for women", "parent_asin": "B07Q7RY523", "esci_label": "I", "esci_product_id": "B07Q7RY523", "join": "asin", "esci_split": "train"}
+{"query_id": 12676, "query": "bakugo hoodie", "parent_asin": "B07Z2SN6LZ", "esci_label": "E", "esci_product_id": "B07M9C8JYM", "join": "title", "esci_split": "train"}
+{"query_id": 12775, "query": "ballerina slippers for toddler girls", "parent_asin": "B07R5YRWVC", "esci_label": "E", "esci_product_id": "B07R5YRWVC", "join": "asin", "esci_split": "train"}
+{"query_id": 12941, "query": "band tour shirts for men", "parent_asin": "B07HKNZ7S9", "esci_label": "E", "esci_product_id": "B07HKRKBM5", "join": "title", "esci_split": "train"}
+{"query_id": 12962, "query": "bandana print shirt for women", "parent_asin": "B07CZWZSRG", "esci_label": "I", "esci_product_id": "B07CZWZSRG", "join": "asin", "esci_split": "train"}
+{"query_id": 13124, "query": "barbell piercing ear", "parent_asin": "B07DVF5XMN", "esci_label": "E", "esci_product_id": "B07DVF5XMN", "join": "asin", "esci_split": "train"}
+{"query_id": 13505, "query": "bat sunglasses", "parent_asin": "B007VQR0H2", "esci_label": "C", "esci_product_id": "B007VQR0H2", "join": "asin", "esci_split": "train"}
+{"query_id": 14111, "query": "bdu vest", "parent_asin": "B07N83DQGP", "esci_label": "I", "esci_product_id": "B07N88DFR1", "join": "title", "esci_split": "train"}
+{"query_id": 14258, "query": "beanie", "parent_asin": "B01MSYKE17", "esci_label": "E", "esci_product_id": "B01MSYKE17", "join": "asin", "esci_split": "train"}
+{"query_id": 14862, "query": "belt for women guess", "parent_asin": "B07K16566V", "esci_label": "I", "esci_product_id": "B00FL62ZHE", "join": "title", "esci_split": "test"}
+{"query_id": 15066, "query": "best durable mens socks", "parent_asin": "B0735V67KT", "esci_label": "E", "esci_product_id": "B0735V67KT", "join": "asin", "esci_split": "train"}
+{"query_id": 15197, "query": "best water shoes for men", "parent_asin": "B07X3MGMJR", "esci_label": "E", "esci_product_id": "B07CYSMJPN", "join": "title", "esci_split": "test"}
+{"query_id": 15562, "query": "big and tall men 5xl", "parent_asin": "B07HBJG7QJ", "esci_label": "E", "esci_product_id": "B07HBJG7QJ", "join": "asin", "esci_split": "test"}
+{"query_id": 15571, "query": "big and tall t shirts", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B000EBZ0PA", "join": "title", "esci_split": "train"}
+{"query_id": 15724, "query": "bigfoot silhouette", "parent_asin": "B0767KQ9VH", "esci_label": "E", "esci_product_id": "B07KWSGXWT", "join": "title", "esci_split": "train"}
+{"query_id": 16109, "query": "birthday dress for 2 yr old girl", "parent_asin": "B072MTTY4G", "esci_label": "E", "esci_product_id": "B072MTTY4G", "join": "asin", "esci_split": "train"}
+{"query_id": 16364, "query": "black belts for women", "parent_asin": "B082DBR1VJ", "esci_label": "E", "esci_product_id": "B07NNWWK5V", "join": "title", "esci_split": "train"}
+{"query_id": 16390, "query": "black boots men", "parent_asin": "B07JQ97T24", "esci_label": "E", "esci_product_id": "B07JQ97T24", "join": "asin", "esci_split": "train"}
+{"query_id": 16416, "query": "black cat eyed sunglasses for women", "parent_asin": "B07BNHRLDW", "esci_label": "S", "esci_product_id": "B07BNHRLDW", "join": "asin", "esci_split": "train"}
+{"query_id": 16437, "query": "black columbia fleece for toddler boy", "parent_asin": "B07K6LRMMB", "esci_label": "S", "esci_product_id": "B07K6LRMMB", "join": "asin", "esci_split": "train"}
+{"query_id": 16475, "query": "black dress for wedding", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N5JHXW8", "join": "title", "esci_split": "train"}
+{"query_id": 16495, "query": "black evening dress for women", "parent_asin": "B07571RMS3", "esci_label": "E", "esci_product_id": "B07571RMS3", "join": "asin", "esci_split": "train"}
+{"query_id": 16495, "query": "black evening dress for women", "parent_asin": "B07MFQCP57", "esci_label": "E", "esci_product_id": "B07MJBLLCX", "join": "title", "esci_split": "train"}
+{"query_id": 16636, "query": "black little dress for women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N1WFB1F", "join": "title", "esci_split": "train"}
+{"query_id": 16739, "query": "black plus size kimono", "parent_asin": "B07F12DFQM", "esci_label": "E", "esci_product_id": "B07F12DFQM", "join": "asin", "esci_split": "train"}
+{"query_id": 16757, "query": "black rectangular patch", "parent_asin": "B076DJY87M", "esci_label": "S", "esci_product_id": "B076DJY87M", "join": "asin", "esci_split": "train"}
+{"query_id": 16776, "query": "black sandals for women flat", "parent_asin": "B07QW2V2L8", "esci_label": "E", "esci_product_id": "B07QX1MZGC", "join": "title", "esci_split": "train"}
+{"query_id": 17182, "query": "block heels with lace up", "parent_asin": "B07S4CBQ4F", "esci_label": "E", "esci_product_id": "B07S4CBQ4F", "join": "asin", "esci_split": "test"}
+{"query_id": 17440, "query": "blue poncho men", "parent_asin": "B001L6QGE6", "esci_label": "E", "esci_product_id": "B01G95WOWQ", "join": "title", "esci_split": "train"}
+{"query_id": 17692, "query": "blush silk robe long", "parent_asin": "B07BWHH2QB", "esci_label": "E", "esci_product_id": "B07BWHH2QB", "join": "asin", "esci_split": "train"}
+{"query_id": 17904, "query": "body harness for women", "parent_asin": "B07P2BY53G", "esci_label": "E", "esci_product_id": "B07MZNT8G8", "join": "title", "esci_split": "test"}
+{"query_id": 18036, "query": "boho top", "parent_asin": "B091Z4VPF8", "esci_label": "E", "esci_product_id": "B07QZJRHY1", "join": "title", "esci_split": "train"}
+{"query_id": 18091, "query": "bolo tie packages", "parent_asin": "B07Z8VRNT9", "esci_label": "E", "esci_product_id": "B07Z8VX2G2", "join": "title", "esci_split": "test"}
+{"query_id": 18313, "query": "book bag purse", "parent_asin": "B07D6G735T", "esci_label": "E", "esci_product_id": "B07BW7VVZ4", "join": "title", "esci_split": "train"}
+{"query_id": 18519, "query": "bootie heels open toe", "parent_asin": "B074347KJG", "esci_label": "E", "esci_product_id": "B074347KJG", "join": "asin", "esci_split": "train"}
+{"query_id": 18519, "query": "bootie heels open toe", "parent_asin": "B07JQ22GRZ", "esci_label": "S", "esci_product_id": "B07GPN9Q9N", "join": "title", "esci_split": "train"}
+{"query_id": 19120, "query": "boy white undershirt", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B000EC11PC", "join": "title", "esci_split": "train"}
+{"query_id": 19130, "query": "boyfriend capris for women loose fit", "parent_asin": "B08PPD8FYB", "esci_label": "E", "esci_product_id": "B07D9JLL3Y", "join": "title", "esci_split": "train"}
+{"query_id": 19176, "query": "boys character ties", "parent_asin": "B07R52PDPQ", "esci_label": "E", "esci_product_id": "B07R52PDPQ", "join": "asin", "esci_split": "train"}
+{"query_id": 19202, "query": "boys gold watches ages 7-10 bling", "parent_asin": "B07JX8C7T9", "esci_label": "E", "esci_product_id": "B07JX8C7T9", "join": "asin", "esci_split": "train"}
+{"query_id": 19250, "query": "boys red hoodie", "parent_asin": "B07HGJLZKC", "esci_label": "E", "esci_product_id": "B07HGJLZKC", "join": "asin", "esci_split": "train"}
+{"query_id": 19266, "query": "boys shoes", "parent_asin": "B08DTJYQZ4", "esci_label": "E", "esci_product_id": "B083B6S22M", "join": "title", "esci_split": "train"}
+{"query_id": 20058, "query": "brown high boots for women", "parent_asin": "B01L99SW78", "esci_label": "E", "esci_product_id": "B0002CZKKQ", "join": "title", "esci_split": "train"}
+{"query_id": 20196, "query": "bts backpack", "parent_asin": "B07SB1ZJWF", "esci_label": "S", "esci_product_id": "B07SB1ZJWF", "join": "asin", "esci_split": "train"}
+{"query_id": 20202, "query": "bts hoodies njungkook", "parent_asin": "B071Z2WX9L", "esci_label": "E", "esci_product_id": "B07K3YYTRB", "join": "title", "esci_split": "train"}
+{"query_id": 20305, "query": "buddha quote wall art", "parent_asin": "B01605GWA0", "esci_label": "E", "esci_product_id": "B0718X5VHN", "join": "title", "esci_split": "train"}
+{"query_id": 20353, "query": "buffalo plaid earrings", "parent_asin": "B07XNZWTM6", "esci_label": "E", "esci_product_id": "B07V69XXDJ", "join": "title", "esci_split": "test"}
+{"query_id": 20470, "query": "bulk christmas gifts for coworkers", "parent_asin": "B07KWZVB83", "esci_label": "E", "esci_product_id": "B07KWZVB83", "join": "asin", "esci_split": "train"}
+{"query_id": 20666, "query": "burgundy cashmere shawl", "parent_asin": "B07H9R3KLW", "esci_label": "E", "esci_product_id": "B07H9QSS6Z", "join": "title", "esci_split": "train"}
+{"query_id": 20668, "query": "burgundy dress for women", "parent_asin": "B07VT47J3T", "esci_label": "S", "esci_product_id": "B07JYJYH3Z", "join": "title", "esci_split": "test"}
+{"query_id": 20752, "query": "burts bees pajamas", "parent_asin": "B07PSV7DX8", "esci_label": "E", "esci_product_id": "B07PQNBGRL", "join": "title", "esci_split": "train"}
+{"query_id": 20784, "query": "business checkbook cover", "parent_asin": "B07968N8ZY", "esci_label": "E", "esci_product_id": "B01HPTZ3OQ", "join": "title", "esci_split": "train"}
+{"query_id": 20915, "query": "buttoned down slim fit", "parent_asin": "B07JHYL284", "esci_label": "E", "esci_product_id": "B07JHYL284", "join": "asin", "esci_split": "train"}
+{"query_id": 21117, "query": "cable bags mesh", "parent_asin": "B01JUOA038", "esci_label": "E", "esci_product_id": "B01JUOA07Y", "join": "title", "esci_split": "train"}
+{"query_id": 22088, "query": "camo waterproof jacket womens", "parent_asin": "B07X99HVSX", "esci_label": "E", "esci_product_id": "B07X9CCNQ7", "join": "title", "esci_split": "train"}
+{"query_id": 22192, "query": "camping tanks for women", "parent_asin": "B07G1TC1X8", "esci_label": "S", "esci_product_id": "B07KT77FF5", "join": "title", "esci_split": "train"}
+{"query_id": 22304, "query": "candy cane onesie adult", "parent_asin": "B07PSV7DX8", "esci_label": "I", "esci_product_id": "B07PMFBRP2", "join": "title", "esci_split": "train"}
+{"query_id": 23004, "query": "card lanyard holder", "parent_asin": "B0828SQYSL", "esci_label": "E", "esci_product_id": "B088BK1JC9", "join": "title", "esci_split": "train"}
+{"query_id": 23190, "query": "carhartt jeans for women", "parent_asin": "B00S8OKNWA", "esci_label": "E", "esci_product_id": "B00S8OKNWA", "join": "asin", "esci_split": "test"}
+{"query_id": 23191, "query": "carhartt jeans womens", "parent_asin": "B00S8OKNWA", "esci_label": "E", "esci_product_id": "B00S8OKNWA", "join": "asin", "esci_split": "train"}
+{"query_id": 23442, "query": "cartier watches for women", "parent_asin": "B007R9WURS", "esci_label": "S", "esci_product_id": "B004D4S7AY", "join": "title", "esci_split": "train"}
+{"query_id": 23628, "query": "casio illuminator watches for men", "parent_asin": "B07W22TLGG", "esci_label": "S", "esci_product_id": "B07W22TLGG", "join": "asin", "esci_split": "train"}
+{"query_id": 23702, "query": "castle grayskull mega construx", "parent_asin": "B07WVBSBD6", "esci_label": "S", "esci_product_id": "B07527H5NQ", "join": "title", "esci_split": "train"}
+{"query_id": 23721, "query": "casual jewelry for women", "parent_asin": "B08P3QBLN8", "esci_label": "E", "esci_product_id": "B07SD9YCYK", "join": "title", "esci_split": "train"}
+{"query_id": 23744, "query": "cat and jack shoe", "parent_asin": "B07NWLBKZR", "esci_label": "S", "esci_product_id": "B07Q5WRJD1", "join": "title", "esci_split": "test"}
+{"query_id": 23794, "query": "cat ears", "parent_asin": "B07PQBRJ82", "esci_label": "E", "esci_product_id": "B07PSM5S5N", "join": "title", "esci_split": "train"}
+{"query_id": 23946, "query": "catalog classics tunic tops", "parent_asin": "B07X2ZFDLR", "esci_label": "S", "esci_product_id": "B07X2ZFDLR", "join": "asin", "esci_split": "train"}
+{"query_id": 24006, "query": "cats make me happy you not so much", "parent_asin": "B077QM3PGY", "esci_label": "E", "esci_product_id": "B07PM4CPN5", "join": "title", "esci_split": "train"}
+{"query_id": 24077, "query": "cbd oil", "parent_asin": "B07WVBSBD6", "esci_label": "E", "esci_product_id": "B082KDNSFN", "join": "title", "esci_split": "test"}
+{"query_id": 24567, "query": "chain wallet", "parent_asin": "B07T9PRR8S", "esci_label": "E", "esci_product_id": "B07TX8CBJ6", "join": "title", "esci_split": "test"}
+{"query_id": 25042, "query": "chase the dream not the fame nike shirt", "parent_asin": "B075J6WJ3C", "esci_label": "S", "esci_product_id": "B07PKKHC43", "join": "title", "esci_split": "train"}
+{"query_id": 25495, "query": "chicwish", "parent_asin": "B07RSRBPJ6", "esci_label": "E", "esci_product_id": "B07RRPFRQ9", "join": "title", "esci_split": "train"}
+{"query_id": 25981, "query": "christmas pajamas for boys", "parent_asin": "B07PSV7DX8", "esci_label": "S", "esci_product_id": "B07PMFB9K3", "join": "title", "esci_split": "train"}
+{"query_id": 25992, "query": "christmas pj for 9 months", "parent_asin": "B07PSV7DX8", "esci_label": "S", "esci_product_id": "B07PMFB9LP", "join": "title", "esci_split": "train"}
+{"query_id": 25994, "query": "christmas pjs", "parent_asin": "B07PSV7DX8", "esci_label": "E", "esci_product_id": "B07PNCRW8W", "join": "title", "esci_split": "train"}
+{"query_id": 25995, "query": "christmas pjs for kids", "parent_asin": "B07PSV7DX8", "esci_label": "E", "esci_product_id": "B07PRSXLPK", "join": "title", "esci_split": "train"}
+{"query_id": 26174, "query": "chuck taylor mens", "parent_asin": "B010RK95IA", "esci_label": "E", "esci_product_id": "B010RK95IA", "join": "asin", "esci_split": "test"}
+{"query_id": 26348, "query": "cintos gucci originales para mujer", "parent_asin": "B071D877KZ", "esci_label": "I", "esci_product_id": "B071D877KZ", "join": "asin", "esci_split": "test"}
+{"query_id": 26348, "query": "cintos gucci originales para mujer", "parent_asin": "B077N7MSWV", "esci_label": "I", "esci_product_id": "B077N7MSWV", "join": "asin", "esci_split": "test"}
+{"query_id": 26696, "query": "clear boobytape lift", "parent_asin": "B07QVG2FFM", "esci_label": "E", "esci_product_id": "B07QVG2FFM", "join": "asin", "esci_split": "train"}
+{"query_id": 27155, "query": "coach bags for women", "parent_asin": "B07Q7RY523", "esci_label": "I", "esci_product_id": "B07Q7RY523", "join": "asin", "esci_split": "train"}
+{"query_id": 27158, "query": "coach glasses for women", "parent_asin": "B07QJWMCL8", "esci_label": "E", "esci_product_id": "B07QJWMCL8", "join": "asin", "esci_split": "train"}
+{"query_id": 27337, "query": "coctail dress", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N1WFB1F", "join": "title", "esci_split": "train"}
+{"query_id": 27740, "query": "collar stays", "parent_asin": "B075QPB1T6", "esci_label": "E", "esci_product_id": "B075QPB1T6", "join": "asin", "esci_split": "train"}
+{"query_id": 27819, "query": "color block leggings high waisted", "parent_asin": "B08VRN834Y", "esci_label": "E", "esci_product_id": "B08VGYFVTZ", "join": "title", "esci_split": "train"}
+{"query_id": 28089, "query": "comfy clothes for women sets", "parent_asin": "B08VRN834Y", "esci_label": "E", "esci_product_id": "B08CXNKW71", "join": "title", "esci_split": "test"}
+{"query_id": 28286, "query": "compression long sleeve shirt men", "parent_asin": "B00KHTNLXM", "esci_label": "E", "esci_product_id": "B00KHTNLXM", "join": "asin", "esci_split": "train"}
+{"query_id": 28432, "query": "concert shirts for women", "parent_asin": "B07G1TC1X8", "esci_label": "I", "esci_product_id": "B07KT74WXK", "join": "title", "esci_split": "test"}
+{"query_id": 28665, "query": "converse chuck taylor", "parent_asin": "B010RK95IA", "esci_label": "E", "esci_product_id": "B010RK95IA", "join": "asin", "esci_split": "train"}
+{"query_id": 28665, "query": "converse chuck taylor", "parent_asin": "B07848Z7F7", "esci_label": "E", "esci_product_id": "B07848Z7F7", "join": "asin", "esci_split": "train"}
+{"query_id": 29394, "query": "costa sunglasses for women", "parent_asin": "B08WB2KQWK", "esci_label": "E", "esci_product_id": "B08WB2KQWK", "join": "asin", "esci_split": "train"}
+{"query_id": 29420, "query": "costumes tshirts for women", "parent_asin": "B01K0RMBYK", "esci_label": "E", "esci_product_id": "B01EG59Q6I", "join": "title", "esci_split": "train"}
+{"query_id": 29482, "query": "cotton nightgowns for women", "parent_asin": "B08CVM46SH", "esci_label": "E", "esci_product_id": "B07SR7BH3K", "join": "title", "esci_split": "train"}
+{"query_id": 29511, "query": "cotton undershirt men", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B00LSRU1QW", "join": "title", "esci_split": "train"}
+{"query_id": 29595, "query": "couple christmas pajamas", "parent_asin": "B07PSV7DX8", "esci_label": "E", "esci_product_id": "B07PRSXLPK", "join": "title", "esci_split": "train"}
+{"query_id": 29700, "query": "cowboy boots women", "parent_asin": "B01L2MR1SS", "esci_label": "E", "esci_product_id": "B01L2MUIEM", "join": "title", "esci_split": "train"}
+{"query_id": 29931, "query": "crazy watches for men", "parent_asin": "B0792T1C9R", "esci_label": "E", "esci_product_id": "B0792T1C9R", "join": "asin", "esci_split": "train"}
+{"query_id": 30030, "query": "crep protect spray", "parent_asin": "B013YRRFJ4", "esci_label": "E", "esci_product_id": "B013YRRFJ4", "join": "asin", "esci_split": "train"}
+{"query_id": 30060, "query": "crew socks", "parent_asin": "B0735V67KT", "esci_label": "E", "esci_product_id": "B0735V67KT", "join": "asin", "esci_split": "test"}
+{"query_id": 30185, "query": "croc embossed satchel bag", "parent_asin": "B08ZN8Y2W1", "esci_label": "E", "esci_product_id": "B07F87LTMJ", "join": "title", "esci_split": "train"}
+{"query_id": 30195, "query": "crochet bunny outfit 12 months old", "parent_asin": "B01N7CL609", "esci_label": "I", "esci_product_id": "B01LEYCFAS", "join": "title", "esci_split": "train"}
+{"query_id": 30258, "query": "croft and barrow women", "parent_asin": "B08GS81FF8", "esci_label": "E", "esci_product_id": "B07T96DRJ2", "join": "title", "esci_split": "train"}
+{"query_id": 30272, "query": "crop leggings for women high waisted", "parent_asin": "B08VRN834Y", "esci_label": "E", "esci_product_id": "B08VGYFVTZ", "join": "title", "esci_split": "train"}
+{"query_id": 30383, "query": "cruise shoes", "parent_asin": "B010WEBZG6", "esci_label": "S", "esci_product_id": "B010WEBZG6", "join": "asin", "esci_split": "train"}
+{"query_id": 30421, "query": "crystal beaded belt", "parent_asin": "B0199GUWQW", "esci_label": "E", "esci_product_id": "B0199GUWQW", "join": "asin", "esci_split": "train"}
+{"query_id": 30434, "query": "crystal garter belt", "parent_asin": "B0199GUWQW", "esci_label": "S", "esci_product_id": "B0199GUWQW", "join": "asin", "esci_split": "train"}
+{"query_id": 30656, "query": "cuff bracelets for women", "parent_asin": "B01JGRHHTY", "esci_label": "E", "esci_product_id": "B01JGRHHTY", "join": "asin", "esci_split": "train"}
+{"query_id": 31053, "query": "cute pajamas for teen girls", "parent_asin": "B08D7JTHSK", "esci_label": "E", "esci_product_id": "B08BCQXDWY", "join": "title", "esci_split": "test"}
+{"query_id": 31086, "query": "cute suitcases for girls", "parent_asin": "B004HKSDO4", "esci_label": "E", "esci_product_id": "B004HKSDO4", "join": "asin", "esci_split": "train"}
+{"query_id": 31321, "query": "daddy and baby matching t-shirt and onesie set", "parent_asin": "B075LYZVDM", "esci_label": "E", "esci_product_id": "B075LYZVDM", "join": "asin", "esci_split": "train"}
+{"query_id": 31390, "query": "daisy rose", "parent_asin": "B08ZN8Y2W1", "esci_label": "S", "esci_product_id": "B07T6DTQQB", "join": "title", "esci_split": "train"}
+{"query_id": 31598, "query": "dark purple dresses for women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B07GFB8X9Q", "join": "title", "esci_split": "train"}
+{"query_id": 32521, "query": "desert digital camo boots", "parent_asin": "B07MN2WKQQ", "esci_label": "I", "esci_product_id": "B07MK79DSV", "join": "title", "esci_split": "train"}
+{"query_id": 32549, "query": "designer baseball caps for women", "parent_asin": "B00J9TTFK4", "esci_label": "E", "esci_product_id": "B00J9TTFK4", "join": "asin", "esci_split": "train"}
+{"query_id": 33106, "query": "dickies scrubs women pants", "parent_asin": "B07K34W3X7", "esci_label": "E", "esci_product_id": "B07K34W3X7", "join": "asin", "esci_split": "train"}
+{"query_id": 33341, "query": "dinner dresses for women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B07GFCWT9X", "join": "title", "esci_split": "train"}
+{"query_id": 33417, "query": "dio cosplay", "parent_asin": "B019SZ3BSU", "esci_label": "E", "esci_product_id": "B019SZ37RU", "join": "title", "esci_split": "train"}
+{"query_id": 33832, "query": "disney sleep wear", "parent_asin": "B01N4BTYAZ", "esci_label": "E", "esci_product_id": "B01N4BTYAZ", "join": "asin", "esci_split": "train"}
+{"query_id": 34701, "query": "dollars coins", "parent_asin": "B0BZFMBB6T", "esci_label": "E", "esci_product_id": "B07JJKWT3Y", "join": "title", "esci_split": "train"}
+{"query_id": 35409, "query": "dreses-women casual elegant", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01MS1GE55", "join": "title", "esci_split": "train"}
+{"query_id": 35410, "query": "dress", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B07GFB8X9Q", "join": "title", "esci_split": "train"}
+{"query_id": 35416, "query": "dress cocktail", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N1WFB1F", "join": "title", "esci_split": "test"}
+{"query_id": 35447, "query": "dress watch", "parent_asin": "B0792T1C9R", "esci_label": "E", "esci_product_id": "B0792T1C9R", "join": "asin", "esci_split": "train"}
+{"query_id": 35459, "query": "dresses", "parent_asin": "B0743B5GGT", "esci_label": "E", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "train"}
+{"query_id": 35472, "query": "dresses for women wedding guest", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B072KQ6PK5", "join": "title", "esci_split": "test"}
+{"query_id": 36309, "query": "eagle creek cargo hauler duffel", "parent_asin": "B07K3SMDWR", "esci_label": "S", "esci_product_id": "B07K3SMDWR", "join": "asin", "esci_split": "train"}
+{"query_id": 36362, "query": "ear stretching kit", "parent_asin": "B0182OKCD0", "esci_label": "E", "esci_product_id": "B0182OKCD0", "join": "asin", "esci_split": "test"}
+{"query_id": 36363, "query": "ear stretching kit clear", "parent_asin": "B0182OKCD0", "esci_label": "S", "esci_product_id": "B0182OKCD0", "join": "asin", "esci_split": "test"}
+{"query_id": 36732, "query": "edox watches for men", "parent_asin": "B01INXF758", "esci_label": "S", "esci_product_id": "B01INXF758", "join": "asin", "esci_split": "train"}
+{"query_id": 36801, "query": "egg earrings", "parent_asin": "B01FFLG51G", "esci_label": "S", "esci_product_id": "B01FFLG51G", "join": "asin", "esci_split": "train"}
+{"query_id": 36838, "query": "egyptian bangle bracelets", "parent_asin": "B01JGRHHTY", "esci_label": "E", "esci_product_id": "B01JGRHHTY", "join": "asin", "esci_split": "train"}
+{"query_id": 36874, "query": "ekouaer women's short sleeve v-neck nightgown", "parent_asin": "B08CVM46SH", "esci_label": "E", "esci_product_id": "B07YDBWMSW", "join": "title", "esci_split": "train"}
+{"query_id": 37250, "query": "elegant women's dresses", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01MS1GE55", "join": "title", "esci_split": "train"}
+{"query_id": 37361, "query": "elk bo", "parent_asin": "B07GTYYJMQ", "esci_label": "I", "esci_product_id": "B088Q6WDP6", "join": "title", "esci_split": "train"}
+{"query_id": 37450, "query": "embellished sunglasses boys", "parent_asin": "B06XD43C62", "esci_label": "E", "esci_product_id": "B06XD43C62", "join": "asin", "esci_split": "test"}
+{"query_id": 37485, "query": "emerald green shawl", "parent_asin": "B07QGB859Z", "esci_label": "E", "esci_product_id": "B07QGB859Z", "join": "asin", "esci_split": "train"}
+{"query_id": 37489, "query": "emerald moon and stars hair accessories", "parent_asin": "B01IA6KAIW", "esci_label": "S", "esci_product_id": "B01IA6KAIW", "join": "asin", "esci_split": "test"}
+{"query_id": 37549, "query": "emo handbags", "parent_asin": "B07GTYYJMQ", "esci_label": "S", "esci_product_id": "B07YHGXQQK", "join": "title", "esci_split": "train"}
+{"query_id": 37549, "query": "emo handbags", "parent_asin": "B08ZN8Y2W1", "esci_label": "S", "esci_product_id": "B07T6DTQQB", "join": "title", "esci_split": "train"}
+{"query_id": 38348, "query": "etcyy dresses for women", "parent_asin": "B07FK8MWLK", "esci_label": "E", "esci_product_id": "B07FK8MWLK", "join": "asin", "esci_split": "train"}
+{"query_id": 38489, "query": "evening dresses for women evening party", "parent_asin": "B07MFQCP57", "esci_label": "E", "esci_product_id": "B07MFQCGY6", "join": "title", "esci_split": "train"}
+{"query_id": 38489, "query": "evening dresses for women evening party", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B071XGD5T9", "join": "title", "esci_split": "train"}
+{"query_id": 38490, "query": "evening dresses long elegant", "parent_asin": "B07571RMS3", "esci_label": "E", "esci_product_id": "B07571RMS3", "join": "asin", "esci_split": "test"}
+{"query_id": 38578, "query": "exact fit mens belt", "parent_asin": "B076GQ4P5X", "esci_label": "E", "esci_product_id": "B078TNHD7W", "join": "title", "esci_split": "train"}
+{"query_id": 38841, "query": "extra long t shirts for tall men", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B000EC11R0", "join": "title", "esci_split": "test"}
+{"query_id": 39132, "query": "face coverings for men", "parent_asin": "B07VQTKWVX", "esci_label": "E", "esci_product_id": "B07SPYRN4X", "join": "title", "esci_split": "train"}
+{"query_id": 39165, "query": "face mask hunting", "parent_asin": "B07W1K8TJM", "esci_label": "E", "esci_product_id": "B07W1K8TJM", "join": "asin", "esci_split": "train"}
+{"query_id": 39167, "query": "face mask lanyards for kids", "parent_asin": "B093GK6RG9", "esci_label": "E", "esci_product_id": "B08DNT3PK2", "join": "title", "esci_split": "train"}
+{"query_id": 39321, "query": "faith not fear", "parent_asin": "B08P1ZLC43", "esci_label": "I", "esci_product_id": "B08P1ZLC43", "join": "asin", "esci_split": "train"}
+{"query_id": 39358, "query": "fake fur puff ball keychain", "parent_asin": "B07N87G4RJ", "esci_label": "E", "esci_product_id": "B07N87G4RJ", "join": "asin", "esci_split": "train"}
+{"query_id": 39446, "query": "fall dresses for women plus size", "parent_asin": "B07DNBYG1G", "esci_label": "E", "esci_product_id": "B07DNBYG1G", "join": "asin", "esci_split": "train"}
+{"query_id": 39576, "query": "fanny pack for teens girls", "parent_asin": "B07F71PP3S", "esci_label": "E", "esci_product_id": "B07F72C34V", "join": "title", "esci_split": "train"}
+{"query_id": 39577, "query": "fanny pack for travel", "parent_asin": "B01G1ORT5M", "esci_label": "E", "esci_product_id": "B01G1ORT5M", "join": "asin", "esci_split": "train"}
+{"query_id": 39802, "query": "faux wrap dress for women", "parent_asin": "B0743B5GGT", "esci_label": "E", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "train"}
+{"query_id": 40422, "query": "fionna hat adventure time girls", "parent_asin": "B00KNBFO6G", "esci_label": "I", "esci_product_id": "B004491QCO", "join": "title", "esci_split": "train"}
+{"query_id": 40438, "query": "fire emblem 3 houses merch", "parent_asin": "B07VTV81BG", "esci_label": "E", "esci_product_id": "B07VTV81BG", "join": "asin", "esci_split": "train"}
+{"query_id": 40779, "query": "fishn et tank men", "parent_asin": "B076LVMXN4", "esci_label": "E", "esci_product_id": "B07PY6KBJR", "join": "title", "esci_split": "train"}
+{"query_id": 40895, "query": "fitness tops for women with sleeves", "parent_asin": "B089LWWQWS", "esci_label": "E", "esci_product_id": "B07JFYHZ15", "join": "title", "esci_split": "train"}
+{"query_id": 40910, "query": "fitted cocktail dresses for women", "parent_asin": "B07VT47J3T", "esci_label": "S", "esci_product_id": "B01N5JHXW8", "join": "title", "esci_split": "test"}
+{"query_id": 41032, "query": "flannel pajamas women", "parent_asin": "B01NAX3F4O", "esci_label": "E", "esci_product_id": "B01NAX3F4O", "join": "asin", "esci_split": "train"}
+{"query_id": 41044, "query": "flannels for women", "parent_asin": "B08GK645DZ", "esci_label": "E", "esci_product_id": "B08GK645DZ", "join": "asin", "esci_split": "train"}
+{"query_id": 41119, "query": "flat leather sandals for women", "parent_asin": "B07JBKMYFJ", "esci_label": "E", "esci_product_id": "B07JBKMYFJ", "join": "asin", "esci_split": "test"}
+{"query_id": 41429, "query": "floral baseball tee", "parent_asin": "B09Z9H8ZM5", "esci_label": "S", "esci_product_id": "B097QX4XSG", "join": "title", "esci_split": "train"}
+{"query_id": 41436, "query": "floral dress skirt", "parent_asin": "B0743B5GGT", "esci_label": "E", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "train"}
+{"query_id": 41476, "query": "floryday blouses for women", "parent_asin": "B07S7NXZ7J", "esci_label": "E", "esci_product_id": "B07S7NX3DC", "join": "title", "esci_split": "train"}
+{"query_id": 41550, "query": "flowy tank women", "parent_asin": "B07G1TC1X8", "esci_label": "E", "esci_product_id": "B07DJ8KGFQ", "join": "title", "esci_split": "train"}
+{"query_id": 41550, "query": "flowy tank women", "parent_asin": "B091Z4VPF8", "esci_label": "E", "esci_product_id": "B07QZKZGBR", "join": "title", "esci_split": "train"}
+{"query_id": 41551, "query": "flowy tops for women boho", "parent_asin": "B091Z4VPF8", "esci_label": "E", "esci_product_id": "B07QZKZGBR", "join": "title", "esci_split": "train"}
+{"query_id": 41552, "query": "flowy tops for women long sleeve", "parent_asin": "B07G1TC1X8", "esci_label": "S", "esci_product_id": "B07DJ9Q62G", "join": "title", "esci_split": "train"}
+{"query_id": 42041, "query": "football sweatshirt", "parent_asin": "B07G5QX7FV", "esci_label": "S", "esci_product_id": "B07W6DQ4H5", "join": "title", "esci_split": "test"}
+{"query_id": 42145, "query": "forest green under armour polo", "parent_asin": "B071FGPCZB", "esci_label": "E", "esci_product_id": "B076QTZHMS", "join": "title", "esci_split": "train"}
+{"query_id": 42191, "query": "formal plus size dresses", "parent_asin": "B07DNBYG1G", "esci_label": "E", "esci_product_id": "B07DNBYG1G", "join": "asin", "esci_split": "train"}
+{"query_id": 42432, "query": "fraulein costume women", "parent_asin": "B002G0UV56", "esci_label": "E", "esci_product_id": "B002G0UV56", "join": "asin", "esci_split": "train"}
+{"query_id": 42823, "query": "frozen beg in bag", "parent_asin": "B08ZN8Y2W1", "esci_label": "I", "esci_product_id": "B07F87LTMJ", "join": "title", "esci_split": "test"}
+{"query_id": 43527, "query": "funny bandaids", "parent_asin": "B000ROHR78", "esci_label": "I", "esci_product_id": "B000ROHR78", "join": "asin", "esci_split": "train"}
+{"query_id": 43569, "query": "funny mom shirts plus size", "parent_asin": "B07TS515HS", "esci_label": "E", "esci_product_id": "B07TV91XDY", "join": "title", "esci_split": "train"}
+{"query_id": 43716, "query": "fuzzy sweater", "parent_asin": "B07G5QX7FV", "esci_label": "E", "esci_product_id": "B07G5QFQF2", "join": "title", "esci_split": "train"}
+{"query_id": 43886, "query": "gages starter kit clear", "parent_asin": "B0182OKCD0", "esci_label": "E", "esci_product_id": "B0182OKCD0", "join": "asin", "esci_split": "train"}
+{"query_id": 43891, "query": "gaiam weights", "parent_asin": "B07BMKJMXV", "esci_label": "I", "esci_product_id": "B07BMKJMXV", "join": "asin", "esci_split": "train"}
+{"query_id": 44720, "query": "geckatte girls leopard", "parent_asin": "B07GSKQT9G", "esci_label": "I", "esci_product_id": "B07GSMBL44", "join": "title", "esci_split": "train"}
+{"query_id": 45101, "query": "giama yoga shorts", "parent_asin": "B01M22QTWT", "esci_label": "S", "esci_product_id": "B01M22QTWT", "join": "asin", "esci_split": "train"}
+{"query_id": 45422, "query": "girl costums", "parent_asin": "B07H55K6CN", "esci_label": "E", "esci_product_id": "B07H56TJCC", "join": "title", "esci_split": "train"}
+{"query_id": 45642, "query": "girls oversized longsleeve", "parent_asin": "B07G1TC1X8", "esci_label": "E", "esci_product_id": "B07KT4JZ63", "join": "title", "esci_split": "train"}
+{"query_id": 45675, "query": "girls shoes size 12", "parent_asin": "B07NWLBKZR", "esci_label": "I", "esci_product_id": "B07VYNXXYD", "join": "title", "esci_split": "test"}
+{"query_id": 45679, "query": "girls size 11 shoes", "parent_asin": "B07NWLBKZR", "esci_label": "S", "esci_product_id": "B07W1WDNLF", "join": "title", "esci_split": "test"}
+{"query_id": 45958, "query": "glenda wig", "parent_asin": "B0091K54OM", "esci_label": "E", "esci_product_id": "B0091K54OM", "join": "asin", "esci_split": "train"}
+{"query_id": 46342, "query": "gold bar bezel", "parent_asin": "B07W22TLGG", "esci_label": "I", "esci_product_id": "B07W22TLGG", "join": "asin", "esci_split": "train"}
+{"query_id": 46592, "query": "golf polo slim fit", "parent_asin": "B07VVBRM7R", "esci_label": "E", "esci_product_id": "B07VVBRM7R", "join": "asin", "esci_split": "train"}
+{"query_id": 46687, "query": "good shirt women", "parent_asin": "B07G1TC1X8", "esci_label": "E", "esci_product_id": "B07DJ9DBYZ", "join": "title", "esci_split": "train"}
+{"query_id": 46687, "query": "good shirt women", "parent_asin": "B07S3DQ5KK", "esci_label": "E", "esci_product_id": "B07NWGKZQN", "join": "title", "esci_split": "train"}
+{"query_id": 46691, "query": "good vibes fashion face novelty shirt", "parent_asin": "B07G1TC1X8", "esci_label": "E", "esci_product_id": "B07G2FXGMM", "join": "title", "esci_split": "train"}
+{"query_id": 46733, "query": "google pixel 3", "parent_asin": "B008VGLW4I", "esci_label": "I", "esci_product_id": "B07PDY2BZ9", "join": "title", "esci_split": "train"}
+{"query_id": 46910, "query": "goumikids mittens", "parent_asin": "B076YCYQ6B", "esci_label": "E", "esci_product_id": "B076YCYQ6B", "join": "asin", "esci_split": "test"}
+{"query_id": 46926, "query": "gowns and evening dresses", "parent_asin": "B07571RMS3", "esci_label": "E", "esci_product_id": "B07571RMS3", "join": "asin", "esci_split": "train"}
+{"query_id": 47114, "query": "graphic workout tanktops", "parent_asin": "B07G1TC1X8", "esci_label": "E", "esci_product_id": "B07DJB97RN", "join": "title", "esci_split": "train"}
+{"query_id": 47199, "query": "gray jewelry organizer", "parent_asin": "B07XC4KC77", "esci_label": "E", "esci_product_id": "B07XC4KC77", "join": "asin", "esci_split": "train"}
+{"query_id": 47733, "query": "gshock solar mens watch", "parent_asin": "B01KIKLVVS", "esci_label": "E", "esci_product_id": "B01KIKLVVS", "join": "asin", "esci_split": "train"}
+{"query_id": 47855, "query": "gucci coin purse for women", "parent_asin": "B07RGTCK8K", "esci_label": "S", "esci_product_id": "B07RGTC75H", "join": "title", "esci_split": "train"}
+{"query_id": 47860, "query": "gucci disco", "parent_asin": "B071D877KZ", "esci_label": "I", "esci_product_id": "B071D877KZ", "join": "asin", "esci_split": "test"}
+{"query_id": 47862, "query": "gucci handbags for women", "parent_asin": "B071D877KZ", "esci_label": "I", "esci_product_id": "B071D877KZ", "join": "asin", "esci_split": "train"}
+{"query_id": 47865, "query": "gucci inspire belts women", "parent_asin": "B082DBR1VJ", "esci_label": "E", "esci_product_id": "B07MB9MSGM", "join": "title", "esci_split": "train"}
+{"query_id": 47875, "query": "gucci purses for women", "parent_asin": "B071D877KZ", "esci_label": "I", "esci_product_id": "B071D877KZ", "join": "asin", "esci_split": "train"}
+{"query_id": 47903, "query": "guess purses and handbags", "parent_asin": "B07ZK567BF", "esci_label": "E", "esci_product_id": "B07ZK567BF", "join": "asin", "esci_split": "train"}
+{"query_id": 48120, "query": "gym bags", "parent_asin": "B07T31SXQW", "esci_label": "E", "esci_product_id": "B07T31SXQW", "join": "asin", "esci_split": "train"}
+{"query_id": 48126, "query": "gym leggings women", "parent_asin": "B07ZJ6816Y", "esci_label": "S", "esci_product_id": "B07VDF92VX", "join": "title", "esci_split": "test"}
+{"query_id": 48151, "query": "gymnastics shorts", "parent_asin": "B07DM4M8HR", "esci_label": "E", "esci_product_id": "B07DM6B2F4", "join": "title", "esci_split": "train"}
+{"query_id": 48257, "query": "hair bands men nike", "parent_asin": "B07KF8N4VV", "esci_label": "E", "esci_product_id": "B07KKDLNL3", "join": "title", "esci_split": "train"}
+{"query_id": 48536, "query": "halloween boobs", "parent_asin": "B01MRS36L7", "esci_label": "I", "esci_product_id": "B01MRS36L7", "join": "asin", "esci_split": "test"}
+{"query_id": 48986, "query": "hanes muscle shirts for men", "parent_asin": "B0BXP6MG3X", "esci_label": "S", "esci_product_id": "B00LSRU162", "join": "title", "esci_split": "test"}
+{"query_id": 48995, "query": "hanes xl tall mens white undershirts", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B00LSRU2JS", "join": "title", "esci_split": "test"}
+{"query_id": 49164, "query": "hard clutch purse", "parent_asin": "B077M6K87W", "esci_label": "E", "esci_product_id": "B075ZP879K", "join": "title", "esci_split": "train"}
+{"query_id": 49254, "query": "harley davidson rings for men", "parent_asin": "B0777SGJCZ", "esci_label": "I", "esci_product_id": "B0777SGJCZ", "join": "asin", "esci_split": "train"}
+{"query_id": 49911, "query": "heated ski boot liners", "parent_asin": "B07DD82V4M", "esci_label": "I", "esci_product_id": "B07DD82V4M", "join": "asin", "esci_split": "train"}
+{"query_id": 49938, "query": "heathyoga biker shorts", "parent_asin": "B089291TSH", "esci_label": "S", "esci_product_id": "B08928ZPQ3", "join": "title", "esci_split": "train"}
+{"query_id": 50057, "query": "heeleys roller shoes for girls", "parent_asin": "B07RDBL2GP", "esci_label": "E", "esci_product_id": "B078YM2QXY", "join": "title", "esci_split": "train"}
+{"query_id": 50499, "query": "high heels pump", "parent_asin": "B079P4GPY4", "esci_label": "E", "esci_product_id": "B079P4GPY4", "join": "asin", "esci_split": "train"}
+{"query_id": 50559, "query": "high waisted baggy jeans", "parent_asin": "B08PPD8FYB", "esci_label": "E", "esci_product_id": "B07D9JFM28", "join": "title", "esci_split": "test"}
+{"query_id": 50687, "query": "hip pads", "parent_asin": "B07S2XQP9L", "esci_label": "E", "esci_product_id": "B07DB8NC3P", "join": "title", "esci_split": "train"}
+{"query_id": 50857, "query": "holiday cocktail dresses for women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B07JRFGM2R", "join": "title", "esci_split": "train"}
+{"query_id": 50866, "query": "holiday gifts for coworkers", "parent_asin": "B07KWZVB83", "esci_label": "E", "esci_product_id": "B07KWZVB83", "join": "asin", "esci_split": "train"}
+{"query_id": 50904, "query": "holly jeans for women", "parent_asin": "B08PPD8FYB", "esci_label": "E", "esci_product_id": "B07D9JK47Q", "join": "title", "esci_split": "test"}
+{"query_id": 51048, "query": "homecoming dresses modest long", "parent_asin": "B07VT47J3T", "esci_label": "S", "esci_product_id": "B07JYJYH3Z", "join": "title", "esci_split": "train"}
+{"query_id": 51223, "query": "hoodies for women", "parent_asin": "B07RP71WXG", "esci_label": "E", "esci_product_id": "B07RN5VHV7", "join": "title", "esci_split": "train"}
+{"query_id": 51416, "query": "hot pink berets for women", "parent_asin": "B00O8Z994Q", "esci_label": "E", "esci_product_id": "B00O8Z994Q", "join": "asin", "esci_split": "train"}
+{"query_id": 51888, "query": "hublot womens watch", "parent_asin": "B0018AL3XY", "esci_label": "E", "esci_product_id": "B0018AL3XY", "join": "asin", "esci_split": "test"}
+{"query_id": 51923, "query": "hue sleepwear women", "parent_asin": "B07SHW13T4", "esci_label": "E", "esci_product_id": "B01LQW066S", "join": "title", "esci_split": "train"}
+{"query_id": 51923, "query": "hue sleepwear women", "parent_asin": "B082PJVXQY", "esci_label": "E", "esci_product_id": "B082PJGG4K", "join": "title", "esci_split": "train"}
+{"query_id": 51967, "query": "hugo boss wallet", "parent_asin": "B01BP3Z14K", "esci_label": "S", "esci_product_id": "B07F73VKWS", "join": "title", "esci_split": "train"}
+{"query_id": 52353, "query": "i am looking for an olive green fur coat that has a cheetah print on it. it is a long jacket with buttons. ", "parent_asin": "B01LZ3V5HV", "esci_label": "I", "esci_product_id": "B07PGBXXTL", "join": "title", "esci_split": "test"}
+{"query_id": 52390, "query": "i have you i'm not scared shirt", "parent_asin": "B071WM2HCR", "esci_label": "S", "esci_product_id": "B07RJVMTND", "join": "title", "esci_split": "train"}
+{"query_id": 52567, "query": "ibuki mioda wig without horns", "parent_asin": "B07GS8T7SM", "esci_label": "S", "esci_product_id": "B07GS8T7SM", "join": "asin", "esci_split": "train"}
+{"query_id": 52688, "query": "id holder with zipper vera bradley", "parent_asin": "B07T2FSP64", "esci_label": "S", "esci_product_id": "B07T2FSP64", "join": "asin", "esci_split": "train"}
+{"query_id": 52863, "query": "imcubus shirt", "parent_asin": "B089LWWQWS", "esci_label": "S", "esci_product_id": "B07NW4V18V", "join": "title", "esci_split": "train"}
+{"query_id": 53045, "query": "indiana jones hat", "parent_asin": "B001A1Q3XG", "esci_label": "E", "esci_product_id": "B001A1Q3XG", "join": "asin", "esci_split": "train"}
+{"query_id": 53134, "query": "inessence hijab", "parent_asin": "B09DYXPWPD", "esci_label": "S", "esci_product_id": "B07VGBNVTR", "join": "title", "esci_split": "train"}
+{"query_id": 53698, "query": "invicta automatic watches for men", "parent_asin": "B000GX3IIM", "esci_label": "E", "esci_product_id": "B000GX3IIM", "join": "asin", "esci_split": "test"}
+{"query_id": 55350, "query": "jackshibo water shoes", "parent_asin": "B071KN8GPM", "esci_label": "E", "esci_product_id": "B07BT77L7H", "join": "title", "esci_split": "train"}
+{"query_id": 55354, "query": "jacob twilight", "parent_asin": "B0030VDK6W", "esci_label": "E", "esci_product_id": "B0030VDK6W", "join": "asin", "esci_split": "test"}
+{"query_id": 55659, "query": "jean jacket women riped", "parent_asin": "B08PPD8FYB", "esci_label": "I", "esci_product_id": "B07D9JB3JL", "join": "title", "esci_split": "test"}
+{"query_id": 55889, "query": "jet ski", "parent_asin": "B07X3MGMJR", "esci_label": "I", "esci_product_id": "B07CSJWQRW", "join": "title", "esci_split": "train"}
+{"query_id": 55940, "query": "jewelry indian you bella", "parent_asin": "B071NV42PX", "esci_label": "E", "esci_product_id": "B078LGGBLT", "join": "title", "esci_split": "train"}
+{"query_id": 56089, "query": "joe exotic", "parent_asin": "B08CVQBMQM", "esci_label": "E", "esci_product_id": "B08CVQBMQM", "join": "asin", "esci_split": "train"}
+{"query_id": 56289, "query": "jordan black and white", "parent_asin": "B097Z35X4P", "esci_label": "S", "esci_product_id": "B097Z35X4P", "join": "asin", "esci_split": "test"}
+{"query_id": 56297, "query": "jordan shoes", "parent_asin": "B07PM1RG49", "esci_label": "E", "esci_product_id": "B07PM26ZN5", "join": "title", "esci_split": "test"}
+{"query_id": 56304, "query": "jordans", "parent_asin": "B07BGDKJQN", "esci_label": "E", "esci_product_id": "B07BGDKJQN", "join": "asin", "esci_split": "train"}
+{"query_id": 56304, "query": "jordans", "parent_asin": "B07PM1RG49", "esci_label": "E", "esci_product_id": "B07PM26ZN5", "join": "title", "esci_split": "train"}
+{"query_id": 56532, "query": "juice wrld hoodie", "parent_asin": "B083SKMMBQ", "esci_label": "E", "esci_product_id": "B083SKYQZD", "join": "title", "esci_split": "train"}
+{"query_id": 56613, "query": "jumpsuits for work women", "parent_asin": "B0743B5GGT", "esci_label": "S", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "train"}
+{"query_id": 56644, "query": "junior's tops", "parent_asin": "B07G1TC1X8", "esci_label": "E", "esci_product_id": "B07KT77FF5", "join": "title", "esci_split": "train"}
+{"query_id": 56737, "query": "justin womens square toe boots", "parent_asin": "B01L99SW78", "esci_label": "S", "esci_product_id": "B07JZJ4598", "join": "title", "esci_split": "train"}
+{"query_id": 56740, "query": "jute bag", "parent_asin": "B079H9CHDC", "esci_label": "E", "esci_product_id": "B079H9CHDC", "join": "asin", "esci_split": "train"}
+{"query_id": 57154, "query": "keen womens water shoe", "parent_asin": "B07DJZ5XR4", "esci_label": "E", "esci_product_id": "B07DJZ5XR4", "join": "asin", "esci_split": "test"}
+{"query_id": 57548, "query": "khalid free spirit hoodie", "parent_asin": "B06XPSBPQ6", "esci_label": "I", "esci_product_id": "B06XPSBPQ6", "join": "asin", "esci_split": "train"}
+{"query_id": 57590, "query": "kid christmas pajamas", "parent_asin": "B07PSV7DX8", "esci_label": "E", "esci_product_id": "B07PNCRLQ8", "join": "title", "esci_split": "train"}
+{"query_id": 57603, "query": "kid fleece sport gloves", "parent_asin": "B07HGJLZKC", "esci_label": "I", "esci_product_id": "B07HGJLZKC", "join": "asin", "esci_split": "test"}
+{"query_id": 57961, "query": "kids rainbow umbrella", "parent_asin": "B07VYGB7M6", "esci_label": "E", "esci_product_id": "B07VYGB7M6", "join": "asin", "esci_split": "train"}
+{"query_id": 58068, "query": "kids unicorn costume", "parent_asin": "B07TCWF1Z2", "esci_label": "E", "esci_product_id": "B07TCXF9KC", "join": "title", "esci_split": "train"}
+{"query_id": 58259, "query": "king and queen hoodies", "parent_asin": "B081JL6D6Z", "esci_label": "E", "esci_product_id": "B081JL6D6Z", "join": "asin", "esci_split": "train"}
+{"query_id": 58461, "query": "kit cat clock", "parent_asin": "B079WHHYMR", "esci_label": "E", "esci_product_id": "B079WHHYMR", "join": "asin", "esci_split": "train"}
+{"query_id": 58799, "query": "knee high christmas socks for women", "parent_asin": "B07F976XKZ", "esci_label": "E", "esci_product_id": "B07F976XKZ", "join": "asin", "esci_split": "train"}
+{"query_id": 58879, "query": "knit capri", "parent_asin": "B082PJVXQY", "esci_label": "E", "esci_product_id": "B082PJ54BJ", "join": "title", "esci_split": "train"}
+{"query_id": 59241, "query": "l & l nation", "parent_asin": "B06XPV6BDS", "esci_label": "E", "esci_product_id": "B06XPV6BDS", "join": "asin", "esci_split": "train"}
+{"query_id": 59453, "query": "lace flowy dresses for women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N9LP56M", "join": "title", "esci_split": "train"}
+{"query_id": 59496, "query": "lacey white dress", "parent_asin": "B07VT47J3T", "esci_label": "S", "esci_product_id": "B01N9LP56M", "join": "title", "esci_split": "train"}
+{"query_id": 59579, "query": "ladies purses", "parent_asin": "B07TB9L1FF", "esci_label": "E", "esci_product_id": "B07TB9L1FF", "join": "asin", "esci_split": "test"}
+{"query_id": 59580, "query": "ladies purses and handbags", "parent_asin": "B07TB9L1FF", "esci_label": "E", "esci_product_id": "B07TB9L1FF", "join": "asin", "esci_split": "test"}
+{"query_id": 59582, "query": "ladies sandals on sale clearance", "parent_asin": "B077B413BP", "esci_label": "E", "esci_product_id": "B08RHKSYCC", "join": "title", "esci_split": "train"}
+{"query_id": 59591, "query": "ladies watches", "parent_asin": "B007R9WURS", "esci_label": "E", "esci_product_id": "B004D4S7AY", "join": "title", "esci_split": "train"}
+{"query_id": 59593, "query": "ladies western hats", "parent_asin": "B07WH28ZBG", "esci_label": "E", "esci_product_id": "B07WH28ZBG", "join": "asin", "esci_split": "train"}
+{"query_id": 59610, "query": "lady handbags for women", "parent_asin": "B07TB9L1FF", "esci_label": "E", "esci_product_id": "B07TB9L1FF", "join": "asin", "esci_split": "test"}
+{"query_id": 59822, "query": "lanjry sexy for women", "parent_asin": "B092Z8DN96", "esci_label": "I", "esci_product_id": "B08V8DK7FW", "join": "title", "esci_split": "train"}
+{"query_id": 59843, "query": "lanyard cute for women", "parent_asin": "B0828SQYSL", "esci_label": "S", "esci_product_id": "B088BK1JC9", "join": "title", "esci_split": "train"}
+{"query_id": 59848, "query": "lanyards", "parent_asin": "B093GK6RG9", "esci_label": "E", "esci_product_id": "B08DNT3PK2", "join": "title", "esci_split": "train"}
+{"query_id": 60076, "query": "large gym backpack", "parent_asin": "B07LG1PR7B", "esci_label": "E", "esci_product_id": "B07QN32Q9S", "join": "title", "esci_split": "train"}
+{"query_id": 60622, "query": "leaher check book", "parent_asin": "B07968N8ZY", "esci_label": "E", "esci_product_id": "B01HPTZ3OQ", "join": "title", "esci_split": "train"}
+{"query_id": 60689, "query": "leather belts without buckles", "parent_asin": "B07NP8HDFY", "esci_label": "E", "esci_product_id": "B012ZX5R8E", "join": "title", "esci_split": "train"}
+{"query_id": 60726, "query": "leather hat bands", "parent_asin": "B00H58ODF8", "esci_label": "E", "esci_product_id": "B00H58ODF8", "join": "asin", "esci_split": "train"}
+{"query_id": 60759, "query": "leather pants for men straight", "parent_asin": "B07SRC6YMV", "esci_label": "I", "esci_product_id": "B07SRC6YMV", "join": "asin", "esci_split": "train"}
+{"query_id": 60763, "query": "leather purses", "parent_asin": "B08ZN8Y2W1", "esci_label": "E", "esci_product_id": "B07M74YPJ9", "join": "title", "esci_split": "test"}
+{"query_id": 61183, "query": "legging shorts high waisted plus size", "parent_asin": "B08DXLQRGH", "esci_label": "E", "esci_product_id": "B08CXVCXTT", "join": "title", "esci_split": "train"}
+{"query_id": 61197, "query": "leggings with pockets", "parent_asin": "B07X4W1J52", "esci_label": "E", "esci_product_id": "B082SNC7L5", "join": "title", "esci_split": "train"}
+{"query_id": 61197, "query": "leggings with pockets", "parent_asin": "B087M7VHS7", "esci_label": "E", "esci_product_id": "B087LTHF89", "join": "title", "esci_split": "train"}
+{"query_id": 61198, "query": "leggings with pockets for women", "parent_asin": "B087M7VHS7", "esci_label": "E", "esci_product_id": "B087LTHF89", "join": "title", "esci_split": "train"}
+{"query_id": 61199, "query": "leggings with pockets not high waisted", "parent_asin": "B08VRN834Y", "esci_label": "S", "esci_product_id": "B08VGYFVTZ", "join": "title", "esci_split": "test"}
+{"query_id": 61201, "query": "leggings women high waisted", "parent_asin": "B08VRN834Y", "esci_label": "E", "esci_product_id": "B08VGYFVTZ", "join": "title", "esci_split": "train"}
+{"query_id": 61456, "query": "lemon yellow blouse", "parent_asin": "B093LP8VJN", "esci_label": "E", "esci_product_id": "B093LM7SPV", "join": "title", "esci_split": "test"}
+{"query_id": 61571, "query": "leopard print tops for women", "parent_asin": "B07S7NXZ7J", "esci_label": "E", "esci_product_id": "B07PQRLCSG", "join": "title", "esci_split": "test"}
+{"query_id": 61580, "query": "leopard tops for men", "parent_asin": "B003ZH1UG8", "esci_label": "I", "esci_product_id": "B003ZH1UG8", "join": "asin", "esci_split": "train"}
+{"query_id": 61581, "query": "leopard vans shoes women", "parent_asin": "B0BPN227Z1", "esci_label": "S", "esci_product_id": "B07LBCSYFX", "join": "title", "esci_split": "train"}
+{"query_id": 61593, "query": "lepord print for women tops", "parent_asin": "B07S7NXZ7J", "esci_label": "E", "esci_product_id": "B07PQRLCSG", "join": "title", "esci_split": "train"}
+{"query_id": 61595, "query": "lepord print tops for women sweaters", "parent_asin": "B07YF9YZPT", "esci_label": "S", "esci_product_id": "B07VWG3ZCK", "join": "title", "esci_split": "train"}
+{"query_id": 61726, "query": "levis wallet for men", "parent_asin": "B004A7YLPY", "esci_label": "E", "esci_product_id": "B004A7YLPY", "join": "asin", "esci_split": "test"}
+{"query_id": 62086, "query": "licras sexy para mujer", "parent_asin": "B08VRN834Y", "esci_label": "E", "esci_product_id": "B08CXJP4TC", "join": "title", "esci_split": "test"}
+{"query_id": 62245, "query": "light blue ripped jeans for women", "parent_asin": "B01BN0MJZ4", "esci_label": "E", "esci_product_id": "B01BN0MJZ4", "join": "asin", "esci_split": "train"}
+{"query_id": 62315, "query": "light pink pencil skirt", "parent_asin": "B06XX9P1ZN", "esci_label": "E", "esci_product_id": "B06XX9P1ZN", "join": "asin", "esci_split": "train"}
+{"query_id": 62652, "query": "linen shirt women", "parent_asin": "B07JMP8R7T", "esci_label": "I", "esci_product_id": "B07JMP8R7T", "join": "asin", "esci_split": "train"}
+{"query_id": 62687, "query": "linksoul", "parent_asin": "B01ACJQ5CA", "esci_label": "E", "esci_product_id": "B01ACJQ5CA", "join": "asin", "esci_split": "train"}
+{"query_id": 62911, "query": "little black dress for women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N1WFB1F", "join": "title", "esci_split": "train"}
+{"query_id": 63408, "query": "lone peak 4 women", "parent_asin": "B01N5HWT5C", "esci_label": "S", "esci_product_id": "B01N5HWT5C", "join": "asin", "esci_split": "test"}
+{"query_id": 63467, "query": "long head scarf for women", "parent_asin": "B07NWC4JYB", "esci_label": "E", "esci_product_id": "B07QJ57LCX", "join": "title", "esci_split": "train"}
+{"query_id": 63469, "query": "long hooded trench coat", "parent_asin": "B07PR8GZS5", "esci_label": "E", "esci_product_id": "B07PR8GZS5", "join": "asin", "esci_split": "train"}
+{"query_id": 63490, "query": "long modest maxi dresses", "parent_asin": "B07QQRQ566", "esci_label": "E", "esci_product_id": "B074SF7B6H", "join": "title", "esci_split": "train"}
+{"query_id": 63501, "query": "long peplum tops for women", "parent_asin": "B091Z4VPF8", "esci_label": "S", "esci_product_id": "B07QZKZGBR", "join": "title", "esci_split": "train"}
+{"query_id": 63559, "query": "long sleeve party tops for women", "parent_asin": "B00IH94ZC0", "esci_label": "E", "esci_product_id": "B00IH94ZC0", "join": "asin", "esci_split": "train"}
+{"query_id": 63569, "query": "long sleeve shirt sayings", "parent_asin": "B07G1TC1X8", "esci_label": "E", "esci_product_id": "B07KT74WXK", "join": "title", "esci_split": "train"}
+{"query_id": 63589, "query": "long sleve purple top", "parent_asin": "B07LG6SXL2", "esci_label": "E", "esci_product_id": "B07C7YT51B", "join": "title", "esci_split": "train"}
+{"query_id": 63603, "query": "long underwear mens", "parent_asin": "B07HNF5JVT", "esci_label": "E", "esci_product_id": "B07HNFVS3F", "join": "title", "esci_split": "train"}
+{"query_id": 63808, "query": "louis vutton wallet", "parent_asin": "B08172T8MD", "esci_label": "S", "esci_product_id": "B08172T8MD", "join": "asin", "esci_split": "train"}
+{"query_id": 63830, "query": "lounge shorts", "parent_asin": "B08FXKQ56N", "esci_label": "E", "esci_product_id": "B08FXKM6W7", "join": "title", "esci_split": "train"}
+{"query_id": 63832, "query": "lounge wear for women robe", "parent_asin": "B07NY34LLN", "esci_label": "E", "esci_product_id": "B07NY34LLN", "join": "asin", "esci_split": "train"}
+{"query_id": 63838, "query": "loungewear sets for women clothing", "parent_asin": "B087TVSGJS", "esci_label": "E", "esci_product_id": "B087TT8HQ6", "join": "title", "esci_split": "train"}
+{"query_id": 63990, "query": "lox earring backs", "parent_asin": "B00B4AC5LM", "esci_label": "E", "esci_product_id": "B00B4AC5LM", "join": "asin", "esci_split": "train"}
+{"query_id": 64156, "query": "luggage sets samsonite", "parent_asin": "B07BYDKL94", "esci_label": "E", "esci_product_id": "B07BYDKL94", "join": "asin", "esci_split": "test"}
+{"query_id": 64330, "query": "luxury robes for women", "parent_asin": "B082N4XNWS", "esci_label": "E", "esci_product_id": "B082N4XNWS", "join": "asin", "esci_split": "test"}
+{"query_id": 64449, "query": "m rena leggings", "parent_asin": "B07LGJ7M6R", "esci_label": "E", "esci_product_id": "B07LGJ7M6R", "join": "asin", "esci_split": "train"}
+{"query_id": 65331, "query": "mama to be pjs", "parent_asin": "B07PSV7DX8", "esci_label": "S", "esci_product_id": "B07PPJM3LW", "join": "title", "esci_split": "train"}
+{"query_id": 65739, "query": "marco para gafas de mujer", "parent_asin": "B07QJWMCL8", "esci_label": "S", "esci_product_id": "B07QJWMCL8", "join": "asin", "esci_split": "test"}
+{"query_id": 66134, "query": "mask chain lanyard", "parent_asin": "B093GK6RG9", "esci_label": "S", "esci_product_id": "B08DNT3PK2", "join": "title", "esci_split": "test"}
+{"query_id": 66141, "query": "mask lanyard strap", "parent_asin": "B093GK6RG9", "esci_label": "E", "esci_product_id": "B08DNT3PK2", "join": "title", "esci_split": "train"}
+{"query_id": 66299, "query": "matching christmas pajamas", "parent_asin": "B07PSV7DX8", "esci_label": "S", "esci_product_id": "B078MHSVTP", "join": "title", "esci_split": "train"}
+{"query_id": 66304, "query": "matching family christmas pajamas", "parent_asin": "B07PSV7DX8", "esci_label": "E", "esci_product_id": "B078MHSVTP", "join": "title", "esci_split": "train"}
+{"query_id": 66310, "query": "matching pajamas", "parent_asin": "B07PSV7DX8", "esci_label": "E", "esci_product_id": "B078MHSVTP", "join": "title", "esci_split": "train"}
+{"query_id": 66312, "query": "matching pjs for couple prime", "parent_asin": "B07PSV7DX8", "esci_label": "E", "esci_product_id": "B07PQNBV8Y", "join": "title", "esci_split": "test"}
+{"query_id": 66338, "query": "maternity bodycon maxi dress", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B07GFCWT9X", "join": "title", "esci_split": "test"}
+{"query_id": 66347, "query": "maternity joggers capri", "parent_asin": "B07B9L8L1Z", "esci_label": "S", "esci_product_id": "B07B9L8L1Z", "join": "asin", "esci_split": "test"}
+{"query_id": 66475, "query": "maturity bathingsuits", "parent_asin": "B07S3DKXJ1", "esci_label": "E", "esci_product_id": "B07S1634VF", "join": "title", "esci_split": "train"}
+{"query_id": 66658, "query": "mcm shades men", "parent_asin": "B01MYA419D", "esci_label": "I", "esci_product_id": "B01MYA419D", "join": "asin", "esci_split": "test"}
+{"query_id": 66811, "query": "medical clogs for women", "parent_asin": "B005J32E8Y", "esci_label": "E", "esci_product_id": "B005J32E8Y", "join": "asin", "esci_split": "test"}
+{"query_id": 67022, "query": "meline martinez wig", "parent_asin": "B0756FN6D5", "esci_label": "E", "esci_product_id": "B0756FN6D5", "join": "asin", "esci_split": "train"}
+{"query_id": 67160, "query": "men designer jeans", "parent_asin": "B077R8B358", "esci_label": "E", "esci_product_id": "B077R8B358", "join": "asin", "esci_split": "train"}
+{"query_id": 67244, "query": "men socks", "parent_asin": "B0735V67KT", "esci_label": "E", "esci_product_id": "B0735V67KT", "join": "asin", "esci_split": "train"}
+{"query_id": 67279, "query": "men's bifold wallet", "parent_asin": "B004A7YLPY", "esci_label": "S", "esci_product_id": "B004A7YLPY", "join": "asin", "esci_split": "train"}
+{"query_id": 67326, "query": "men's levis wallet", "parent_asin": "B004A7YLPY", "esci_label": "E", "esci_product_id": "B004A7YLPY", "join": "asin", "esci_split": "train"}
+{"query_id": 67405, "query": "mens 2mm black stud earrings", "parent_asin": "B07CTB9PGR", "esci_label": "E", "esci_product_id": "B07CTB9PGR", "join": "asin", "esci_split": "train"}
+{"query_id": 67455, "query": "mens biker wallet with chain", "parent_asin": "B07Q5SNZ2Z", "esci_label": "E", "esci_product_id": "B07M6QJMJ2", "join": "title", "esci_split": "train"}
+{"query_id": 67475, "query": "mens blue striped shirt", "parent_asin": "B07GBMGS2Y", "esci_label": "E", "esci_product_id": "B07GBMF7FS", "join": "title", "esci_split": "train"}
+{"query_id": 67556, "query": "mens deep v neck undershirts", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B00LSRU1QW", "join": "title", "esci_split": "train"}
+{"query_id": 67647, "query": "mens hanes t shirts", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B00LSRU162", "join": "title", "esci_split": "train"}
+{"query_id": 67856, "query": "mens sherpa hoodie", "parent_asin": "B00VHA6XDK", "esci_label": "E", "esci_product_id": "B00VHA6XDK", "join": "asin", "esci_split": "train"}
+{"query_id": 67907, "query": "mens socks", "parent_asin": "B0735V67KT", "esci_label": "E", "esci_product_id": "B0735V67KT", "join": "asin", "esci_split": "test"}
+{"query_id": 67993, "query": "mens undershirts", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B000EC11PC", "join": "title", "esci_split": "test"}
+{"query_id": 68131, "query": "merino bamboo socks", "parent_asin": "B07H3FP3R5", "esci_label": "E", "esci_product_id": "B07H3FP3R5", "join": "asin", "esci_split": "train"}
+{"query_id": 68140, "query": "merlin hat adult", "parent_asin": "B0891ZVSDC", "esci_label": "E", "esci_product_id": "B002SIDKNG", "join": "title", "esci_split": "train"}
+{"query_id": 68167, "query": "mermaid tail", "parent_asin": "B07H55K6CN", "esci_label": "E", "esci_product_id": "B07H545KTX", "join": "title", "esci_split": "train"}
+{"query_id": 68171, "query": "mermaid wallet", "parent_asin": "B081P92KKM", "esci_label": "E", "esci_product_id": "B081P92KKM", "join": "asin", "esci_split": "train"}
+{"query_id": 68270, "query": "mesh high waisted bikini", "parent_asin": "B07P7P3Z5D", "esci_label": "E", "esci_product_id": "B07P7P3Z5D", "join": "asin", "esci_split": "train"}
+{"query_id": 68271, "query": "mesh hoodie men", "parent_asin": "B076LVMXN4", "esci_label": "E", "esci_product_id": "B07PY6KBJR", "join": "title", "esci_split": "train"}
+{"query_id": 68482, "query": "metallica shirts for men", "parent_asin": "B004MC9DJ6", "esci_label": "E", "esci_product_id": "B004MC9DJ6", "join": "asin", "esci_split": "train"}
+{"query_id": 68956, "query": "mid length cocktail dresses for women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B071XGD5T9", "join": "title", "esci_split": "test"}
+{"query_id": 69150, "query": "million dollar purse", "parent_asin": "B07MMH1579", "esci_label": "I", "esci_product_id": "B07MMH1579", "join": "asin", "esci_split": "test"}
+{"query_id": 69597, "query": "minimalist fitnes", "parent_asin": "B08CXRD64S", "esci_label": "E", "esci_product_id": "B08CXQP5BG", "join": "title", "esci_split": "train"}
+{"query_id": 70052, "query": "mock neck tops for women", "parent_asin": "B07JKS9BD8", "esci_label": "E", "esci_product_id": "B07JKS9BD8", "join": "asin", "esci_split": "test"}
+{"query_id": 70215, "query": "moldable grill for teeth", "parent_asin": "B07XCKD9DD", "esci_label": "E", "esci_product_id": "B07SG3DZKC", "join": "title", "esci_split": "test"}
+{"query_id": 70286, "query": "mom jeans high waisted vintage", "parent_asin": "B08PPD8FYB", "esci_label": "E", "esci_product_id": "B07D9JFM28", "join": "title", "esci_split": "test"}
+{"query_id": 70332, "query": "money bag belt", "parent_asin": "B01G1ORT5M", "esci_label": "E", "esci_product_id": "B01G1ORT5M", "join": "asin", "esci_split": "train"}
+{"query_id": 70334, "query": "money belt", "parent_asin": "B01G1ORT5M", "esci_label": "E", "esci_product_id": "B01G1ORT5M", "join": "asin", "esci_split": "train"}
+{"query_id": 70335, "query": "money belts for travel women", "parent_asin": "B01G1ORT5M", "esci_label": "E", "esci_product_id": "B01G1ORT5M", "join": "asin", "esci_split": "train"}
+{"query_id": 70603, "query": "moose creek hoodie", "parent_asin": "B078C6DXVJ", "esci_label": "S", "esci_product_id": "B074NPPTYP", "join": "title", "esci_split": "train"}
+{"query_id": 71087, "query": "moutain bike gloves", "parent_asin": "B08GFBL72V", "esci_label": "E", "esci_product_id": "B08GFHNC5R", "join": "title", "esci_split": "train"}
+{"query_id": 71497, "query": "multi colored mermaid prom dress", "parent_asin": "B07DCTVD9F", "esci_label": "I", "esci_product_id": "B07DCVJXG8", "join": "title", "esci_split": "test"}
+{"query_id": 71702, "query": "music tote bag", "parent_asin": "B00ITEOHHG", "esci_label": "E", "esci_product_id": "B00ITEOHHG", "join": "asin", "esci_split": "test"}
+{"query_id": 71827, "query": "my hero academia", "parent_asin": "B07M5H39J6", "esci_label": "E", "esci_product_id": "B07M5H39J6", "join": "asin", "esci_split": "train"}
+{"query_id": 71832, "query": "my hero academia kids shirt", "parent_asin": "B07T73KSW4", "esci_label": "I", "esci_product_id": "B07T73KSW4", "join": "asin", "esci_split": "test"}
+{"query_id": 72534, "query": "navy dress for women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B072KQ6PK5", "join": "title", "esci_split": "train"}
+{"query_id": 72705, "query": "need a nice warm but cheap and washable new jacket,hoping for a nice colour blue purple or red ", "parent_asin": "B07VYGB7M6", "esci_label": "I", "esci_product_id": "B07VYGB7M6", "join": "asin", "esci_split": "train"}
+{"query_id": 72874, "query": "nerf guns beret has", "parent_asin": "B07PKKQJQ3", "esci_label": "E", "esci_product_id": "B07HQKVJBJ", "join": "title", "esci_split": "train"}
+{"query_id": 73102, "query": "new balance running shorts", "parent_asin": "B07SZK2VCL", "esci_label": "E", "esci_product_id": "B07SZK2VCL", "join": "asin", "esci_split": "train"}
+{"query_id": 73184, "query": "new years eve outfits baby girl", "parent_asin": "B072BX4GQ4", "esci_label": "E", "esci_product_id": "B072BX4GQ4", "join": "asin", "esci_split": "test"}
+{"query_id": 73426, "query": "nightgown for women comfy", "parent_asin": "B08CVM46SH", "esci_label": "E", "esci_product_id": "B07SQ5J7PB", "join": "title", "esci_split": "test"}
+{"query_id": 73428, "query": "nightgowns for women", "parent_asin": "B08CVM46SH", "esci_label": "E", "esci_product_id": "B07TL6THDW", "join": "title", "esci_split": "test"}
+{"query_id": 73584, "query": "nike lebron shoes men", "parent_asin": "B07QNKS7BL", "esci_label": "E", "esci_product_id": "B07QNKS7BL", "join": "asin", "esci_split": "train"}
+{"query_id": 73589, "query": "nike matchfit socks", "parent_asin": "B01MU5F0A2", "esci_label": "S", "esci_product_id": "B01MU5F0A2", "join": "asin", "esci_split": "train"}
+{"query_id": 73633, "query": "nike running shoes men", "parent_asin": "B06Y4CZW3D", "esci_label": "E", "esci_product_id": "B06Y4CZW3D", "join": "asin", "esci_split": "train"}
+{"query_id": 73641, "query": "nike setfan janowski", "parent_asin": "B07V5R2Y4L", "esci_label": "E", "esci_product_id": "B07V5R2Y4L", "join": "asin", "esci_split": "train"}
+{"query_id": 73665, "query": "nike sling bag for men", "parent_asin": "B07YHGNVDS", "esci_label": "S", "esci_product_id": "B07YHGNVDS", "join": "asin", "esci_split": "train"}
+{"query_id": 73697, "query": "nike vapormax women", "parent_asin": "B07T2W1QF6", "esci_label": "E", "esci_product_id": "B07ZL3R57C", "join": "title", "esci_split": "train"}
+{"query_id": 74036, "query": "no beer not going shirt", "parent_asin": "B06VVDYJQL", "esci_label": "S", "esci_product_id": "B07KVZDK64", "join": "title", "esci_split": "train"}
+{"query_id": 74416, "query": "nose rings", "parent_asin": "B0793LPS1C", "esci_label": "E", "esci_product_id": "B07CSQDYW8", "join": "title", "esci_split": "train"}
+{"query_id": 74417, "query": "nose rings 20 gauge", "parent_asin": "B0793LPS1C", "esci_label": "E", "esci_product_id": "B07CSQDYW8", "join": "title", "esci_split": "test"}
+{"query_id": 74773, "query": "nursing top", "parent_asin": "B07PKJGKZ3", "esci_label": "E", "esci_product_id": "B07PKJGKZ3", "join": "asin", "esci_split": "train"}
+{"query_id": 74956, "query": "oakley carabiner keychain", "parent_asin": "B007VQR0H2", "esci_label": "I", "esci_product_id": "B007VQR0H2", "join": "asin", "esci_split": "train"}
+{"query_id": 75007, "query": "object earrings", "parent_asin": "B07MYT1SJP", "esci_label": "E", "esci_product_id": "B07MYT1SJP", "join": "asin", "esci_split": "train"}
+{"query_id": 75029, "query": "oboz womens hiking shoe", "parent_asin": "B07MG77LF2", "esci_label": "E", "esci_product_id": "B07MG77LF2", "join": "asin", "esci_split": "test"}
+{"query_id": 75392, "query": "old ladies glasses", "parent_asin": "B076H9G2W1", "esci_label": "E", "esci_product_id": "B076H9G2W1", "join": "asin", "esci_split": "train"}
+{"query_id": 75394, "query": "old lady hair", "parent_asin": "B07C2NMC4J", "esci_label": "E", "esci_product_id": "B07C2NMC4J", "join": "asin", "esci_split": "test"}
+{"query_id": 75406, "query": "old school sunglasses", "parent_asin": "B07YQ79J1W", "esci_label": "S", "esci_product_id": "B07YQ79J1W", "join": "asin", "esci_split": "train"}
+{"query_id": 75647, "query": "one piece swimsuit", "parent_asin": "B07872NQ59", "esci_label": "E", "esci_product_id": "B07872NQ59", "join": "asin", "esci_split": "train"}
+{"query_id": 75648, "query": "one piece swimsuits for women", "parent_asin": "B07872NQ59", "esci_label": "E", "esci_product_id": "B07872NQ59", "join": "asin", "esci_split": "test"}
+{"query_id": 75669, "query": "one shoulder white dress", "parent_asin": "B07FVFJG6K", "esci_label": "S", "esci_product_id": "B07FVFJG6K", "join": "asin", "esci_split": "test"}
+{"query_id": 75712, "query": "onesie christmas pajamas", "parent_asin": "B07PSV7DX8", "esci_label": "E", "esci_product_id": "B07PSV5419", "join": "title", "esci_split": "train"}
+{"query_id": 75998, "query": "orbita watch winder", "parent_asin": "B00EEJSR7Q", "esci_label": "S", "esci_product_id": "B00EEJSR7Q", "join": "asin", "esci_split": "train"}
+{"query_id": 76237, "query": "orient watches for men", "parent_asin": "B00F2DI4JE", "esci_label": "E", "esci_product_id": "B00F2DI44E", "join": "title", "esci_split": "train"}
+{"query_id": 76278, "query": "oris watches for men", "parent_asin": "B000GX3IIM", "esci_label": "E", "esci_product_id": "B000GX3IIM", "join": "asin", "esci_split": "test"}
+{"query_id": 76278, "query": "oris watches for men", "parent_asin": "B01INXF758", "esci_label": "E", "esci_product_id": "B01INXF758", "join": "asin", "esci_split": "test"}
+{"query_id": 76739, "query": "outfits toddler girls", "parent_asin": "B07PVHZS8Z", "esci_label": "E", "esci_product_id": "B07PVHZS8Z", "join": "asin", "esci_split": "train"}
+{"query_id": 77118, "query": "packing cubes for children", "parent_asin": "B07B9VBTRK", "esci_label": "S", "esci_product_id": "B07B9VBTRK", "join": "asin", "esci_split": "train"}
+{"query_id": 77169, "query": "padi seiko", "parent_asin": "B06XSJLBH4", "esci_label": "S", "esci_product_id": "B06XSJLBH4", "join": "asin", "esci_split": "train"}
+{"query_id": 77295, "query": "pajamas", "parent_asin": "B082PJVXQY", "esci_label": "E", "esci_product_id": "B074KDFGLP", "join": "title", "esci_split": "test"}
+{"query_id": 77304, "query": "pajamas women", "parent_asin": "B08CVM46SH", "esci_label": "E", "esci_product_id": "B07PCMQ3QD", "join": "title", "esci_split": "train"}
+{"query_id": 77412, "query": "panama straw hat women", "parent_asin": "B07DPS8WM4", "esci_label": "E", "esci_product_id": "B07DPS8WM4", "join": "asin", "esci_split": "train"}
+{"query_id": 77462, "query": "pandora bracelet sale", "parent_asin": "B06XGY9FTX", "esci_label": "E", "esci_product_id": "B06XGY9FTX", "join": "asin", "esci_split": "train"}
+{"query_id": 77472, "query": "pandora women's charms", "parent_asin": "B0C7RCFTTJ", "esci_label": "E", "esci_product_id": "B00WXO6RJY", "join": "title", "esci_split": "test"}
+{"query_id": 77486, "query": "panerai watches outfit", "parent_asin": "B07FDNP55K", "esci_label": "S", "esci_product_id": "B07FDNP55K", "join": "asin", "esci_split": "test"}
+{"query_id": 77502, "query": "pant out fits", "parent_asin": "B087TVSGJS", "esci_label": "E", "esci_product_id": "B088JZYW8G", "join": "title", "esci_split": "train"}
+{"query_id": 77941, "query": "party shirts for women", "parent_asin": "B00IH94ZC0", "esci_label": "E", "esci_product_id": "B00IH94ZC0", "join": "asin", "esci_split": "train"}
+{"query_id": 77941, "query": "party shirts for women", "parent_asin": "B07F6W3FPK", "esci_label": "I", "esci_product_id": "B07F6W3FPK", "join": "asin", "esci_split": "train"}
+{"query_id": 77976, "query": "passport holder and luggage tags", "parent_asin": "B07SLXQWRP", "esci_label": "E", "esci_product_id": "B07WLDJ4XJ", "join": "title", "esci_split": "train"}
+{"query_id": 78256, "query": "payless shoes", "parent_asin": "B07R5DSDCH", "esci_label": "E", "esci_product_id": "B07R5DSDCH", "join": "asin", "esci_split": "test"}
+{"query_id": 79313, "query": "petite dresses", "parent_asin": "B0743B5GGT", "esci_label": "E", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "test"}
+{"query_id": 79698, "query": "pi beta phi sweatshirt", "parent_asin": "B07G5QX7FV", "esci_label": "S", "esci_product_id": "B07K66N9WW", "join": "title", "esci_split": "train"}
+{"query_id": 79741, "query": "pickachu slippers", "parent_asin": "B00FBNKH0E", "esci_label": "I", "esci_product_id": "B00FBNKH0E", "join": "asin", "esci_split": "train"}
+{"query_id": 80181, "query": "pink cat ears", "parent_asin": "B07PQBRJ82", "esci_label": "E", "esci_product_id": "B07PSM5S5N", "join": "title", "esci_split": "train"}
+{"query_id": 80210, "query": "pink floral tie sleeve maxi dress", "parent_asin": "B07QQRQ566", "esci_label": "S", "esci_product_id": "B073Z5T6J5", "join": "title", "esci_split": "train"}
+{"query_id": 80226, "query": "pink green dress", "parent_asin": "B07T7DCLD1", "esci_label": "S", "esci_product_id": "B07T456PZ7", "join": "title", "esci_split": "train"}
+{"query_id": 80710, "query": "pj masks pajamas", "parent_asin": "B01LYCMZFM", "esci_label": "E", "esci_product_id": "B01LYCMZFM", "join": "asin", "esci_split": "train"}
+{"query_id": 80719, "query": "pj shirts women", "parent_asin": "B08CVM46SH", "esci_label": "E", "esci_product_id": "B07YQ26NG1", "join": "title", "esci_split": "train"}
+{"query_id": 80721, "query": "pjs for women", "parent_asin": "B082PJVXQY", "esci_label": "E", "esci_product_id": "B082PJF9FP", "join": "title", "esci_split": "train"}
+{"query_id": 80803, "query": "plain plastic headbands", "parent_asin": "B09KC8VMDH", "esci_label": "E", "esci_product_id": "B08CKR2DFN", "join": "title", "esci_split": "train"}
+{"query_id": 81253, "query": "playboy y necklace", "parent_asin": "B07B7KLWSS", "esci_label": "E", "esci_product_id": "B07B7KLWSS", "join": "asin", "esci_split": "train"}
+{"query_id": 81422, "query": "plum casual dress for women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B07JYJYH3Z", "join": "title", "esci_split": "train"}
+{"query_id": 81448, "query": "plunge top", "parent_asin": "B07F6W3FPK", "esci_label": "S", "esci_product_id": "B07F6W3FPK", "join": "asin", "esci_split": "train"}
+{"query_id": 81495, "query": "plus size disco dress", "parent_asin": "B07D7B7VZK", "esci_label": "S", "esci_product_id": "B07D7B7VZK", "join": "asin", "esci_split": "train"}
+{"query_id": 81496, "query": "plus size dress", "parent_asin": "B07DNBYG1G", "esci_label": "E", "esci_product_id": "B07DNBYG1G", "join": "asin", "esci_split": "train"}
+{"query_id": 81502, "query": "plus size fishnet thigh highs with back seam", "parent_asin": "B01BLU621I", "esci_label": "C", "esci_product_id": "B01BLU621I", "join": "asin", "esci_split": "train"}
+{"query_id": 81528, "query": "plus size long johns for women", "parent_asin": "B078NT4C8P", "esci_label": "E", "esci_product_id": "B078NQMDH1", "join": "title", "esci_split": "train"}
+{"query_id": 81529, "query": "plus size long sleeve baseball shirts women", "parent_asin": "B07G2GR4J9", "esci_label": "S", "esci_product_id": "B07P2XY296", "join": "title", "esci_split": "train"}
+{"query_id": 81540, "query": "plus size one piece bathing suits for women", "parent_asin": "B08S3L95WS", "esci_label": "E", "esci_product_id": "B08RYKSXTF", "join": "title", "esci_split": "train"}
+{"query_id": 81567, "query": "plus size summer tops for women", "parent_asin": "B091Z4VPF8", "esci_label": "E", "esci_product_id": "B07QZHZP92", "join": "title", "esci_split": "train"}
+{"query_id": 81642, "query": "pocket book", "parent_asin": "B07D8S9ZP3", "esci_label": "I", "esci_product_id": "B07BFVVCVZ", "join": "title", "esci_split": "train"}
+{"query_id": 81749, "query": "pokemon charzard wallet", "parent_asin": "B00JNML3LG", "esci_label": "E", "esci_product_id": "B01I4UYSSM", "join": "title", "esci_split": "test"}
+{"query_id": 81772, "query": "pokemon hat", "parent_asin": "B00FBNKH0E", "esci_label": "E", "esci_product_id": "B00FBNKH0E", "join": "asin", "esci_split": "train"}
+{"query_id": 81900, "query": "police equipment", "parent_asin": "B000AL9CUI", "esci_label": "E", "esci_product_id": "B000AL9CUI", "join": "asin", "esci_split": "train"}
+{"query_id": 83510, "query": "pro watch tools kit", "parent_asin": "B07FDNP55K", "esci_label": "E", "esci_product_id": "B07FDNP55K", "join": "asin", "esci_split": "train"}
+{"query_id": 83581, "query": "professional purse", "parent_asin": "B08ZN8Y2W1", "esci_label": "S", "esci_product_id": "B07F87LTMJ", "join": "title", "esci_split": "test"}
+{"query_id": 83651, "query": "prom dresses under 30 dollars", "parent_asin": "B07571RMS3", "esci_label": "E", "esci_product_id": "B07571RMS3", "join": "asin", "esci_split": "train"}
+{"query_id": 83731, "query": "protectall", "parent_asin": "B00NA8BVGG", "esci_label": "E", "esci_product_id": "B00NA8BVGG", "join": "asin", "esci_split": "train"}
+{"query_id": 84151, "query": "pullover nike women", "parent_asin": "B078WHGQNC", "esci_label": "I", "esci_product_id": "B078WHGQNC", "join": "asin", "esci_split": "test"}
+{"query_id": 84568, "query": "purple gowns formal dress for women", "parent_asin": "B082P185F4", "esci_label": "S", "esci_product_id": "B082P1K2FN", "join": "title", "esci_split": "train"}
+{"query_id": 84652, "query": "purse that holds cell phone small girls", "parent_asin": "B07JYW9N38", "esci_label": "E", "esci_product_id": "B07H6CTW8M", "join": "title", "esci_split": "train"}
+{"query_id": 84654, "query": "purses and handbags", "parent_asin": "B08ZN8Y2W1", "esci_label": "E", "esci_product_id": "B07F87LTMJ", "join": "title", "esci_split": "train"}
+{"query_id": 84658, "query": "purses for women", "parent_asin": "B08ZN8Y2W1", "esci_label": "E", "esci_product_id": "B07F87LTMJ", "join": "title", "esci_split": "train"}
+{"query_id": 84819, "query": "qaulity skirt bathing suits women", "parent_asin": "B07L8CYCJG", "esci_label": "S", "esci_product_id": "B07SGWGB2Q", "join": "title", "esci_split": "train"}
+{"query_id": 85159, "query": "ra awareness jewelry", "parent_asin": "B00BITEO04", "esci_label": "E", "esci_product_id": "B00BITEO04", "join": "asin", "esci_split": "train"}
+{"query_id": 85165, "query": "rabbit ears headband", "parent_asin": "B01DLIV9DO", "esci_label": "E", "esci_product_id": "B01DLIV7XG", "join": "title", "esci_split": "test"}
+{"query_id": 85192, "query": "racerback bra converter", "parent_asin": "B07B4VZ9DV", "esci_label": "S", "esci_product_id": "B07B4VZ9DV", "join": "asin", "esci_split": "train"}
+{"query_id": 85303, "query": "rado watches for men", "parent_asin": "B00723ZCCY", "esci_label": "E", "esci_product_id": "B00723ZCCY", "join": "asin", "esci_split": "train"}
+{"query_id": 85658, "query": "ratchet belts for men without buckle", "parent_asin": "B07NP8HDFY", "esci_label": "S", "esci_product_id": "B01L8A0L0O", "join": "title", "esci_split": "train"}
+{"query_id": 85976, "query": "real me high waisted crossover legging", "parent_asin": "B08VRN834Y", "esci_label": "E", "esci_product_id": "B08VGYFVTZ", "join": "title", "esci_split": "train"}
+{"query_id": 86002, "query": "really ripped jeans for women", "parent_asin": "B08PPD8FYB", "esci_label": "E", "esci_product_id": "B07D9J79DS", "join": "title", "esci_split": "train"}
+{"query_id": 86083, "query": "rec watches", "parent_asin": "B007R9WURS", "esci_label": "S", "esci_product_id": "B004D4S7AY", "join": "title", "esci_split": "test"}
+{"query_id": 86299, "query": "red canvas shoes men", "parent_asin": "B00V6K99XM", "esci_label": "S", "esci_product_id": "B00V6K99XM", "join": "asin", "esci_split": "train"}
+{"query_id": 86457, "query": "red purses for women", "parent_asin": "B07XMJ7TW8", "esci_label": "S", "esci_product_id": "B07XMJ7TW8", "join": "asin", "esci_split": "test"}
+{"query_id": 86809, "query": "rehearsal dinner dresses for women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B06XQCMHTQ", "join": "title", "esci_split": "train"}
+{"query_id": 86934, "query": "reloj tag heuer hombre", "parent_asin": "B000E4C8H0", "esci_label": "E", "esci_product_id": "B000E4C8H0", "join": "asin", "esci_split": "train"}
+{"query_id": 86934, "query": "reloj tag heuer hombre", "parent_asin": "B071CP75ZN", "esci_label": "S", "esci_product_id": "B071CP75ZN", "join": "asin", "esci_split": "train"}
+{"query_id": 87334, "query": "retro purse and handbags for women", "parent_asin": "B07WPH9DY7", "esci_label": "E", "esci_product_id": "B07WPH9DY7", "join": "asin", "esci_split": "train"}
+{"query_id": 87397, "query": "reuseable swimmer diapers", "parent_asin": "B0B9W19249", "esci_label": "E", "esci_product_id": "B0731NZ3XG", "join": "title", "esci_split": "train"}
+{"query_id": 87519, "query": "rhinestone starfish brooch", "parent_asin": "B01CH539GM", "esci_label": "E", "esci_product_id": "B01CH53BOM", "join": "title", "esci_split": "train"}
+{"query_id": 87630, "query": "riding socks", "parent_asin": "B00BEIQ5GU", "esci_label": "E", "esci_product_id": "B00BEIQ5GU", "join": "asin", "esci_split": "train"}
+{"query_id": 87817, "query": "ripped jeans", "parent_asin": "B08PPD8FYB", "esci_label": "E", "esci_product_id": "B07D9JBLZZ", "join": "title", "esci_split": "train"}
+{"query_id": 87820, "query": "ripped jeans for women", "parent_asin": "B08PPD8FYB", "esci_label": "E", "esci_product_id": "B07D9JBLZZ", "join": "title", "esci_split": "train"}
+{"query_id": 87970, "query": "robin hood costume", "parent_asin": "B07RJPY3B8", "esci_label": "I", "esci_product_id": "B07RJPY3B8", "join": "asin", "esci_split": "train"}
+{"query_id": 88063, "query": "rock tshirts for men", "parent_asin": "B07HKNZ7S9", "esci_label": "E", "esci_product_id": "B07HKS7QZ4", "join": "title", "esci_split": "train"}
+{"query_id": 88246, "query": "rolerskate shoes", "parent_asin": "B07H8X74S8", "esci_label": "E", "esci_product_id": "B07PRDD1WG", "join": "title", "esci_split": "train"}
+{"query_id": 88573, "query": "rose gold", "parent_asin": "B007R9WURS", "esci_label": "E", "esci_product_id": "B004D4S7AY", "join": "title", "esci_split": "train"}
+{"query_id": 88602, "query": "rose gold hoop earrings", "parent_asin": "B083NNQZSQ", "esci_label": "S", "esci_product_id": "B083NNQZSQ", "join": "asin", "esci_split": "train"}
+{"query_id": 88629, "query": "rose gold watch", "parent_asin": "B007R9WURS", "esci_label": "E", "esci_product_id": "B004D4S7AY", "join": "title", "esci_split": "train"}
+{"query_id": 88855, "query": "royal blue dresses for women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N9LP03W", "join": "title", "esci_split": "test"}
+{"query_id": 88865, "query": "royal blue soccer socks men nike", "parent_asin": "B01MU5F0A2", "esci_label": "S", "esci_product_id": "B01MU5F0A2", "join": "asin", "esci_split": "train"}
+{"query_id": 89057, "query": "ruffle strap bikini", "parent_asin": "B07T2YKY1X", "esci_label": "E", "esci_product_id": "B07T2YKY1X", "join": "asin", "esci_split": "train"}
+{"query_id": 89793, "query": "sally pjs for girls", "parent_asin": "B077R9HZS1", "esci_label": "E", "esci_product_id": "B077R9HZS1", "join": "asin", "esci_split": "train"}
+{"query_id": 90431, "query": "sandals girls", "parent_asin": "B07CZBQ5FL", "esci_label": "E", "esci_product_id": "B07CZBQ5FL", "join": "asin", "esci_split": "train"}
+{"query_id": 90651, "query": "satin robes", "parent_asin": "B0B18NH7K7", "esci_label": "E", "esci_product_id": "B07KS57LNQ", "join": "title", "esci_split": "train"}
+{"query_id": 91042, "query": "scooter suitcase for adults", "parent_asin": "B004HKSDO4", "esci_label": "S", "esci_product_id": "B004HKSDO4", "join": "asin", "esci_split": "train"}
+{"query_id": 91376, "query": "seasum high waisted leggings", "parent_asin": "B092Z8DN96", "esci_label": "S", "esci_product_id": "B08V8HDRTR", "join": "title", "esci_split": "test"}
+{"query_id": 91559, "query": "seiko 5 white dial", "parent_asin": "B000HG9RF6", "esci_label": "S", "esci_product_id": "B000HG9RF6", "join": "asin", "esci_split": "train"}
+{"query_id": 91784, "query": "sequin dresses for women", "parent_asin": "B078WTLS7C", "esci_label": "E", "esci_product_id": "B078WTLS7C", "join": "asin", "esci_split": "train"}
+{"query_id": 92043, "query": "sexy black dress", "parent_asin": "B07MFQCP57", "esci_label": "E", "esci_product_id": "B07M7DCB63", "join": "title", "esci_split": "train"}
+{"query_id": 92063, "query": "sexy formal dresses for curvy women", "parent_asin": "B07MFQCP57", "esci_label": "E", "esci_product_id": "B07M7DCB63", "join": "title", "esci_split": "test"}
+{"query_id": 92071, "query": "sexy high waisted pants for women", "parent_asin": "B074CSP7LV", "esci_label": "E", "esci_product_id": "B079HPLQHN", "join": "title", "esci_split": "train"}
+{"query_id": 92078, "query": "sexy langire for women", "parent_asin": "B07S9XNXH9", "esci_label": "E", "esci_product_id": "B07S9XNXH9", "join": "asin", "esci_split": "train"}
+{"query_id": 92115, "query": "sexy summer dresses for women", "parent_asin": "B07PYSFFS3", "esci_label": "E", "esci_product_id": "B07PXQGH4C", "join": "title", "esci_split": "train"}
+{"query_id": 92457, "query": "shein plus size for women", "parent_asin": "B097GQQMPX", "esci_label": "E", "esci_product_id": "B097GQQMPX", "join": "asin", "esci_split": "test"}
+{"query_id": 92519, "query": "sherpa dickies jacket", "parent_asin": "B00VHA6XDK", "esci_label": "E", "esci_product_id": "B00VHA6XDK", "join": "asin", "esci_split": "test"}
+{"query_id": 92520, "query": "sherpa jacket", "parent_asin": "B07G5QX7FV", "esci_label": "E", "esci_product_id": "B07G5S4MP9", "join": "title", "esci_split": "train"}
+{"query_id": 92526, "query": "sherpa pullovers", "parent_asin": "B07G5QX7FV", "esci_label": "E", "esci_product_id": "B07G5R5L2Q", "join": "title", "esci_split": "test"}
+{"query_id": 92543, "query": "shift dress with fringe", "parent_asin": "B07VT47J3T", "esci_label": "S", "esci_product_id": "B07GFGF27V", "join": "title", "esci_split": "train"}
+{"query_id": 92635, "query": "shirts for young adults women", "parent_asin": "B07RP71WXG", "esci_label": "E", "esci_product_id": "B07RN67SG2", "join": "title", "esci_split": "train"}
+{"query_id": 92700, "query": "shoe protector spray", "parent_asin": "B013YRRFJ4", "esci_label": "E", "esci_product_id": "B013YRRFJ4", "join": "asin", "esci_split": "train"}
+{"query_id": 92740, "query": "shoes for men on sale", "parent_asin": "B0845Z58ZX", "esci_label": "E", "esci_product_id": "B0845Z58ZX", "join": "asin", "esci_split": "test"}
+{"query_id": 92744, "query": "shoes for toddler boys", "parent_asin": "B08541L514", "esci_label": "E", "esci_product_id": "B07ZRS58SZ", "join": "title", "esci_split": "train"}
+{"query_id": 92745, "query": "shoes for toddler girls", "parent_asin": "B07NWLBKZR", "esci_label": "E", "esci_product_id": "B07W2VML8G", "join": "title", "esci_split": "test"}
+{"query_id": 92764, "query": "shoes with wheels for boys", "parent_asin": "B07H8X74S8", "esci_label": "S", "esci_product_id": "B07PQC11YM", "join": "title", "esci_split": "train"}
+{"query_id": 92848, "query": "short sleeve mock tutleneck sweater", "parent_asin": "B075X76VGB", "esci_label": "E", "esci_product_id": "B075X76VGB", "join": "asin", "esci_split": "train"}
+{"query_id": 92853, "query": "short sleeve slim fit maxi dresses for women", "parent_asin": "B01MSJLNU2", "esci_label": "S", "esci_product_id": "B01MSJLNU2", "join": "asin", "esci_split": "test"}
+{"query_id": 92879, "query": "shorts for women loose fit", "parent_asin": "B094QQKJTB", "esci_label": "E", "esci_product_id": "B094QQKJTB", "join": "asin", "esci_split": "train"}
+{"query_id": 92923, "query": "shoulder umbrella hands free", "parent_asin": "B01MXZT0NI", "esci_label": "E", "esci_product_id": "B01MQVLM94", "join": "title", "esci_split": "train"}
+{"query_id": 93349, "query": "silk nightie with robe for women", "parent_asin": "B0B18NH7K7", "esci_label": "E", "esci_product_id": "B07YBSRVC9", "join": "title", "esci_split": "test"}
+{"query_id": 93482, "query": "silver black western belt buckle", "parent_asin": "B082DBR1VJ", "esci_label": "S", "esci_product_id": "B07PXV93TK", "join": "title", "esci_split": "train"}
+{"query_id": 93510, "query": "silver disco earrings", "parent_asin": "B07ZR5X7G4", "esci_label": "S", "esci_product_id": "B07ZR5X7G4", "join": "asin", "esci_split": "train"}
+{"query_id": 93526, "query": "silver hoop earrings sleepers", "parent_asin": "B07PZFRN4Z", "esci_label": "E", "esci_product_id": "B07PZFRF4N", "join": "title", "esci_split": "train"}
+{"query_id": 93550, "query": "silver princesss gown", "parent_asin": "B07FTHB469", "esci_label": "S", "esci_product_id": "B07KMSQTZY", "join": "title", "esci_split": "train"}
+{"query_id": 93569, "query": "silver toe rings", "parent_asin": "B07RDPNZRD", "esci_label": "E", "esci_product_id": "B07RDPNZRD", "join": "asin", "esci_split": "train"}
+{"query_id": 93635, "query": "simple grunge outfits", "parent_asin": "B07MFQCP57", "esci_label": "S", "esci_product_id": "B07M7DCB63", "join": "title", "esci_split": "train"}
+{"query_id": 93657, "query": "simple silver ring amethyst", "parent_asin": "B00KAESI4G", "esci_label": "E", "esci_product_id": "B00KAESI4G", "join": "asin", "esci_split": "train"}
+{"query_id": 93871, "query": "size 14 dresses women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N9LP56M", "join": "title", "esci_split": "train"}
+{"query_id": 93879, "query": "size 18 office dresses for women with 3/4 sleeve", "parent_asin": "B0743B5GGT", "esci_label": "S", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "train"}
+{"query_id": 93909, "query": "size 9 toddler shoes girls", "parent_asin": "B07NWLBKZR", "esci_label": "E", "esci_product_id": "B07Q875BMZ", "join": "title", "esci_split": "train"}
+{"query_id": 93912, "query": "sizing watch kit", "parent_asin": "B07FDNP55K", "esci_label": "E", "esci_product_id": "B07FDNP55K", "join": "asin", "esci_split": "train"}
+{"query_id": 93920, "query": "skagen watches mens", "parent_asin": "B07X581BN1", "esci_label": "E", "esci_product_id": "B07X581BN1", "join": "asin", "esci_split": "train"}
+{"query_id": 94178, "query": "skis", "parent_asin": "B07X3MGMJR", "esci_label": "I", "esci_product_id": "B07CSJWQRW", "join": "title", "esci_split": "train"}
+{"query_id": 94274, "query": "slazenger", "parent_asin": "B07VSXKW81", "esci_label": "E", "esci_product_id": "B07VSXKW81", "join": "asin", "esci_split": "train"}
+{"query_id": 94298, "query": "sleep number bed replacement parts", "parent_asin": "B01605GWA0", "esci_label": "E", "esci_product_id": "B07L25LJP4", "join": "title", "esci_split": "train"}
+{"query_id": 94336, "query": "sleepwear for women", "parent_asin": "B07LH1K3GW", "esci_label": "E", "esci_product_id": "B07KLSS666", "join": "title", "esci_split": "train"}
+{"query_id": 94336, "query": "sleepwear for women", "parent_asin": "B08CVM46SH", "esci_label": "E", "esci_product_id": "B07SQ5HM1Z", "join": "title", "esci_split": "train"}
+{"query_id": 94340, "query": "sleepytime pj matching", "parent_asin": "B07PSV7DX8", "esci_label": "E", "esci_product_id": "B07PQNBGRL", "join": "title", "esci_split": "train"}
+{"query_id": 94345, "query": "sleeveless dresses for women", "parent_asin": "B07FXFCW4Q", "esci_label": "E", "esci_product_id": "B083QB6KM9", "join": "title", "esci_split": "train"}
+{"query_id": 94414, "query": "slim fit satin shirts for men", "parent_asin": "B07K6M6XBG", "esci_label": "S", "esci_product_id": "B07K6M6XBG", "join": "asin", "esci_split": "train"}
+{"query_id": 94461, "query": "slimming tops for women plus size", "parent_asin": "B07G1TC1X8", "esci_label": "E", "esci_product_id": "B07DJ9ZH62", "join": "title", "esci_split": "test"}
+{"query_id": 94520, "query": "slipt color body suit", "parent_asin": "B01H6DGA16", "esci_label": "E", "esci_product_id": "B07BTGDN54", "join": "title", "esci_split": "train"}
+{"query_id": 94715, "query": "small equipment organizer", "parent_asin": "B000AL9CUI", "esci_label": "C", "esci_product_id": "B000AL9CUI", "join": "asin", "esci_split": "train"}
+{"query_id": 94886, "query": "small satchel bags for women", "parent_asin": "B07TB9L1FF", "esci_label": "E", "esci_product_id": "B07TB9L1FF", "join": "asin", "esci_split": "test"}
+{"query_id": 95093, "query": "smart wool socks womens medium", "parent_asin": "B004I6E8NW", "esci_label": "E", "esci_product_id": "B004I6E8NW", "join": "asin", "esci_split": "train"}
+{"query_id": 95093, "query": "smart wool socks womens medium", "parent_asin": "B07MJGVHZY", "esci_label": "E", "esci_product_id": "B07MJGVHZY", "join": "asin", "esci_split": "train"}
+{"query_id": 95355, "query": "snoopy houndstooth", "parent_asin": "B07QKX9S32", "esci_label": "I", "esci_product_id": "B07G2ST7DJ", "join": "title", "esci_split": "train"}
+{"query_id": 95384, "query": "snow boots for toddler boys", "parent_asin": "B07T3H984S", "esci_label": "E", "esci_product_id": "B07T2DRFF7", "join": "title", "esci_split": "train"}
+{"query_id": 95620, "query": "sockpocket", "parent_asin": "B07LC23ZQP", "esci_label": "I", "esci_product_id": "B07LC23ZQP", "join": "asin", "esci_split": "train"}
+{"query_id": 95623, "query": "socks for booties women", "parent_asin": "B0C246QRQS", "esci_label": "E", "esci_product_id": "B076ST8PGZ", "join": "title", "esci_split": "train"}
+{"query_id": 95630, "query": "socks in bulk", "parent_asin": "B0735V67KT", "esci_label": "E", "esci_product_id": "B0735V67KT", "join": "asin", "esci_split": "train"}
+{"query_id": 95631, "query": "socks in bulk cheap", "parent_asin": "B00UP6AG6W", "esci_label": "E", "esci_product_id": "B00UP6AG6W", "join": "asin", "esci_split": "train"}
+{"query_id": 97023, "query": "sports hairbands", "parent_asin": "B07KF8N4VV", "esci_label": "E", "esci_product_id": "B07KKDLNL3", "join": "title", "esci_split": "train"}
+{"query_id": 97033, "query": "sports sets", "parent_asin": "B07ZJ6816Y", "esci_label": "E", "esci_product_id": "B07VGMCXSQ", "join": "title", "esci_split": "train"}
+{"query_id": 97098, "query": "sprayground backpack", "parent_asin": "B07TXM74VD", "esci_label": "E", "esci_product_id": "B07TXM74VD", "join": "asin", "esci_split": "train"}
+{"query_id": 97099, "query": "sprayground bagpacks", "parent_asin": "B07TXM74VD", "esci_label": "E", "esci_product_id": "B07TXM74VD", "join": "asin", "esci_split": "train"}
+{"query_id": 97395, "query": "stafferd v neck t-shirts", "parent_asin": "B0BXP6MG3X", "esci_label": "S", "esci_product_id": "B00LSRU2JS", "join": "title", "esci_split": "train"}
+{"query_id": 97646, "query": "star wars clothing for women", "parent_asin": "B073HZ878M", "esci_label": "E", "esci_product_id": "B07KVK28Q5", "join": "title", "esci_split": "train"}
+{"query_id": 98250, "query": "stone bangles indian", "parent_asin": "B078GLXRYJ", "esci_label": "E", "esci_product_id": "B078GS47C8", "join": "title", "esci_split": "train"}
+{"query_id": 98451, "query": "strapless tops for women", "parent_asin": "B091Z4VPF8", "esci_label": "S", "esci_product_id": "B07QYFV5JC", "join": "title", "esci_split": "train"}
+{"query_id": 98780, "query": "suade protectant for shoes", "parent_asin": "B013YRRFJ4", "esci_label": "E", "esci_product_id": "B013YRRFJ4", "join": "asin", "esci_split": "train"}
+{"query_id": 99013, "query": "suitcase weigher", "parent_asin": "B003STEIJ4", "esci_label": "E", "esci_product_id": "B003STEIJ4", "join": "asin", "esci_split": "test"}
+{"query_id": 99065, "query": "sully costume", "parent_asin": "B00E00BCSU", "esci_label": "E", "esci_product_id": "B00E00BCSU", "join": "asin", "esci_split": "train"}
+{"query_id": 99135, "query": "sun dresses for wedding guest women", "parent_asin": "B07VT47J3T", "esci_label": "S", "esci_product_id": "B01N1WFB1F", "join": "title", "esci_split": "test"}
+{"query_id": 99152, "query": "sun moon and star jewelry", "parent_asin": "B083SDLMWT", "esci_label": "E", "esci_product_id": "B083SDLMWT", "join": "asin", "esci_split": "train"}
+{"query_id": 99302, "query": "super callous fragile racist sexist not my potus", "parent_asin": "B071CVKC4M", "esci_label": "E", "esci_product_id": "B07NCLFS65", "join": "title", "esci_split": "train"}
+{"query_id": 99391, "query": "superhero workout shirts for women", "parent_asin": "B01MFBT8ZM", "esci_label": "I", "esci_product_id": "B01MFBT8ZM", "join": "asin", "esci_split": "test"}
+{"query_id": 99437, "query": "supra high tops men", "parent_asin": "B08XBPKTJ7", "esci_label": "S", "esci_product_id": "B07WMZQBP5", "join": "title", "esci_split": "test"}
+{"query_id": 99678, "query": "sweater caps for boys", "parent_asin": "B072JNSD8N", "esci_label": "S", "esci_product_id": "B072JNSD8N", "join": "asin", "esci_split": "train"}
+{"query_id": 99766, "query": "sweetheart neckline dress", "parent_asin": "B07MFQCP57", "esci_label": "S", "esci_product_id": "B07MJBLLCX", "join": "title", "esci_split": "test"}
+{"query_id": 99836, "query": "swimming shoes for men", "parent_asin": "B07X3MGMJR", "esci_label": "E", "esci_product_id": "B07CSMBLG9", "join": "title", "esci_split": "train"}
+{"query_id": 99840, "query": "swimsuit", "parent_asin": "B07872NQ59", "esci_label": "E", "esci_product_id": "B07872NQ59", "join": "asin", "esci_split": "train"}
+{"query_id": 99853, "query": "swimsuits for women", "parent_asin": "B07872NQ59", "esci_label": "E", "esci_product_id": "B07872NQ59", "join": "asin", "esci_split": "train"}
+{"query_id": 99857, "query": "swimsuits one piece", "parent_asin": "B07872NQ59", "esci_label": "E", "esci_product_id": "B07872NQ59", "join": "asin", "esci_split": "test"}
+{"query_id": 99883, "query": "swiss army watches for men", "parent_asin": "B01INXF758", "esci_label": "E", "esci_product_id": "B01INXF758", "join": "asin", "esci_split": "train"}
+{"query_id": 99890, "query": "swiss legend watches women", "parent_asin": "B00E96ARCC", "esci_label": "E", "esci_product_id": "B00E96ARCC", "join": "asin", "esci_split": "train"}
+{"query_id": 100334, "query": "tactical bag", "parent_asin": "B000AL9CUI", "esci_label": "E", "esci_product_id": "B000AL9CUI", "join": "asin", "esci_split": "train"}
+{"query_id": 100380, "query": "taffeta skirt", "parent_asin": "B01LYC9OPL", "esci_label": "E", "esci_product_id": "B01LYC9OPL", "join": "asin", "esci_split": "train"}
+{"query_id": 100387, "query": "tag heuer gold watches men", "parent_asin": "B071CP75ZN", "esci_label": "S", "esci_product_id": "B071CP75ZN", "join": "asin", "esci_split": "test"}
+{"query_id": 100394, "query": "tag huer automatic watch men", "parent_asin": "B00ULHG3YE", "esci_label": "E", "esci_product_id": "B00ULHG3YE", "join": "asin", "esci_split": "test"}
+{"query_id": 100397, "query": "tag watches for women clearance", "parent_asin": "B07K4F4192", "esci_label": "S", "esci_product_id": "B07K4F4192", "join": "asin", "esci_split": "train"}
+{"query_id": 100416, "query": "tailgate party", "parent_asin": "B01605GWA0", "esci_label": "E", "esci_product_id": "B0139CPXSE", "join": "title", "esci_split": "train"}
+{"query_id": 100424, "query": "taje a hike top", "parent_asin": "B07G1TC1X8", "esci_label": "S", "esci_product_id": "B07KT6PTLT", "join": "title", "esci_split": "train"}
+{"query_id": 100521, "query": "tall womens dress", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N1WFB1F", "join": "title", "esci_split": "train"}
+{"query_id": 100579, "query": "tan thick belt for women", "parent_asin": "B082DBR1VJ", "esci_label": "S", "esci_product_id": "B07QL69GS8", "join": "title", "esci_split": "train"}
+{"query_id": 101081, "query": "teal satin dress", "parent_asin": "B07XTDRJ13", "esci_label": "S", "esci_product_id": "B07XTDRJ13", "join": "asin", "esci_split": "train"}
+{"query_id": 101107, "query": "teardrop moonstone engagement ring", "parent_asin": "B091745XYC", "esci_label": "E", "esci_product_id": "B091762PWJ", "join": "title", "esci_split": "train"}
+{"query_id": 101174, "query": "ted baker aviator glasses", "parent_asin": "B01KGGZRSM", "esci_label": "E", "esci_product_id": "B01KGGZRSM", "join": "asin", "esci_split": "train"}
+{"query_id": 101184, "query": "teddy bear jacket", "parent_asin": "B07P9S6DF9", "esci_label": "E", "esci_product_id": "B07P9S3N7C", "join": "title", "esci_split": "train"}
+{"query_id": 101189, "query": "teddy jacket", "parent_asin": "B07P9S6DF9", "esci_label": "E", "esci_product_id": "B07PD7Z2JS", "join": "title", "esci_split": "train"}
+{"query_id": 101475, "query": "tennis lacoste hombre", "parent_asin": "B07DPGZF1T", "esci_label": "S", "esci_product_id": "B07DPGZF1T", "join": "asin", "esci_split": "test"}
+{"query_id": 101734, "query": "thank you gifts for coworkers", "parent_asin": "B07VQCVW8H", "esci_label": "E", "esci_product_id": "B07VQCVW8H", "join": "asin", "esci_split": "train"}
+{"query_id": 102709, "query": "thin mens tshirts", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B000EBZ0PA", "join": "title", "esci_split": "train"}
+{"query_id": 103398, "query": "tissot", "parent_asin": "B00KTM27TQ", "esci_label": "E", "esci_product_id": "B00KTM27TQ", "join": "asin", "esci_split": "train"}
+{"query_id": 103401, "query": "tissot watches men", "parent_asin": "B00KTM27TQ", "esci_label": "E", "esci_product_id": "B00KTM27TQ", "join": "asin", "esci_split": "test"}
+{"query_id": 103438, "query": "titans polo shirt mens", "parent_asin": "B00LPXAUFG", "esci_label": "E", "esci_product_id": "B07G255BC7", "join": "title", "esci_split": "train"}
+{"query_id": 103541, "query": "tob womens sexy criss cross", "parent_asin": "B07FZ7NJ93", "esci_label": "E", "esci_product_id": "B07FZ45YZN", "join": "title", "esci_split": "train"}
+{"query_id": 103572, "query": "toddler 115mm polarized", "parent_asin": "B07JFL14ZD", "esci_label": "S", "esci_product_id": "B07JFL14ZD", "join": "asin", "esci_split": "train"}
+{"query_id": 103684, "query": "toddler glenda the good witch costume", "parent_asin": "B0091K54OM", "esci_label": "I", "esci_product_id": "B0091K54OM", "join": "asin", "esci_split": "test"}
+{"query_id": 103704, "query": "toddler jelly sandals size 9", "parent_asin": "B07NWLBKZR", "esci_label": "S", "esci_product_id": "B07Q875BMZ", "join": "title", "esci_split": "train"}
+{"query_id": 103723, "query": "toddler no show socks", "parent_asin": "B07YNYHGQH", "esci_label": "E", "esci_product_id": "B07YNYCH3H", "join": "title", "esci_split": "train"}
+{"query_id": 103752, "query": "toddler shoes", "parent_asin": "B07NWLBKZR", "esci_label": "E", "esci_product_id": "B07NWHSVBK", "join": "title", "esci_split": "train"}
+{"query_id": 103753, "query": "toddler shoes boys", "parent_asin": "B08541L514", "esci_label": "E", "esci_product_id": "B07KXNLK4C", "join": "title", "esci_split": "train"}
+{"query_id": 103754, "query": "toddler shoes girls", "parent_asin": "B07NWLBKZR", "esci_label": "E", "esci_product_id": "B07VYPS3YZ", "join": "title", "esci_split": "test"}
+{"query_id": 103996, "query": "tommy hilfiger coat for women", "parent_asin": "B07RS44M91", "esci_label": "E", "esci_product_id": "B07RS44M91", "join": "asin", "esci_split": "train"}
+{"query_id": 104062, "query": "tonino lamborghini", "parent_asin": "B0096U5TUG", "esci_label": "E", "esci_product_id": "B0096U5TUG", "join": "asin", "esci_split": "train"}
+{"query_id": 104063, "query": "tonino lamborghini watch", "parent_asin": "B0096U5TUG", "esci_label": "E", "esci_product_id": "B0096U5TUG", "join": "asin", "esci_split": "train"}
+{"query_id": 104075, "query": "tony montana sunglasses", "parent_asin": "B07FZXXDJR", "esci_label": "S", "esci_product_id": "B07G15HGPF", "join": "title", "esci_split": "train"}
+{"query_id": 104328, "query": "tory burch backpacks for women", "parent_asin": "B07HJBMVHY", "esci_label": "S", "esci_product_id": "B07HJBMVHY", "join": "asin", "esci_split": "train"}
+{"query_id": 104374, "query": "tote set", "parent_asin": "B08ZN8Y2W1", "esci_label": "E", "esci_product_id": "B07MBVXKK1", "join": "title", "esci_split": "train"}
+{"query_id": 104992, "query": "travel fanny pack", "parent_asin": "B01G1ORT5M", "esci_label": "E", "esci_product_id": "B01G1ORT5M", "join": "asin", "esci_split": "train"}
+{"query_id": 105394, "query": "tropical tank", "parent_asin": "B07QG8QDV2", "esci_label": "E", "esci_product_id": "B07QC5KL8R", "join": "title", "esci_split": "test"}
+{"query_id": 105565, "query": "tshirt jordan men", "parent_asin": "B08YWTQTXX", "esci_label": "S", "esci_product_id": "B08YWTQTXX", "join": "asin", "esci_split": "train"}
+{"query_id": 105571, "query": "tshirts women cotton trending", "parent_asin": "B07G1TC1X8", "esci_label": "S", "esci_product_id": "B07DJ9H7QT", "join": "title", "esci_split": "test"}
+{"query_id": 105692, "query": "tummy control legging", "parent_asin": "B087M7VHS7", "esci_label": "E", "esci_product_id": "B087M581JG", "join": "title", "esci_split": "train"}
+{"query_id": 105737, "query": "turban scarf", "parent_asin": "B07NWC4JYB", "esci_label": "E", "esci_product_id": "B07QJ57LCX", "join": "title", "esci_split": "test"}
+{"query_id": 105738, "query": "turban wrap", "parent_asin": "B07NWC4JYB", "esci_label": "E", "esci_product_id": "B07PDV265J", "join": "title", "esci_split": "test"}
+{"query_id": 105840, "query": "turtleneck sweater women plus size", "parent_asin": "B075X76VGB", "esci_label": "S", "esci_product_id": "B075X76VGB", "join": "asin", "esci_split": "train"}
+{"query_id": 106149, "query": "two piece dresses for women", "parent_asin": "B07TCH1HQN", "esci_label": "E", "esci_product_id": "B07TCH1HQN", "join": "asin", "esci_split": "train"}
+{"query_id": 106156, "query": "two piece sets for women going out", "parent_asin": "B08M38XGCG", "esci_label": "E", "esci_product_id": "B08K8Z6KBX", "join": "title", "esci_split": "test"}
+{"query_id": 106520, "query": "umbrella", "parent_asin": "B071JL6C9N", "esci_label": "E", "esci_product_id": "B071ZRMLWB", "join": "title", "esci_split": "test"}
+{"query_id": 106529, "query": "umbrella upside down", "parent_asin": "B071JL6C9N", "esci_label": "E", "esci_product_id": "B071ZRMLWB", "join": "title", "esci_split": "train"}
+{"query_id": 106529, "query": "umbrella upside down", "parent_asin": "B07KP83662", "esci_label": "E", "esci_product_id": "B07J1TMNRT", "join": "title", "esci_split": "train"}
+{"query_id": 106530, "query": "umbrella windproof", "parent_asin": "B071JL6C9N", "esci_label": "E", "esci_product_id": "B071ZRMLWB", "join": "title", "esci_split": "train"}
+{"query_id": 106530, "query": "umbrella windproof", "parent_asin": "B07KP83662", "esci_label": "E", "esci_product_id": "B07J1K2HQK", "join": "title", "esci_split": "train"}
+{"query_id": 106811, "query": "unicorn headpiece adult", "parent_asin": "B07S65B2SH", "esci_label": "E", "esci_product_id": "B07S65B2SH", "join": "asin", "esci_split": "train"}
+{"query_id": 106814, "query": "unicorn inflatable costume, kids", "parent_asin": "B07TCWF1Z2", "esci_label": "E", "esci_product_id": "B07TCWF1Z2", "join": "asin", "esci_split": "train"}
+{"query_id": 106835, "query": "unicorn shoes", "parent_asin": "B07NWLBKZR", "esci_label": "E", "esci_product_id": "B07VXNF994", "join": "title", "esci_split": "train"}
+{"query_id": 106890, "query": "unique masquerade mask for men", "parent_asin": "B07C2JVTTX", "esci_label": "E", "esci_product_id": "B07C2JVTTX", "join": "asin", "esci_split": "test"}
+{"query_id": 107615, "query": "v cut dresses for women sexy", "parent_asin": "B095XYTTVF", "esci_label": "S", "esci_product_id": "B095XYTTVF", "join": "asin", "esci_split": "train"}
+{"query_id": 107620, "query": "v front ankle boot", "parent_asin": "B07XDH9N7Z", "esci_label": "E", "esci_product_id": "B07XGHFW9D", "join": "title", "esci_split": "train"}
+{"query_id": 107622, "query": "v neck short dress", "parent_asin": "B07MFQCP57", "esci_label": "E", "esci_product_id": "B07M7DCB63", "join": "title", "esci_split": "train"}
+{"query_id": 107625, "query": "v neck white t shirt women", "parent_asin": "B0BXP6MG3X", "esci_label": "I", "esci_product_id": "B000EC11R0", "join": "title", "esci_split": "test"}
+{"query_id": 107655, "query": "vacation tops for women beach", "parent_asin": "B07G1TC1X8", "esci_label": "E", "esci_product_id": "B07DB8X4CP", "join": "title", "esci_split": "train"}
+{"query_id": 107755, "query": "valet umbrella", "parent_asin": "B071JL6C9N", "esci_label": "S", "esci_product_id": "B071ZRMLWB", "join": "title", "esci_split": "train"}
+{"query_id": 107817, "query": "vanessa rosella tote bag", "parent_asin": "B08ZN8Y2W1", "esci_label": "S", "esci_product_id": "B07F87LTMJ", "join": "title", "esci_split": "train"}
+{"query_id": 108155, "query": "velvet dress", "parent_asin": "B077RXT2NF", "esci_label": "E", "esci_product_id": "B077RXT2NF", "join": "asin", "esci_split": "train"}
+{"query_id": 108554, "query": "victorinox watch men", "parent_asin": "B01INXF758", "esci_label": "E", "esci_product_id": "B01INXF758", "join": "asin", "esci_split": "train"}
+{"query_id": 109060, "query": "vlone shirt", "parent_asin": "B07L8L2WHL", "esci_label": "S", "esci_product_id": "B07L8L2WHL", "join": "asin", "esci_split": "train"}
+{"query_id": 109276, "query": "w af1 shadow se", "parent_asin": "B08XBPKTJ7", "esci_label": "S", "esci_product_id": "B07WMZQBP5", "join": "title", "esci_split": "test"}
+{"query_id": 109627, "query": "wallets for women", "parent_asin": "B07Q3NQZ7T", "esci_label": "E", "esci_product_id": "B07Q3NQZ7T", "join": "asin", "esci_split": "train"}
+{"query_id": 109722, "query": "warm socks for boots", "parent_asin": "B0C246QRQS", "esci_label": "E", "esci_product_id": "B076ST8PGZ", "join": "title", "esci_split": "test"}
+{"query_id": 109815, "query": "watch box", "parent_asin": "B0BS5D6MC7", "esci_label": "E", "esci_product_id": "B01D0MRXWM", "join": "title", "esci_split": "train"}
+{"query_id": 109819, "query": "watch case", "parent_asin": "B0BS5D6MC7", "esci_label": "E", "esci_product_id": "B01D0MRXWM", "join": "title", "esci_split": "train"}
+{"query_id": 109827, "query": "watch for men on sale", "parent_asin": "B01J5RRQJG", "esci_label": "E", "esci_product_id": "B01J5RRQJG", "join": "asin", "esci_split": "train"}
+{"query_id": 109828, "query": "watch for women", "parent_asin": "B007R9WURS", "esci_label": "E", "esci_product_id": "B004D4S7AY", "join": "title", "esci_split": "train"}
+{"query_id": 109833, "query": "watch link remover kit", "parent_asin": "B07FDNP55K", "esci_label": "E", "esci_product_id": "B07FDNP55K", "join": "asin", "esci_split": "train"}
+{"query_id": 109853, "query": "watch women", "parent_asin": "B007R9WURS", "esci_label": "E", "esci_product_id": "B004D4S7AY", "join": "title", "esci_split": "test"}
+{"query_id": 109861, "query": "watches for men on sale clearance", "parent_asin": "B07M6162F9", "esci_label": "E", "esci_product_id": "B07M6162F9", "join": "asin", "esci_split": "train"}
+{"query_id": 109862, "query": "watches for women", "parent_asin": "B007R9WURS", "esci_label": "E", "esci_product_id": "B004D4S7AY", "join": "title", "esci_split": "test"}
+{"query_id": 110009, "query": "water shoes mens size 9.5", "parent_asin": "B07X3MGMJR", "esci_label": "E", "esci_product_id": "B07CSML2GK", "join": "title", "esci_split": "train"}
+{"query_id": 110143, "query": "waterproof kid gloves small", "parent_asin": "B01MZ4UZL0", "esci_label": "E", "esci_product_id": "B01MZ4UZL0", "join": "asin", "esci_split": "train"}
+{"query_id": 110194, "query": "waterproof womens boots", "parent_asin": "B01L99SW78", "esci_label": "E", "esci_product_id": "B000BNZMU4", "join": "title", "esci_split": "train"}
+{"query_id": 110318, "query": "we wouldn\u2019t be the team that we are without you.", "parent_asin": "B07KWZVB83", "esci_label": "S", "esci_product_id": "B07KWZVB83", "join": "asin", "esci_split": "train"}
+{"query_id": 110440, "query": "wedding guest dresses for women", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01MS1GE55", "join": "title", "esci_split": "train"}
+{"query_id": 110500, "query": "weed money box", "parent_asin": "B00OYS3SC6", "esci_label": "S", "esci_product_id": "B006T5BG7Q", "join": "title", "esci_split": "train"}
+{"query_id": 110532, "query": "weigh machine for luggage", "parent_asin": "B003STEIJ4", "esci_label": "E", "esci_product_id": "B003STEIJ4", "join": "asin", "esci_split": "train"}
+{"query_id": 110755, "query": "weyland yutani t shirt", "parent_asin": "B01N15I4GB", "esci_label": "E", "esci_product_id": "B01N15I4GB", "join": "asin", "esci_split": "train"}
+{"query_id": 111065, "query": "white denim skirts for women", "parent_asin": "B07PPG5WC1", "esci_label": "E", "esci_product_id": "B07PPG5WC1", "join": "asin", "esci_split": "train"}
+{"query_id": 111295, "query": "white shirts for men", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B000EC11R0", "join": "title", "esci_split": "test"}
+{"query_id": 111342, "query": "white sweatsuit for women", "parent_asin": "B087TVSGJS", "esci_label": "E", "esci_product_id": "B087TWC1XZ", "join": "title", "esci_split": "train"}
+{"query_id": 111358, "query": "white tee shirts for men tall", "parent_asin": "B0BXP6MG3X", "esci_label": "E", "esci_product_id": "B00LSRU2JS", "join": "title", "esci_split": "train"}
+{"query_id": 111722, "query": "willie nelson colored shirt", "parent_asin": "B008LNUQ3E", "esci_label": "S", "esci_product_id": "B008LNUQ3E", "join": "asin", "esci_split": "test"}
+{"query_id": 111764, "query": "wind breaker womens jacket", "parent_asin": "B07X99HVSX", "esci_label": "E", "esci_product_id": "B07X9CCNQ7", "join": "title", "esci_split": "train"}
+{"query_id": 112046, "query": "winter socks women", "parent_asin": "B0C246QRQS", "esci_label": "E", "esci_product_id": "B01MTR6RR0", "join": "title", "esci_split": "train"}
+{"query_id": 112402, "query": "woman shoes open toe pump", "parent_asin": "B07K9ZHCDF", "esci_label": "E", "esci_product_id": "B07K9ZHCDF", "join": "asin", "esci_split": "train"}
+{"query_id": 112409, "query": "woman sweatpants", "parent_asin": "B087TVSGJS", "esci_label": "E", "esci_product_id": "B087TT8HQ6", "join": "title", "esci_split": "train"}
+{"query_id": 112410, "query": "woman swimsuit", "parent_asin": "B07872NQ59", "esci_label": "E", "esci_product_id": "B07872NQ59", "join": "asin", "esci_split": "train"}
+{"query_id": 112422, "query": "womans black heels", "parent_asin": "B079P4GPY4", "esci_label": "E", "esci_product_id": "B079P4GPY4", "join": "asin", "esci_split": "train"}
+{"query_id": 112450, "query": "womans tops", "parent_asin": "B07SHW13T4", "esci_label": "E", "esci_product_id": "B00IFBNA5I", "join": "title", "esci_split": "train"}
+{"query_id": 112477, "query": "women bathing suit under $10 free shipping", "parent_asin": "B07TYMQ2SD", "esci_label": "E", "esci_product_id": "B07TYMQ2SD", "join": "asin", "esci_split": "train"}
+{"query_id": 112517, "query": "women dresses", "parent_asin": "B0743B5GGT", "esci_label": "E", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "train"}
+{"query_id": 112546, "query": "women jeans", "parent_asin": "B08PPD8FYB", "esci_label": "E", "esci_product_id": "B07D9KGJJP", "join": "title", "esci_split": "train"}
+{"query_id": 112594, "query": "women petite cocktail dress", "parent_asin": "B07VT47J3T", "esci_label": "S", "esci_product_id": "B01N5JHXW8", "join": "title", "esci_split": "train"}
+{"query_id": 112604, "query": "women purses and handbags", "parent_asin": "B08ZN8Y2W1", "esci_label": "E", "esci_product_id": "B07F87LTMJ", "join": "title", "esci_split": "train"}
+{"query_id": 112612, "query": "women royally blue dress", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N9LP03W", "join": "title", "esci_split": "train"}
+{"query_id": 112648, "query": "women sleepwear", "parent_asin": "B08CVM46SH", "esci_label": "E", "esci_product_id": "B07SQ5HM1Z", "join": "title", "esci_split": "train"}
+{"query_id": 112667, "query": "women sweater poncho", "parent_asin": "B07HCV4N8V", "esci_label": "E", "esci_product_id": "B07HCV4N8V", "join": "asin", "esci_split": "train"}
+{"query_id": 112685, "query": "women watch", "parent_asin": "B007R9WURS", "esci_label": "E", "esci_product_id": "B004D4S7AY", "join": "title", "esci_split": "train"}
+{"query_id": 112723, "query": "women's cross-trainer | barefoot & minimalist shoe", "parent_asin": "B07RVJ86JY", "esci_label": "E", "esci_product_id": "B07ZH697CN", "join": "title", "esci_split": "train"}
+{"query_id": 112729, "query": "women's dresses", "parent_asin": "B0743B5GGT", "esci_label": "E", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "train"}
+{"query_id": 112762, "query": "women's rose gold watch", "parent_asin": "B007R9WURS", "esci_label": "E", "esci_product_id": "B004D4S7AY", "join": "title", "esci_split": "train"}
+{"query_id": 112765, "query": "women's sandals size 9", "parent_asin": "B072R6QJQ9", "esci_label": "E", "esci_product_id": "B078BFJXHZ", "join": "title", "esci_split": "train"}
+{"query_id": 112766, "query": "women's satin pajama set", "parent_asin": "B07DBP4FTG", "esci_label": "E", "esci_product_id": "B07DBP2DT7", "join": "title", "esci_split": "test"}
+{"query_id": 112783, "query": "women's sweatshirts without hoods", "parent_asin": "B07G5QX7FV", "esci_label": "E", "esci_product_id": "B07G5RW9VZ", "join": "title", "esci_split": "train"}
+{"query_id": 112834, "query": "womens beanie fleece lined", "parent_asin": "B0773MFRMK", "esci_label": "E", "esci_product_id": "B07TSBWJ9Z", "join": "title", "esci_split": "train"}
+{"query_id": 112853, "query": "womens black dress", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N1WFB1F", "join": "title", "esci_split": "train"}
+{"query_id": 112855, "query": "womens black jumpers dressy", "parent_asin": "B07QQQK84S", "esci_label": "S", "esci_product_id": "B07NM2WX2X", "join": "title", "esci_split": "train"}
+{"query_id": 112921, "query": "womens columbia tamiami shirts long sleeve", "parent_asin": "B0089FB73W", "esci_label": "S", "esci_product_id": "B0089FB73W", "join": "asin", "esci_split": "train"}
+{"query_id": 112947, "query": "womens designer shirts and blouses", "parent_asin": "B07S7NXZ7J", "esci_label": "S", "esci_product_id": "B07NPQC73G", "join": "title", "esci_split": "train"}
+{"query_id": 112950, "query": "womens dress", "parent_asin": "B0743B5GGT", "esci_label": "E", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "train"}
+{"query_id": 112950, "query": "womens dress", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N1WFB1F", "join": "title", "esci_split": "train"}
+{"query_id": 112954, "query": "womens dresses", "parent_asin": "B0743B5GGT", "esci_label": "E", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "train"}
+{"query_id": 112956, "query": "womens dresses for wedding guest", "parent_asin": "B07VT47J3T", "esci_label": "E", "esci_product_id": "B01N1WFB1F", "join": "title", "esci_split": "train"}
+{"query_id": 112969, "query": "womens earth boots", "parent_asin": "B07P9TXR4W", "esci_label": "E", "esci_product_id": "B07P9TXR4W", "join": "asin", "esci_split": "test"}
+{"query_id": 112987, "query": "womens floral black lace trim corset overbust sincher", "parent_asin": "B00MYSGERY", "esci_label": "E", "esci_product_id": "B00L24TXJM", "join": "title", "esci_split": "train"}
+{"query_id": 113021, "query": "womens headwraps", "parent_asin": "B07NWC4JYB", "esci_label": "E", "esci_product_id": "B07PW4G1CS", "join": "title", "esci_split": "test"}
+{"query_id": 113080, "query": "womens long sleeve tops", "parent_asin": "B07G1TC1X8", "esci_label": "E", "esci_product_id": "B07KT6BZ38", "join": "title", "esci_split": "train"}
+{"query_id": 113083, "query": "womens lounge wear", "parent_asin": "B087TVSGJS", "esci_label": "E", "esci_product_id": "B087TT8HQ6", "join": "title", "esci_split": "train"}
+{"query_id": 113098, "query": "womens movado watch", "parent_asin": "B078XJ93KF", "esci_label": "E", "esci_product_id": "B078XJ93KF", "join": "asin", "esci_split": "train"}
+{"query_id": 113126, "query": "womens one piece swimsuits", "parent_asin": "B07872NQ59", "esci_label": "E", "esci_product_id": "B07872NQ59", "join": "asin", "esci_split": "train"}
+{"query_id": 113136, "query": "womens pajama pants", "parent_asin": "B082PJVXQY", "esci_label": "E", "esci_product_id": "B082PJ54BJ", "join": "title", "esci_split": "train"}
+{"query_id": 113146, "query": "womens petite dresses", "parent_asin": "B0743B5GGT", "esci_label": "S", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "train"}
+{"query_id": 113162, "query": "womens plus size satin pajamas", "parent_asin": "B07BWHH2QB", "esci_label": "E", "esci_product_id": "B07BWHH2QB", "join": "asin", "esci_split": "test"}
+{"query_id": 113199, "query": "womens rompers", "parent_asin": "B07QQQK84S", "esci_label": "E", "esci_product_id": "B07PXKZCTX", "join": "title", "esci_split": "train"}
+{"query_id": 113265, "query": "womens skinny jeans", "parent_asin": "B08PPD8FYB", "esci_label": "E", "esci_product_id": "B07D9JNY1K", "join": "title", "esci_split": "train"}
+{"query_id": 113271, "query": "womens sleepwear", "parent_asin": "B08CVM46SH", "esci_label": "E", "esci_product_id": "B07SQ5HM1Z", "join": "title", "esci_split": "train"}
+{"query_id": 113324, "query": "womens swimsuits", "parent_asin": "B07872NQ59", "esci_label": "E", "esci_product_id": "B07872NQ59", "join": "asin", "esci_split": "train"}
+{"query_id": 113342, "query": "womens thick workout leggings", "parent_asin": "B08VRN834Y", "esci_label": "E", "esci_product_id": "B08CXNKW71", "join": "title", "esci_split": "train"}
+{"query_id": 113406, "query": "womens winter gear", "parent_asin": "B01N9H4WNK", "esci_label": "E", "esci_product_id": "B01N9H4WNK", "join": "asin", "esci_split": "train"}
+{"query_id": 113413, "query": "womens wool socks", "parent_asin": "B0C246QRQS", "esci_label": "E", "esci_product_id": "B01MTR6RR0", "join": "title", "esci_split": "train"}
+{"query_id": 113432, "query": "women\u2019s night shirts ekouear", "parent_asin": "B08CVM46SH", "esci_label": "E", "esci_product_id": "B07TL6THDW", "join": "title", "esci_split": "train"}
+{"query_id": 113439, "query": "women\u2019s watches", "parent_asin": "B007R9WURS", "esci_label": "E", "esci_product_id": "B004D4S7AY", "join": "title", "esci_split": "train"}
+{"query_id": 113798, "query": "work dresses", "parent_asin": "B0743B5GGT", "esci_label": "E", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "train"}
+{"query_id": 113799, "query": "work dresses for women", "parent_asin": "B0743B5GGT", "esci_label": "E", "esci_product_id": "B0743B5GGT", "join": "asin", "esci_split": "train"}
+{"query_id": 113806, "query": "work headbands", "parent_asin": "B00RQNNSQM", "esci_label": "E", "esci_product_id": "B00RQNNSQM", "join": "asin", "esci_split": "train"}
+{"query_id": 113879, "query": "workout outfit", "parent_asin": "B07VB3X919", "esci_label": "E", "esci_product_id": "B07ZQZWN8F", "join": "title", "esci_split": "train"}
+{"query_id": 113879, "query": "workout outfit", "parent_asin": "B07ZJ6816Y", "esci_label": "E", "esci_product_id": "B07VB8WQ9D", "join": "title", "esci_split": "train"}
+{"query_id": 114123, "query": "ww2 british uniform", "parent_asin": "B077QTWX2F", "esci_label": "I", "esci_product_id": "B077QTWX2F", "join": "asin", "esci_split": "test"}
+{"query_id": 114127, "query": "ww2 russian pouch", "parent_asin": "B076SKXW4T", "esci_label": "S", "esci_product_id": "B076SKXW4T", "join": "asin", "esci_split": "train"}
+{"query_id": 114348, "query": "xero shoes", "parent_asin": "B07WYCWL7C", "esci_label": "E", "esci_product_id": "B07P7J7PZJ", "join": "title", "esci_split": "train"}
+{"query_id": 114472, "query": "xl red umbrella", "parent_asin": "B071JL6C9N", "esci_label": "S", "esci_product_id": "B071ZRMLWB", "join": "title", "esci_split": "test"}
+{"query_id": 114502, "query": "xmen shirt", "parent_asin": "B06ZY9S3TQ", "esci_label": "E", "esci_product_id": "B06ZY9S3TQ", "join": "asin", "esci_split": "train"}
+{"query_id": 114615, "query": "xunyu", "parent_asin": "B07QNB714P", "esci_label": "E", "esci_product_id": "B07MXKPY32", "join": "title", "esci_split": "train"}
+{"query_id": 114615, "query": "xunyu", "parent_asin": "B07RT97VZJ", "esci_label": "E", "esci_product_id": "B07PTPDR89", "join": "title", "esci_split": "train"}
+{"query_id": 114615, "query": "xunyu", "parent_asin": "B087N9QRFS", "esci_label": "E", "esci_product_id": "B07P7SLKV6", "join": "title", "esci_split": "train"}
+{"query_id": 114616, "query": "xx polo", "parent_asin": "B07N6KFS61", "esci_label": "E", "esci_product_id": "B07N6KFS61", "join": "asin", "esci_split": "train"}
+{"query_id": 114807, "query": "yeezy boost 350 black and red", "parent_asin": "B08XBPKTJ7", "esci_label": "S", "esci_product_id": "B0816D1VBB", "join": "title", "esci_split": "train"}
+{"query_id": 114853, "query": "yellow hadbag", "parent_asin": "B07D6G735T", "esci_label": "S", "esci_product_id": "B07CXQFJPL", "join": "title", "esci_split": "train"}
+{"query_id": 114888, "query": "yellow poodle skirt", "parent_asin": "B01LYC9OPL", "esci_label": "S", "esci_product_id": "B01LYC9OPL", "join": "asin", "esci_split": "train"}
+{"query_id": 114917, "query": "yellow+ball+gowns+form+girls", "parent_asin": "B0756X76GC", "esci_label": "S", "esci_product_id": "B0756X76GC", "join": "asin", "esci_split": "test"}
+{"query_id": 115091, "query": "yoome handbags for women", "parent_asin": "B07RS9LSPF", "esci_label": "E", "esci_product_id": "B07RN47LN7", "join": "title", "esci_split": "test"}
+{"query_id": 115133, "query": "youga suit", "parent_asin": "B07VB3X919", "esci_label": "E", "esci_product_id": "B07VD6MND9", "join": "title", "esci_split": "train"}
+{"query_id": 115167, "query": "youth baklava", "parent_asin": "B07W1K8TJM", "esci_label": "E", "esci_product_id": "B07W1K8TJM", "join": "asin", "esci_split": "train"}
+{"query_id": 115342, "query": "zac posen gown", "parent_asin": "B08ZN8Y2W1", "esci_label": "I", "esci_product_id": "B08G15BFLC", "join": "title", "esci_split": "test"}
+{"query_id": 115532, "query": "zara usa women", "parent_asin": "B08PPD8FYB", "esci_label": "E", "esci_product_id": "B07D9JF6MD", "join": "title", "esci_split": "train"}
+{"query_id": 115533, "query": "zara woman", "parent_asin": "B074W1QQP9", "esci_label": "S", "esci_product_id": "B074W1QQP9", "join": "asin", "esci_split": "train"}
+{"query_id": 115591, "query": "zelda link gifts", "parent_asin": "B01MYNODJU", "esci_label": "E", "esci_product_id": "B01MYNODJU", "join": "asin", "esci_split": "train"}

@@ -375,9 +375,92 @@ CALIBRATED_WEIGHTS = RerankWeights(
     consensus_scale=9.0,
 )
 
+
+
+# Output of `python3 -m scripts.train_reranker` -- gradient descent on the 770
+# human ESCI relevance judgments that join onto the frozen catalog
+# (`scripts/build_esci_gold.py`), not on anything our simulators wrote. 457 of
+# those queries retrieve at least one judged product, split 378/79 by ESCI's own
+# train/test partition.
+#
+# Selected at epoch 41 of 500 by held-out MRR. The full curve is in
+# `docs/reranker_training.json` and it is not subtle: training loss falls
+# monotonically to epoch 500 while held-out MRR peaks at 41 and then decays
+# (0.2708 -> 0.2422). On 37 parameters and 378 queries, more epochs buy
+# memorisation.
+#
+# Held-out single-turn retrieval over real queries:
+#
+#     MRR      0.2220 -> 0.2708   +22% relative
+#     hit@10   0.3671 -> 0.4937   +35% relative
+#
+# What it learned, and why it does not simply ship: the fitted vector
+# effectively deletes the soft stage (`soft_scale` 1.0 -> 0.0009), flips
+# `vocabulary_miss` and `budget_unpriced` from penalties to bonuses, collapses
+# `color_boost` 18.9 -> 1.1, and triples `popularity_scale`. Read together
+# that is one finding -- on a real one-line shopper query, the attribute-boost
+# machinery is mostly noise and BM25 rank plus popularity carries the signal.
+#
+# The catch is the training distribution. Every example is a **turn-1** query,
+# because a human judgment attaches to a query and not to a conversation. Any
+# weight whose feature only becomes active once constraints accumulate is
+# therefore either untrained (zero gradient, left at its calibrated value --
+# every `category_*`, `demoted_*` and the ranking-experiment scales below) or
+# trained on an unrepresentative slice (`soft_scale`, which multiplies exactly
+# the Tier 1 gazetteer constraints that a multi-turn session leans on).
+# `ESCI_TRAINED_SOFT_WEIGHTS` isolates that single coordinate so the bench can
+# say which half of the change carries.
+ESCI_TRAINED_WEIGHTS = RerankWeights(
+    fusion_scale=753.9511,
+    backfill_scale=0.2,
+    rating_coefficient=0.06,
+    popularity_scale=3.0529,
+    category_exact=50.625,
+    category_partial=18.0,
+    category_weak=4.4,
+    category_miss=-44.0,
+    brand_store=26.0717,
+    brand_text=20.4381,
+    brand_weak=17.3975,
+    brand_miss=-50.0,
+    material_boost=29.079,
+    color_boost=1.1101,
+    size_boost=22.8117,
+    feature_boost=-13.9722,
+    use_case_boost=10.0,
+    style_boost=58.0115,
+    other_boost=22.0,
+    vocabulary_miss=5.3478,
+    generic_miss=-0.0715,
+    budget_within=10.7997,
+    budget_over=-60.0,
+    budget_near=12.0,
+    budget_near_miss=-56.0,
+    budget_loose=2.4,
+    budget_loose_miss=0.0,
+    budget_unpriced=11.2003,
+    department_miss=-34.5,
+    department_match=0.0085,
+    soft_scale=0.0009,
+    demoted_exact=7.2,
+    demoted_partial=8.0,
+    coverage_scale=22.0,
+    idf_evidence_scale=16.0,
+    consensus_scale=9.0,
+    profile_scale=0.1,
+)
+
+# The fitted vector with `soft_scale` held at its shipped value. Everything the
+# ESCI labels say about *magnitudes* is kept; the one coordinate whose training
+# distribution is known to be unrepresentative is not.
+ESCI_TRAINED_SOFT_WEIGHTS = replace(ESCI_TRAINED_WEIGHTS, soft_scale=1.0)
+
+
 WEIGHT_PRESETS: dict[str, RerankWeights] = {
     "default": RerankWeights(),
     "calibrated": CALIBRATED_WEIGHTS,
+    "esci": ESCI_TRAINED_WEIGHTS,
+    "esci_soft": ESCI_TRAINED_SOFT_WEIGHTS,
 }
 
 
