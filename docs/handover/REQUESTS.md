@@ -68,3 +68,14 @@ retriever's `last_diagnostics`: for each typed attribute, a `coverage` fraction,
 `StateManager.set_retrieval_diagnostics()` consumes this exact mapping. Existing
 `candidate_scores` already supports C's score/margin credibility calculation.
 Status: open
+
+### 2026-08-31 · C → team · Request-completion audit (approval to delete)
+Checked against the current working tree and commit history. The two requests
+already marked done are ready to delete if the team wants a shorter log:
+`A → C/D Verify 0.1 syntax fix` and `C → B/D Schema freeze`.
+
+The four remaining C requests are **not complete**: Agent still records the
+user message after export; Agent still decides policy before retrieval; the
+answerability script has no per-mission/fitted output; and retriever diagnostics
+have no `attribute_stats`. Keep all four open.
+Status: done
