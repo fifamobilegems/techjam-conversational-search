@@ -1,0 +1,7757 @@
+{
+ "attributes": {
+  "brand": {
+   "count": 105,
+   "entries": [
+    {
+     "canonical": "nike",
+     "df": 565,
+     "surfaces": [
+      "nike",
+      "nikes"
+     ]
+    },
+    {
+     "canonical": "adidas",
+     "df": 438,
+     "surfaces": [
+      "adida",
+      "adidas"
+     ]
+    },
+    {
+     "canonical": "skechers",
+     "df": 375,
+     "surfaces": [
+      "skecher",
+      "skechers"
+     ]
+    },
+    {
+     "canonical": "puma",
+     "df": 265,
+     "surfaces": [
+      "puma",
+      "pumas"
+     ]
+    },
+    {
+     "canonical": "nine west",
+     "df": 250,
+     "surfaces": [
+      "nine west",
+      "nine wests",
+      "ninewest"
+     ]
+    },
+    {
+     "canonical": "clarks",
+     "df": 239,
+     "surfaces": [
+      "clark",
+      "clarks"
+     ]
+    },
+    {
+     "canonical": "calvin klein",
+     "df": 224,
+     "surfaces": [
+      "calvin klein",
+      "calvin kleins",
+      "calvinklein"
+     ]
+    },
+    {
+     "canonical": "asics",
+     "df": 221,
+     "surfaces": [
+      "asic",
+      "asics"
+     ]
+    },
+    {
+     "canonical": "columbia",
+     "df": 202,
+     "surfaces": [
+      "columbia",
+      "columbias"
+     ]
+    },
+    {
+     "canonical": "under armour",
+     "df": 199,
+     "surfaces": [
+      "under armour",
+      "under armours",
+      "underarmour"
+     ]
+    },
+    {
+     "canonical": "disney",
+     "df": 175,
+     "surfaces": [
+      "disney",
+      "disneys"
+     ]
+    },
+    {
+     "canonical": "reebok",
+     "df": 149,
+     "surfaces": [
+      "reebok",
+      "reeboks"
+     ]
+    },
+    {
+     "canonical": "levi s",
+     "df": 137,
+     "surfaces": [
+      "levi ",
+      "levi s",
+      "levis"
+     ]
+    },
+    {
+     "canonical": "amazon essentials",
+     "df": 136,
+     "surfaces": [
+      "amazon essential",
+      "amazon essentials",
+      "amazonessentials"
+     ]
+    },
+    {
+     "canonical": "crocs",
+     "df": 131,
+     "surfaces": [
+      "croc",
+      "crocs"
+     ]
+    },
+    {
+     "canonical": "new balance",
+     "df": 121,
+     "surfaces": [
+      "new balance",
+      "new balances",
+      "newbalance"
+     ]
+    },
+    {
+     "canonical": "ugg",
+     "df": 119,
+     "surfaces": [
+      "ugg",
+      "uggs"
+     ]
+    },
+    {
+     "canonical": "tommy hilfiger",
+     "df": 114,
+     "surfaces": [
+      "tommy hilfiger",
+      "tommy hilfigers",
+      "tommyhilfiger"
+     ]
+    },
+    {
+     "canonical": "hanes",
+     "df": 107,
+     "surfaces": [
+      "han",
+      "hane",
+      "hanes"
+     ]
+    },
+    {
+     "canonical": "keen",
+     "df": 107,
+     "surfaces": [
+      "keen",
+      "keens"
+     ]
+    },
+    {
+     "canonical": "anne klein",
+     "df": 106,
+     "surfaces": [
+      "anne klein",
+      "anne kleins",
+      "anneklein"
+     ]
+    },
+    {
+     "canonical": "the north face",
+     "df": 100,
+     "surfaces": [
+      "the north face",
+      "the north faces",
+      "thenorthface"
+     ]
+    },
+    {
+     "canonical": "guess",
+     "df": 98,
+     "surfaces": [
+      "gues",
+      "guess"
+     ]
+    },
+    {
+     "canonical": "merrell",
+     "df": 97,
+     "surfaces": [
+      "merrell",
+      "merrells"
+     ]
+    },
+    {
+     "canonical": "michael kors",
+     "df": 97,
+     "surfaces": [
+      "michael kor",
+      "michael kors",
+      "michaelkors"
+     ]
+    },
+    {
+     "canonical": "saucony",
+     "df": 97,
+     "surfaces": [
+      "saucony",
+      "sauconys"
+     ]
+    },
+    {
+     "canonical": "aerosoles",
+     "df": 93,
+     "surfaces": [
+      "aerosol",
+      "aerosole",
+      "aerosoles"
+     ]
+    },
+    {
+     "canonical": "champion",
+     "df": 93,
+     "surfaces": [
+      "champion",
+      "champions"
+     ]
+    },
+    {
+     "canonical": "goodthreads",
+     "df": 93,
+     "surfaces": [
+      "goodthread",
+      "goodthreads"
+     ]
+    },
+    {
+     "canonical": "steve madden",
+     "df": 93,
+     "surfaces": [
+      "steve madden",
+      "steve maddens",
+      "stevemadden"
+     ]
+    },
+    {
+     "canonical": "romwe",
+     "df": 92,
+     "surfaces": [
+      "romwe",
+      "romwes"
+     ]
+    },
+    {
+     "canonical": "timberland",
+     "df": 91,
+     "surfaces": [
+      "timberland",
+      "timberlands"
+     ]
+    },
+    {
+     "canonical": "lifestride",
+     "df": 86,
+     "surfaces": [
+      "lifestride",
+      "lifestrides"
+     ]
+    },
+    {
+     "canonical": "naturalizer",
+     "df": 86,
+     "surfaces": [
+      "naturalizer",
+      "naturalizers"
+     ]
+    },
+    {
+     "canonical": "cambridge select",
+     "df": 85,
+     "surfaces": [
+      "cambridge select",
+      "cambridge selects",
+      "cambridgeselect"
+     ]
+    },
+    {
+     "canonical": "roxy",
+     "df": 84,
+     "surfaces": [
+      "roxy",
+      "roxys"
+     ]
+    },
+    {
+     "canonical": "carter s",
+     "df": 82,
+     "surfaces": [
+      "carter ",
+      "carter s",
+      "carters"
+     ]
+    },
+    {
+     "canonical": "nautica",
+     "df": 82,
+     "surfaces": [
+      "nautica",
+      "nauticas"
+     ]
+    },
+    {
+     "canonical": "lucky brand",
+     "df": 81,
+     "surfaces": [
+      "lucky brand",
+      "lucky brands",
+      "luckybrand"
+     ]
+    },
+    {
+     "canonical": "invicta",
+     "df": 80,
+     "surfaces": [
+      "invicta",
+      "invictas"
+     ]
+    },
+    {
+     "canonical": "kenneth cole",
+     "df": 77,
+     "surfaces": [
+      "kenneth cole",
+      "kenneth coles",
+      "kennethcole"
+     ]
+    },
+    {
+     "canonical": "lark ro",
+     "df": 76,
+     "surfaces": [
+      "lark ro",
+      "lark ros",
+      "larkro"
+     ]
+    },
+    {
+     "canonical": "ekouaer",
+     "df": 75,
+     "surfaces": [
+      "ekouaer",
+      "ekouaers"
+     ]
+    },
+    {
+     "canonical": "dream pairs",
+     "df": 74,
+     "surfaces": [
+      "dream pair",
+      "dream pairs",
+      "dreampairs"
+     ]
+    },
+    {
+     "canonical": "sperry",
+     "df": 74,
+     "surfaces": [
+      "sperry",
+      "sperrys"
+     ]
+    },
+    {
+     "canonical": "converse",
+     "df": 73,
+     "surfaces": [
+      "converse",
+      "converses"
+     ]
+    },
+    {
+     "canonical": "carhartt",
+     "df": 70,
+     "surfaces": [
+      "carhartt",
+      "carhartts"
+     ]
+    },
+    {
+     "canonical": "cole haan",
+     "df": 70,
+     "surfaces": [
+      "cole haan",
+      "cole haans",
+      "colehaan"
+     ]
+    },
+    {
+     "canonical": "frye",
+     "df": 70,
+     "surfaces": [
+      "frye",
+      "fryes"
+     ]
+    },
+    {
+     "canonical": "jessica simpson",
+     "df": 67,
+     "surfaces": [
+      "jessica simpson",
+      "jessica simpsons",
+      "jessicasimpson"
+     ]
+    },
+    {
+     "canonical": "adidas originals",
+     "df": 65,
+     "surfaces": [
+      "adidas original",
+      "adidas originals",
+      "adidasoriginals"
+     ]
+    },
+    {
+     "canonical": "daily ritual",
+     "df": 65,
+     "surfaces": [
+      "daily ritual",
+      "daily rituals",
+      "dailyritual"
+     ]
+    },
+    {
+     "canonical": "ariat",
+     "df": 64,
+     "surfaces": [
+      "ariat",
+      "ariats"
+     ]
+    },
+    {
+     "canonical": "sweatyrocks",
+     "df": 63,
+     "surfaces": [
+      "sweatyrock",
+      "sweatyrocks"
+     ]
+    },
+    {
+     "canonical": "dickies",
+     "df": 62,
+     "surfaces": [
+      "dickie",
+      "dickies",
+      "dicky"
+     ]
+    },
+    {
+     "canonical": "life is good",
+     "df": 61,
+     "surfaces": [
+      "life is good",
+      "life is goods",
+      "lifeisgood"
+     ]
+    },
+    {
+     "canonical": "sorel",
+     "df": 61,
+     "surfaces": [
+      "sorel",
+      "sorels"
+     ]
+    },
+    {
+     "canonical": "dansko",
+     "df": 60,
+     "surfaces": [
+      "dansko",
+      "danskos"
+     ]
+    },
+    {
+     "canonical": "floerns",
+     "df": 60,
+     "surfaces": [
+      "floern",
+      "floerns"
+     ]
+    },
+    {
+     "canonical": "easy spirit",
+     "df": 59,
+     "surfaces": [
+      "easy spirit",
+      "easy spirits",
+      "easyspirit"
+     ]
+    },
+    {
+     "canonical": "fossil",
+     "df": 59,
+     "surfaces": [
+      "fossil",
+      "fossils"
+     ]
+    },
+    {
+     "canonical": "oakley",
+     "df": 58,
+     "surfaces": [
+      "oakley",
+      "oakleys"
+     ]
+    },
+    {
+     "canonical": "coach",
+     "df": 56,
+     "surfaces": [
+      "coach",
+      "coachs"
+     ]
+    },
+    {
+     "canonical": "dockers",
+     "df": 56,
+     "surfaces": [
+      "docker",
+      "dockers"
+     ]
+    },
+    {
+     "canonical": "shein",
+     "df": 56,
+     "surfaces": [
+      "shein",
+      "sheins"
+     ]
+    },
+    {
+     "canonical": "brooks",
+     "df": 55,
+     "surfaces": [
+      "brook",
+      "brooks"
+     ]
+    },
+    {
+     "canonical": "ecco",
+     "df": 55,
+     "surfaces": [
+      "ecco",
+      "eccos"
+     ]
+    },
+    {
+     "canonical": "mizuno",
+     "df": 55,
+     "surfaces": [
+      "mizuno",
+      "mizunos"
+     ]
+    },
+    {
+     "canonical": "teva",
+     "df": 55,
+     "surfaces": [
+      "teva",
+      "tevas"
+     ]
+    },
+    {
+     "canonical": "allegra k",
+     "df": 54,
+     "surfaces": [
+      "allegra k",
+      "allegra ks",
+      "allegrak"
+     ]
+    },
+    {
+     "canonical": "grace karin",
+     "df": 54,
+     "surfaces": [
+      "grace karin",
+      "grace karins",
+      "gracekarin"
+     ]
+    },
+    {
+     "canonical": "dr martens",
+     "df": 53,
+     "surfaces": [
+      "dr marten",
+      "dr martens",
+      "drmartens"
+     ]
+    },
+    {
+     "canonical": "polo ralph lauren",
+     "df": 53,
+     "surfaces": [
+      "polo ralph lauren",
+      "polo ralph laurens",
+      "poloralphlauren"
+     ]
+    },
+    {
+     "canonical": "rubie s",
+     "df": 53,
+     "surfaces": [
+      "rubie ",
+      "rubie s",
+      "rubies"
+     ]
+    },
+    {
+     "canonical": "toms",
+     "df": 52,
+     "surfaces": [
+      "tom",
+      "toms"
+     ]
+    },
+    {
+     "canonical": "fitflop",
+     "df": 51,
+     "surfaces": [
+      "fitflop",
+      "fitflops"
+     ]
+    },
+    {
+     "canonical": "vera bradley",
+     "df": 51,
+     "surfaces": [
+      "vera bradley",
+      "vera bradleys",
+      "verabradley"
+     ]
+    },
+    {
+     "canonical": "vince camuto",
+     "df": 51,
+     "surfaces": [
+      "vince camuto",
+      "vince camutos",
+      "vincecamuto"
+     ]
+    },
+    {
+     "canonical": "aldo",
+     "df": 50,
+     "surfaces": [
+      "aldo",
+      "aldos"
+     ]
+    },
+    {
+     "canonical": "doublju",
+     "df": 49,
+     "surfaces": [
+      "doublju",
+      "doubljus"
+     ]
+    },
+    {
+     "canonical": "salomon",
+     "df": 49,
+     "surfaces": [
+      "salomon",
+      "salomons"
+     ]
+    },
+    {
+     "canonical": "stride rite",
+     "df": 49,
+     "surfaces": [
+      "stride rite",
+      "stride rites",
+      "striderite"
+     ]
+    },
+    {
+     "canonical": "oshkosh b gosh",
+     "df": 48,
+     "surfaces": [
+      "oshkosh b gosh",
+      "oshkosh b goshs",
+      "oshkoshbgosh"
+     ]
+    },
+    {
+     "canonical": "ryka",
+     "df": 48,
+     "surfaces": [
+      "ryka",
+      "rykas"
+     ]
+    },
+    {
+     "canonical": "milumia",
+     "df": 47,
+     "surfaces": [
+      "milumia",
+      "milumias"
+     ]
+    },
+    {
+     "canonical": "rockport",
+     "df": 47,
+     "surfaces": [
+      "rockport",
+      "rockports"
+     ]
+    },
+    {
+     "canonical": "marvel",
+     "df": 46,
+     "surfaces": [
+      "marvel",
+      "marvels"
+     ]
+    },
+    {
+     "canonical": "vionic",
+     "df": 46,
+     "surfaces": [
+      "vionic",
+      "vionics"
+     ]
+    },
+    {
+     "canonical": "betsey johnson",
+     "df": 45,
+     "surfaces": [
+      "betsey johnson",
+      "betsey johnsons",
+      "betseyjohnson"
+     ]
+    },
+    {
+     "canonical": "franco sarto",
+     "df": 45,
+     "surfaces": [
+      "franco sarto",
+      "franco sartos",
+      "francosarto"
+     ]
+    },
+    {
+     "canonical": "gem stone king",
+     "df": 45,
+     "surfaces": [
+      "gem stone king",
+      "gem stone kings",
+      "gemstoneking"
+     ]
+    },
+    {
+     "canonical": "makemechic",
+     "df": 45,
+     "surfaces": [
+      "makemechic",
+      "makemechics"
+     ]
+    },
+    {
+     "canonical": "birkenstock",
+     "df": 43,
+     "surfaces": [
+      "birkenstock",
+      "birkenstocks"
+     ]
+    },
+    {
+     "canonical": "seiko",
+     "df": 43,
+     "surfaces": [
+      "seiko",
+      "seikos"
+     ]
+    },
+    {
+     "canonical": "born",
+     "df": 42,
+     "surfaces": [
+      "born",
+      "borns"
+     ]
+    },
+    {
+     "canonical": "quiksilver",
+     "df": 42,
+     "surfaces": [
+      "quiksilver",
+      "quiksilvers"
+     ]
+    },
+    {
+     "canonical": "smartwool",
+     "df": 42,
+     "surfaces": [
+      "smartwool",
+      "smartwools"
+     ]
+    },
+    {
+     "canonical": "lee",
+     "df": 41,
+     "surfaces": [
+      "lee",
+      "lees"
+     ]
+    },
+    {
+     "canonical": "star wars",
+     "df": 41,
+     "surfaces": [
+      "star war",
+      "star wars",
+      "starwars"
+     ]
+    },
+    {
+     "canonical": "the mountain",
+     "df": 41,
+     "surfaces": [
+      "the mountain",
+      "the mountains",
+      "themountain"
+     ]
+    },
+    {
+     "canonical": "vans",
+     "df": 41,
+     "surfaces": [
+      "van",
+      "vans"
+     ]
+    },
+    {
+     "canonical": "casio",
+     "df": 40,
+     "surfaces": [
+      "casio",
+      "casios"
+     ]
+    },
+    {
+     "canonical": "fila",
+     "df": 40,
+     "surfaces": [
+      "fila",
+      "filas"
+     ]
+    },
+    {
+     "canonical": "sanuk",
+     "df": 40,
+     "surfaces": [
+      "sanuk",
+      "sanuks"
+     ]
+    },
+    {
+     "canonical": "volcom",
+     "df": 40,
+     "surfaces": [
+      "volcom",
+      "volcoms"
+     ]
+    }
+   ]
+  },
+  "category": {
+   "count": 519,
+   "entries": [
+    {
+     "canonical": "shoes",
+     "df": 6661,
+     "surfaces": [
+      "sho",
+      "shoe",
+      "shoes"
+     ]
+    },
+    {
+     "canonical": "tees",
+     "df": 4078,
+     "surfaces": [
+      "tee",
+      "tees"
+     ]
+    },
+    {
+     "canonical": "tops",
+     "df": 3639,
+     "surfaces": [
+      "top",
+      "tops"
+     ]
+    },
+    {
+     "canonical": "blouses",
+     "df": 3152,
+     "surfaces": [
+      "blous",
+      "blouse",
+      "blouses"
+     ]
+    },
+    {
+     "canonical": "clothing",
+     "df": 3030,
+     "surfaces": [
+      "clothing",
+      "clothings"
+     ]
+    },
+    {
+     "canonical": "t shirts",
+     "df": 2807,
+     "surfaces": [
+      "t shirt",
+      "t shirts",
+      "tshirts"
+     ]
+    },
+    {
+     "canonical": "sandals",
+     "df": 2213,
+     "surfaces": [
+      "sandal",
+      "sandals"
+     ]
+    },
+    {
+     "canonical": "shirts",
+     "df": 2176,
+     "surfaces": [
+      "shirt",
+      "shirts"
+     ]
+    },
+    {
+     "canonical": "dresses",
+     "df": 2134,
+     "surfaces": [
+      "dress",
+      "dresse",
+      "dresses"
+     ]
+    },
+    {
+     "canonical": "wallets",
+     "df": 1794,
+     "surfaces": [
+      "wallet",
+      "wallets"
+     ]
+    },
+    {
+     "canonical": "active",
+     "df": 1653,
+     "surfaces": [
+      "active",
+      "actives"
+     ]
+    },
+    {
+     "canonical": "accessories",
+     "df": 1481,
+     "surfaces": [
+      "accessorie",
+      "accessories",
+      "accessory"
+     ]
+    },
+    {
+     "canonical": "athletic",
+     "df": 1453,
+     "surfaces": [
+      "athletic",
+      "athletics"
+     ]
+    },
+    {
+     "canonical": "jewelry",
+     "df": 1406,
+     "surfaces": [
+      "jewelry",
+      "jewelrys"
+     ]
+    },
+    {
+     "canonical": "sunglasses",
+     "df": 1273,
+     "surfaces": [
+      "sunglass",
+      "sunglasse",
+      "sunglasses"
+     ]
+    },
+    {
+     "canonical": "earrings",
+     "df": 1250,
+     "surfaces": [
+      "earring",
+      "earrings"
+     ]
+    },
+    {
+     "canonical": "necklaces",
+     "df": 1214,
+     "surfaces": [
+      "necklac",
+      "necklace",
+      "necklaces"
+     ]
+    },
+    {
+     "canonical": "watches",
+     "df": 1168,
+     "surfaces": [
+      "watch",
+      "watche",
+      "watches"
+     ]
+    },
+    {
+     "canonical": "hats",
+     "df": 1164,
+     "surfaces": [
+      "hat",
+      "hats"
+     ]
+    },
+    {
+     "canonical": "caps",
+     "df": 1159,
+     "surfaces": [
+      "cap",
+      "caps"
+     ]
+    },
+    {
+     "canonical": "westlake",
+     "df": 1136,
+     "surfaces": [
+      "westlake",
+      "westlakes"
+     ]
+    },
+    {
+     "canonical": "casual",
+     "df": 1111,
+     "surfaces": [
+      "casual",
+      "casuals"
+     ]
+    },
+    {
+     "canonical": "wrist watches",
+     "df": 1034,
+     "surfaces": [
+      "wrist watch",
+      "wrist watche",
+      "wrist watches",
+      "wristwatches"
+     ]
+    },
+    {
+     "canonical": "boots",
+     "df": 1023,
+     "surfaces": [
+      "boot",
+      "boots"
+     ]
+    },
+    {
+     "canonical": "fashion sneakers",
+     "df": 1017,
+     "surfaces": [
+      "fashion sneaker",
+      "fashion sneakers",
+      "fashionsneakers"
+     ]
+    },
+    {
+     "canonical": "handbags",
+     "df": 1015,
+     "surfaces": [
+      "handbag",
+      "handbags"
+     ]
+    },
+    {
+     "canonical": "jackets",
+     "df": 966,
+     "surfaces": [
+      "jacket",
+      "jackets"
+     ]
+    },
+    {
+     "canonical": "flats",
+     "df": 943,
+     "surfaces": [
+      "flat",
+      "flats"
+     ]
+    },
+    {
+     "canonical": "running",
+     "df": 914,
+     "surfaces": [
+      "running",
+      "runnings"
+     ]
+    },
+    {
+     "canonical": "lounge",
+     "df": 891,
+     "surfaces": [
+      "lounge",
+      "lounges"
+     ]
+    },
+    {
+     "canonical": "sleep",
+     "df": 891,
+     "surfaces": [
+      "sleep",
+      "sleeps"
+     ]
+    },
+    {
+     "canonical": "socks",
+     "df": 856,
+     "surfaces": [
+      "sock",
+      "socks"
+     ]
+    },
+    {
+     "canonical": "costumes",
+     "df": 849,
+     "surfaces": [
+      "costum",
+      "costume",
+      "costumes"
+     ]
+    },
+    {
+     "canonical": "sweaters",
+     "df": 805,
+     "surfaces": [
+      "sweater",
+      "sweaters"
+     ]
+    },
+    {
+     "canonical": "coats",
+     "df": 794,
+     "surfaces": [
+      "coat",
+      "coats"
+     ]
+    },
+    {
+     "canonical": "work",
+     "df": 774,
+     "surfaces": [
+      "work",
+      "works"
+     ]
+    },
+    {
+     "canonical": "sets",
+     "df": 761,
+     "surfaces": [
+      "set",
+      "sets"
+     ]
+    },
+    {
+     "canonical": "rings",
+     "df": 759,
+     "surfaces": [
+      "ring",
+      "rings"
+     ]
+    },
+    {
+     "canonical": "eyewear accessories",
+     "df": 729,
+     "surfaces": [
+      "eyewear accessorie",
+      "eyewear accessories",
+      "eyewear accessory",
+      "eyewearaccessories"
+     ]
+    },
+    {
+     "canonical": "button down shirts",
+     "df": 722,
+     "surfaces": [
+      "button down shirt",
+      "button down shirts",
+      "buttondownshirts"
+     ]
+    },
+    {
+     "canonical": "bracelets",
+     "df": 716,
+     "surfaces": [
+      "bracelet",
+      "bracelets"
+     ]
+    },
+    {
+     "canonical": "fashion",
+     "df": 710,
+     "surfaces": [
+      "fashion",
+      "fashions"
+     ]
+    },
+    {
+     "canonical": "loafers",
+     "df": 697,
+     "surfaces": [
+      "loafer",
+      "loafers"
+     ]
+    },
+    {
+     "canonical": "pants",
+     "df": 694,
+     "surfaces": [
+      "pant",
+      "pants"
+     ]
+    },
+    {
+     "canonical": "slip ons",
+     "df": 665,
+     "surfaces": [
+      "slip on",
+      "slip ons",
+      "slipons"
+     ]
+    },
+    {
+     "canonical": "cover ups",
+     "df": 647,
+     "surfaces": [
+      "cover up",
+      "cover ups",
+      "coverups"
+     ]
+    },
+    {
+     "canonical": "pumps",
+     "df": 634,
+     "surfaces": [
+      "pump",
+      "pumps"
+     ]
+    },
+    {
+     "canonical": "vests",
+     "df": 547,
+     "surfaces": [
+      "vest",
+      "vests"
+     ]
+    },
+    {
+     "canonical": "platforms",
+     "df": 545,
+     "surfaces": [
+      "platform",
+      "platforms"
+     ]
+    },
+    {
+     "canonical": "wedges",
+     "df": 545,
+     "surfaces": [
+      "wedg",
+      "wedge",
+      "wedges"
+     ]
+    },
+    {
+     "canonical": "slippers",
+     "df": 538,
+     "surfaces": [
+      "slipper",
+      "slippers"
+     ]
+    },
+    {
+     "canonical": "tanks",
+     "df": 538,
+     "surfaces": [
+      "tank",
+      "tanks"
+     ]
+    },
+    {
+     "canonical": "sweatshirts",
+     "df": 536,
+     "surfaces": [
+      "sweatshirt",
+      "sweatshirts"
+     ]
+    },
+    {
+     "canonical": "pendant necklaces",
+     "df": 531,
+     "surfaces": [
+      "pendant necklac",
+      "pendant necklace",
+      "pendant necklaces",
+      "pendantnecklaces"
+     ]
+    },
+    {
+     "canonical": "road running",
+     "df": 522,
+     "surfaces": [
+      "road running",
+      "road runnings",
+      "roadrunning"
+     ]
+    },
+    {
+     "canonical": "tunics",
+     "df": 521,
+     "surfaces": [
+      "tunic",
+      "tunics"
+     ]
+    },
+    {
+     "canonical": "luggage",
+     "df": 511,
+     "surfaces": [
+      "luggage",
+      "luggages"
+     ]
+    },
+    {
+     "canonical": "dangle",
+     "df": 503,
+     "surfaces": [
+      "dangle",
+      "dangles"
+     ]
+    },
+    {
+     "canonical": "drop",
+     "df": 503,
+     "surfaces": [
+      "drop",
+      "drops"
+     ]
+    },
+    {
+     "canonical": "camis",
+     "df": 499,
+     "surfaces": [
+      "cami",
+      "camis"
+     ]
+    },
+    {
+     "canonical": "jumpsuits",
+     "df": 499,
+     "surfaces": [
+      "jumpsuit",
+      "jumpsuits"
+     ]
+    },
+    {
+     "canonical": "rompers",
+     "df": 494,
+     "surfaces": [
+      "romper",
+      "rompers"
+     ]
+    },
+    {
+     "canonical": "fashion hoodies",
+     "df": 489,
+     "surfaces": [
+      "fashion hoodie",
+      "fashion hoodies",
+      "fashion hoody",
+      "fashionhoodies"
+     ]
+    },
+    {
+     "canonical": "active shirts",
+     "df": 483,
+     "surfaces": [
+      "active shirt",
+      "active shirts",
+      "activeshirts"
+     ]
+    },
+    {
+     "canonical": "swimsuits",
+     "df": 479,
+     "surfaces": [
+      "swimsuit",
+      "swimsuits"
+     ]
+    },
+    {
+     "canonical": "jeans",
+     "df": 467,
+     "surfaces": [
+      "jean",
+      "jeans"
+     ]
+    },
+    {
+     "canonical": "outdoor",
+     "df": 465,
+     "surfaces": [
+      "outdoor",
+      "outdoors"
+     ]
+    },
+    {
+     "canonical": "card cases",
+     "df": 454,
+     "surfaces": [
+      "card cas",
+      "card case",
+      "card cases",
+      "cardcases"
+     ]
+    },
+    {
+     "canonical": "money organizers",
+     "df": 424,
+     "surfaces": [
+      "money organizer",
+      "money organizers",
+      "moneyorganizers"
+     ]
+    },
+    {
+     "canonical": "bras",
+     "df": 422,
+     "surfaces": [
+      "bra",
+      "bras"
+     ]
+    },
+    {
+     "canonical": "robes",
+     "df": 420,
+     "surfaces": [
+      "rob",
+      "robe",
+      "robes"
+     ]
+    },
+    {
+     "canonical": "baseball caps",
+     "df": 385,
+     "surfaces": [
+      "baseball cap",
+      "baseball caps",
+      "baseballcaps"
+     ]
+    },
+    {
+     "canonical": "leggings",
+     "df": 383,
+     "surfaces": [
+      "legging",
+      "leggings"
+     ]
+    },
+    {
+     "canonical": "ankle",
+     "df": 382,
+     "surfaces": [
+      "ankle",
+      "ankles"
+     ]
+    },
+    {
+     "canonical": "bootie",
+     "df": 382,
+     "surfaces": [
+      "bootie",
+      "booties"
+     ]
+    },
+    {
+     "canonical": "shorts",
+     "df": 382,
+     "surfaces": [
+      "short",
+      "shorts"
+     ]
+    },
+    {
+     "canonical": "wraps",
+     "df": 380,
+     "surfaces": [
+      "wrap",
+      "wraps"
+     ]
+    },
+    {
+     "canonical": "pullovers",
+     "df": 379,
+     "surfaces": [
+      "pullover",
+      "pullovers"
+     ]
+    },
+    {
+     "canonical": "cosplay apparel",
+     "df": 371,
+     "surfaces": [
+      "cosplay apparel",
+      "cosplay apparels",
+      "cosplayapparel"
+     ]
+    },
+    {
+     "canonical": "hosiery",
+     "df": 371,
+     "surfaces": [
+      "hosiery",
+      "hosierys"
+     ]
+    },
+    {
+     "canonical": "overalls",
+     "df": 365,
+     "surfaces": [
+      "overall",
+      "overalls"
+     ]
+    },
+    {
+     "canonical": "stud",
+     "df": 358,
+     "surfaces": [
+      "stud",
+      "studs"
+     ]
+    },
+    {
+     "canonical": "skirts",
+     "df": 352,
+     "surfaces": [
+      "skirt",
+      "skirts"
+     ]
+    },
+    {
+     "canonical": "underwear",
+     "df": 344,
+     "surfaces": [
+      "underwear",
+      "underwears"
+     ]
+    },
+    {
+     "canonical": "walking",
+     "df": 342,
+     "surfaces": [
+      "walking",
+      "walkings"
+     ]
+    },
+    {
+     "canonical": "sneakers",
+     "df": 341,
+     "surfaces": [
+      "sneaker",
+      "sneakers"
+     ]
+    },
+    {
+     "canonical": "bikinis",
+     "df": 337,
+     "surfaces": [
+      "bikini",
+      "bikinis"
+     ]
+    },
+    {
+     "canonical": "novelty",
+     "df": 335,
+     "surfaces": [
+      "novelty",
+      "noveltys"
+     ]
+    },
+    {
+     "canonical": "clothing sets",
+     "df": 329,
+     "surfaces": [
+      "clothing set",
+      "clothing sets",
+      "clothingsets"
+     ]
+    },
+    {
+     "canonical": "charms",
+     "df": 326,
+     "surfaces": [
+      "charms"
+     ]
+    },
+    {
+     "canonical": "clogs",
+     "df": 325,
+     "surfaces": [
+      "clog",
+      "clogs"
+     ]
+    },
+    {
+     "canonical": "heeled sandals",
+     "df": 325,
+     "surfaces": [
+      "heeled sandal",
+      "heeled sandals",
+      "heeledsandals"
+     ]
+    },
+    {
+     "canonical": "mules",
+     "df": 325,
+     "surfaces": [
+      "mul",
+      "mule",
+      "mules"
+     ]
+    },
+    {
+     "canonical": "piercing jewelry",
+     "df": 322,
+     "surfaces": [
+      "piercing jewelry",
+      "piercing jewelrys",
+      "piercingjewelry"
+     ]
+    },
+    {
+     "canonical": "slides",
+     "df": 322,
+     "surfaces": [
+      "slid",
+      "slide",
+      "slides"
+     ]
+    },
+    {
+     "canonical": "travel gear",
+     "df": 321,
+     "surfaces": [
+      "travel gear",
+      "travel gears",
+      "travelgear"
+     ]
+    },
+    {
+     "canonical": "cardigans",
+     "df": 315,
+     "surfaces": [
+      "cardigan",
+      "cardigans"
+     ]
+    },
+    {
+     "canonical": "active pants",
+     "df": 313,
+     "surfaces": [
+      "active pant",
+      "active pants",
+      "activepants"
+     ]
+    },
+    {
+     "canonical": "active shorts",
+     "df": 294,
+     "surfaces": [
+      "active short",
+      "active shorts",
+      "activeshorts"
+     ]
+    },
+    {
+     "canonical": "casual button down shirts",
+     "df": 288,
+     "surfaces": [
+      "casual button down shirt",
+      "casual button down shirts",
+      "casualbuttondownshirts"
+     ]
+    },
+    {
+     "canonical": "hiking",
+     "df": 287,
+     "surfaces": [
+      "hiking",
+      "hikings"
+     ]
+    },
+    {
+     "canonical": "oxfords",
+     "df": 287,
+     "surfaces": [
+      "oxford",
+      "oxfords"
+     ]
+    },
+    {
+     "canonical": "scarves",
+     "df": 286,
+     "surfaces": [
+      "scarv",
+      "scarve",
+      "scarves"
+     ]
+    },
+    {
+     "canonical": "trekking",
+     "df": 284,
+     "surfaces": [
+      "trekking",
+      "trekkings"
+     ]
+    },
+    {
+     "canonical": "one pieces",
+     "df": 279,
+     "surfaces": [
+      "one piec",
+      "one piece",
+      "one pieces",
+      "onepieces"
+     ]
+    },
+    {
+     "canonical": "athletic socks",
+     "df": 276,
+     "surfaces": [
+      "athletic sock",
+      "athletic socks",
+      "athleticsocks"
+     ]
+    },
+    {
+     "canonical": "gloves",
+     "df": 272,
+     "surfaces": [
+      "glov",
+      "glove",
+      "gloves"
+     ]
+    },
+    {
+     "canonical": "crossbody bags",
+     "df": 271,
+     "surfaces": [
+      "crossbody bag",
+      "crossbody bags",
+      "crossbodybags"
+     ]
+    },
+    {
+     "canonical": "snow",
+     "df": 271,
+     "surfaces": [
+      "snow",
+      "snows"
+     ]
+    },
+    {
+     "canonical": "hoodies",
+     "df": 268,
+     "surfaces": [
+      "hoodies",
+      "hoody"
+     ]
+    },
+    {
+     "canonical": "shoulder bags",
+     "df": 265,
+     "surfaces": [
+      "shoulder bag",
+      "shoulder bags",
+      "shoulderbags"
+     ]
+    },
+    {
+     "canonical": "cold weather",
+     "df": 261,
+     "surfaces": [
+      "cold weather",
+      "cold weathers",
+      "coldweather"
+     ]
+    },
+    {
+     "canonical": "belts",
+     "df": 260,
+     "surfaces": [
+      "belt",
+      "belts"
+     ]
+    },
+    {
+     "canonical": "jewelry boxes",
+     "df": 257,
+     "surfaces": [
+      "jewelry box",
+      "jewelry boxe",
+      "jewelry boxes",
+      "jewelryboxes"
+     ]
+    },
+    {
+     "canonical": "backpacks",
+     "df": 251,
+     "surfaces": [
+      "backpacks"
+     ]
+    },
+    {
+     "canonical": "statement",
+     "df": 249,
+     "surfaces": [
+      "statement",
+      "statements"
+     ]
+    },
+    {
+     "canonical": "flip flops",
+     "df": 245,
+     "surfaces": [
+      "flip flop",
+      "flip flops",
+      "flipflops"
+     ]
+    },
+    {
+     "canonical": "blazers",
+     "df": 233,
+     "surfaces": [
+      "blazer",
+      "blazers"
+     ]
+    },
+    {
+     "canonical": "pendants",
+     "df": 233,
+     "surfaces": [
+      "pendant",
+      "pendants"
+     ]
+    },
+    {
+     "canonical": "everyday bras",
+     "df": 230,
+     "surfaces": [
+      "everyday bra",
+      "everyday bras",
+      "everydaybras"
+     ]
+    },
+    {
+     "canonical": "rain",
+     "df": 222,
+     "surfaces": [
+      "rain",
+      "rains"
+     ]
+    },
+    {
+     "canonical": "polos",
+     "df": 219,
+     "surfaces": [
+      "polo",
+      "polos"
+     ]
+    },
+    {
+     "canonical": "tights",
+     "df": 212,
+     "surfaces": [
+      "tight",
+      "tights"
+     ]
+    },
+    {
+     "canonical": "keychains",
+     "df": 208,
+     "surfaces": [
+      "keychain",
+      "keychains"
+     ]
+    },
+    {
+     "canonical": "swim",
+     "df": 208,
+     "surfaces": [
+      "swim",
+      "swims"
+     ]
+    },
+    {
+     "canonical": "bottoms",
+     "df": 203,
+     "surfaces": [
+      "bottom",
+      "bottoms"
+     ]
+    },
+    {
+     "canonical": "pant sets",
+     "df": 203,
+     "surfaces": [
+      "pant set",
+      "pant sets",
+      "pantsets"
+     ]
+    },
+    {
+     "canonical": "team sports",
+     "df": 203,
+     "surfaces": [
+      "team sport",
+      "team sports",
+      "teamsports"
+     ]
+    },
+    {
+     "canonical": "hoop",
+     "df": 200,
+     "surfaces": [
+      "hoop",
+      "hoops"
+     ]
+    },
+    {
+     "canonical": "nightgowns",
+     "df": 200,
+     "surfaces": [
+      "nightgown",
+      "nightgowns"
+     ]
+    },
+    {
+     "canonical": "sleepwear",
+     "df": 197,
+     "surfaces": [
+      "sleepwear",
+      "sleepwears"
+     ]
+    },
+    {
+     "canonical": "totes",
+     "df": 188,
+     "surfaces": [
+      "tot",
+      "tote",
+      "totes"
+     ]
+    },
+    {
+     "canonical": "utility",
+     "df": 187,
+     "surfaces": [
+      "utility",
+      "utilitys"
+     ]
+    },
+    {
+     "canonical": "mittens",
+     "df": 184,
+     "surfaces": [
+      "mitten",
+      "mittens"
+     ]
+    },
+    {
+     "canonical": "chelsea",
+     "df": 183,
+     "surfaces": [
+      "chelsea",
+      "chelseas"
+     ]
+    },
+    {
+     "canonical": "evening bags",
+     "df": 182,
+     "surfaces": [
+      "evening bag",
+      "evening bags",
+      "eveningbags"
+     ]
+    },
+    {
+     "canonical": "pins",
+     "df": 180,
+     "surfaces": [
+      "pin",
+      "pins"
+     ]
+    },
+    {
+     "canonical": "sleepshirts",
+     "df": 178,
+     "surfaces": [
+      "sleepshirt",
+      "sleepshirts"
+     ]
+    },
+    {
+     "canonical": "casual daypacks",
+     "df": 176,
+     "surfaces": [
+      "casual daypack",
+      "casual daypacks",
+      "casualdaypacks"
+     ]
+    },
+    {
+     "canonical": "organizers",
+     "df": 172,
+     "surfaces": [
+      "organizer",
+      "organizers"
+     ]
+    },
+    {
+     "canonical": "sport coats",
+     "df": 169,
+     "surfaces": [
+      "sport coat",
+      "sport coats",
+      "sportcoats"
+     ]
+    },
+    {
+     "canonical": "beanies",
+     "df": 168,
+     "surfaces": [
+      "beanie",
+      "beanies",
+      "beany"
+     ]
+    },
+    {
+     "canonical": "panties",
+     "df": 168,
+     "surfaces": [
+      "pantie",
+      "panties",
+      "panty"
+     ]
+    },
+    {
+     "canonical": "water shoes",
+     "df": 168,
+     "surfaces": [
+      "water sho",
+      "water shoe",
+      "water shoes",
+      "watershoes"
+     ]
+    },
+    {
+     "canonical": "suits",
+     "df": 167,
+     "surfaces": [
+      "suit",
+      "suits"
+     ]
+    },
+    {
+     "canonical": "sports bras",
+     "df": 166,
+     "surfaces": [
+      "sports bra",
+      "sports bras",
+      "sportsbras"
+     ]
+    },
+    {
+     "canonical": "shoe care",
+     "df": 163,
+     "surfaces": [
+      "shoe care",
+      "shoe cares",
+      "shoecare"
+     ]
+    },
+    {
+     "canonical": "riding",
+     "df": 162,
+     "surfaces": [
+      "riding",
+      "ridings"
+     ]
+    },
+    {
+     "canonical": "bodysuits",
+     "df": 160,
+     "surfaces": [
+      "bodysuit",
+      "bodysuits"
+     ]
+    },
+    {
+     "canonical": "night out",
+     "df": 158,
+     "surfaces": [
+      "night out",
+      "night outs",
+      "nightout"
+     ]
+    },
+    {
+     "canonical": "skullies",
+     "df": 156,
+     "surfaces": [
+      "skullie",
+      "skullies",
+      "skully"
+     ]
+    },
+    {
+     "canonical": "clutches",
+     "df": 154,
+     "surfaces": [
+      "clutch",
+      "clutche",
+      "clutches"
+     ]
+    },
+    {
+     "canonical": "basketball",
+     "df": 151,
+     "surfaces": [
+      "basketball",
+      "basketballs"
+     ]
+    },
+    {
+     "canonical": "compression",
+     "df": 148,
+     "surfaces": [
+      "compression",
+      "compressions"
+     ]
+    },
+    {
+     "canonical": "sport sandals",
+     "df": 147,
+     "surfaces": [
+      "sport sandal",
+      "sport sandals",
+      "sportsandals"
+     ]
+    },
+    {
+     "canonical": "club",
+     "df": 141,
+     "surfaces": [
+      "club",
+      "clubs"
+     ]
+    },
+    {
+     "canonical": "performance",
+     "df": 140,
+     "surfaces": [
+      "performance",
+      "performances"
+     ]
+    },
+    {
+     "canonical": "special occasion",
+     "df": 140,
+     "surfaces": [
+      "special occasion",
+      "special occasions",
+      "specialoccasion"
+     ]
+    },
+    {
+     "canonical": "bangle",
+     "df": 139,
+     "surfaces": [
+      "bangle",
+      "bangles"
+     ]
+    },
+    {
+     "canonical": "safety",
+     "df": 139,
+     "surfaces": [
+      "safety",
+      "safetys"
+     ]
+    },
+    {
+     "canonical": "trail running",
+     "df": 139,
+     "surfaces": [
+      "trail running",
+      "trail runnings",
+      "trailrunning"
+     ]
+    },
+    {
+     "canonical": "mid calf",
+     "df": 137,
+     "surfaces": [
+      "mid calf",
+      "mid calfs",
+      "midcalf"
+     ]
+    },
+    {
+     "canonical": "cocktail",
+     "df": 136,
+     "surfaces": [
+      "cocktail",
+      "cocktails"
+     ]
+    },
+    {
+     "canonical": "cross training",
+     "df": 136,
+     "surfaces": [
+      "cross training",
+      "cross trainings",
+      "crosstraining"
+     ]
+    },
+    {
+     "canonical": "fashion scarves",
+     "df": 136,
+     "surfaces": [
+      "fashion scarv",
+      "fashion scarve",
+      "fashion scarves",
+      "fashionscarves"
+     ]
+    },
+    {
+     "canonical": "fitness",
+     "df": 136,
+     "surfaces": [
+      "fitnes",
+      "fitness"
+     ]
+    },
+    {
+     "canonical": "hiking boots",
+     "df": 135,
+     "surfaces": [
+      "hiking boot",
+      "hiking boots",
+      "hikingboots"
+     ]
+    },
+    {
+     "canonical": "medical",
+     "df": 135,
+     "surfaces": [
+      "medical",
+      "medicals"
+     ]
+    },
+    {
+     "canonical": "boxer briefs",
+     "df": 133,
+     "surfaces": [
+      "boxer brief",
+      "boxer briefs",
+      "boxerbriefs"
+     ]
+    },
+    {
+     "canonical": "travel accessories",
+     "df": 133,
+     "surfaces": [
+      "travel accessorie",
+      "travel accessories",
+      "travel accessory",
+      "travelaccessories"
+     ]
+    },
+    {
+     "canonical": "formal",
+     "df": 131,
+     "surfaces": [
+      "formal",
+      "formals"
+     ]
+    },
+    {
+     "canonical": "keyrings",
+     "df": 128,
+     "surfaces": [
+      "keyring",
+      "keyrings"
+     ]
+    },
+    {
+     "canonical": "pajama sets",
+     "df": 128,
+     "surfaces": [
+      "pajama set",
+      "pajama sets",
+      "pajamasets"
+     ]
+    },
+    {
+     "canonical": "sport specific clothing",
+     "df": 127,
+     "surfaces": [
+      "sport specific clothing",
+      "sport specific clothings",
+      "sportspecificclothing"
+     ]
+    },
+    {
+     "canonical": "sweatpants",
+     "df": 127,
+     "surfaces": [
+      "sweatpant",
+      "sweatpants"
+     ]
+    },
+    {
+     "canonical": "link",
+     "df": 126,
+     "surfaces": [
+      "link",
+      "links"
+     ]
+    },
+    {
+     "canonical": "cummerbunds",
+     "df": 122,
+     "surfaces": [
+      "cummerbund",
+      "cummerbunds"
+     ]
+    },
+    {
+     "canonical": "pocket squares",
+     "df": 122,
+     "surfaces": [
+      "pocket squar",
+      "pocket square",
+      "pocket squares",
+      "pocketsquares"
+     ]
+    },
+    {
+     "canonical": "combat",
+     "df": 121,
+     "surfaces": [
+      "combat",
+      "combats"
+     ]
+    },
+    {
+     "canonical": "ties",
+     "df": 121,
+     "surfaces": [
+      "tie",
+      "ties",
+      "ty"
+     ]
+    },
+    {
+     "canonical": "chains",
+     "df": 118,
+     "surfaces": [
+      "chains"
+     ]
+    },
+    {
+     "canonical": "hiking shoes",
+     "df": 116,
+     "surfaces": [
+      "hiking sho",
+      "hiking shoe",
+      "hiking shoes",
+      "hikingshoes"
+     ]
+    },
+    {
+     "canonical": "brooches",
+     "df": 114,
+     "surfaces": [
+      "brooch",
+      "brooche",
+      "brooches"
+     ]
+    },
+    {
+     "canonical": "balaclavas",
+     "df": 113,
+     "surfaces": [
+      "balaclava",
+      "balaclavas"
+     ]
+    },
+    {
+     "canonical": "bead",
+     "df": 113,
+     "surfaces": [
+      "bead"
+     ]
+    },
+    {
+     "canonical": "briefs",
+     "df": 113,
+     "surfaces": [
+      "brief",
+      "briefs"
+     ]
+    },
+    {
+     "canonical": "cold weather gloves",
+     "df": 113,
+     "surfaces": [
+      "cold weather glov",
+      "cold weather glove",
+      "cold weather gloves",
+      "coldweathergloves"
+     ]
+    },
+    {
+     "canonical": "coins",
+     "df": 112,
+     "surfaces": [
+      "coin",
+      "coins"
+     ]
+    },
+    {
+     "canonical": "suiting",
+     "df": 112,
+     "surfaces": [
+      "suiting",
+      "suitings"
+     ]
+    },
+    {
+     "canonical": "fleece",
+     "df": 111,
+     "surfaces": [
+      "fleece",
+      "fleeces"
+     ]
+    },
+    {
+     "canonical": "jewelry sets",
+     "df": 111,
+     "surfaces": [
+      "jewelry set",
+      "jewelry sets",
+      "jewelrysets"
+     ]
+    },
+    {
+     "canonical": "knee high",
+     "df": 109,
+     "surfaces": [
+      "knee high",
+      "knee highs",
+      "kneehigh"
+     ]
+    },
+    {
+     "canonical": "chukka",
+     "df": 108,
+     "surfaces": [
+      "chukka",
+      "chukkas"
+     ]
+    },
+    {
+     "canonical": "trench",
+     "df": 107,
+     "surfaces": [
+      "trench",
+      "trenchs"
+     ]
+    },
+    {
+     "canonical": "engagement",
+     "df": 106,
+     "surfaces": [
+      "engagement",
+      "engagements"
+     ]
+    },
+    {
+     "canonical": "jerseys",
+     "df": 106,
+     "surfaces": [
+      "jerseys"
+     ]
+    },
+    {
+     "canonical": "wedding",
+     "df": 106,
+     "surfaces": [
+      "wedding",
+      "weddings"
+     ]
+    },
+    {
+     "canonical": "masks",
+     "df": 105,
+     "surfaces": [
+      "mask",
+      "masks"
+     ]
+    },
+    {
+     "canonical": "lingerie",
+     "df": 103,
+     "surfaces": [
+      "lingerie",
+      "lingeries"
+     ]
+    },
+    {
+     "canonical": "cuff",
+     "df": 101,
+     "surfaces": [
+      "cuff",
+      "cuffs"
+     ]
+    },
+    {
+     "canonical": "down jackets",
+     "df": 101,
+     "surfaces": [
+      "down jacket",
+      "down jackets",
+      "downjackets"
+     ]
+    },
+    {
+     "canonical": "parkas",
+     "df": 101,
+     "surfaces": [
+      "parka",
+      "parkas"
+     ]
+    },
+    {
+     "canonical": "top handle bags",
+     "df": 101,
+     "surfaces": [
+      "top handle bag",
+      "top handle bags",
+      "tophandlebags"
+     ]
+    },
+    {
+     "canonical": "bands",
+     "df": 100,
+     "surfaces": [
+      "band",
+      "bands"
+     ]
+    },
+    {
+     "canonical": "dress shirts",
+     "df": 96,
+     "surfaces": [
+      "dress shirt",
+      "dress shirts",
+      "dressshirts"
+     ]
+    },
+    {
+     "canonical": "soccer",
+     "df": 96,
+     "surfaces": [
+      "soccer",
+      "soccers"
+     ]
+    },
+    {
+     "canonical": "western",
+     "df": 95,
+     "surfaces": [
+      "western",
+      "westerns"
+     ]
+    },
+    {
+     "canonical": "trunks",
+     "df": 94,
+     "surfaces": [
+      "trunk",
+      "trunks"
+     ]
+    },
+    {
+     "canonical": "watch bands",
+     "df": 94,
+     "surfaces": [
+      "watch band",
+      "watch bands",
+      "watchbands"
+     ]
+    },
+    {
+     "canonical": "motorcycle",
+     "df": 93,
+     "surfaces": [
+      "motorcycle",
+      "motorcycles"
+     ]
+    },
+    {
+     "canonical": "anoraks",
+     "df": 92,
+     "surfaces": [
+      "anorak",
+      "anoraks"
+     ]
+    },
+    {
+     "canonical": "tankinis",
+     "df": 92,
+     "surfaces": [
+      "tankini",
+      "tankinis"
+     ]
+    },
+    {
+     "canonical": "golf",
+     "df": 90,
+     "surfaces": [
+      "golf",
+      "golfs"
+     ]
+    },
+    {
+     "canonical": "more",
+     "df": 90,
+     "surfaces": [
+      "more",
+      "mores"
+     ]
+    },
+    {
+     "canonical": "active hoodies",
+     "df": 89,
+     "surfaces": [
+      "active hoodie",
+      "active hoodies",
+      "active hoody",
+      "activehoodies"
+     ]
+    },
+    {
+     "canonical": "charm bracelets",
+     "df": 89,
+     "surfaces": [
+      "charm bracelet",
+      "charm bracelets",
+      "charmbracelets"
+     ]
+    },
+    {
+     "canonical": "tennis",
+     "df": 89,
+     "surfaces": [
+      "tenni",
+      "tennis"
+     ]
+    },
+    {
+     "canonical": "eyewear frames",
+     "df": 88,
+     "surfaces": [
+      "eyewear fram",
+      "eyewear frame",
+      "eyewear frames",
+      "eyewearframes"
+     ]
+    },
+    {
+     "canonical": "down",
+     "df": 87,
+     "surfaces": [
+      "down",
+      "downs"
+     ]
+    },
+    {
+     "canonical": "down alternative",
+     "df": 87,
+     "surfaces": [
+      "down alternative",
+      "down alternatives",
+      "downalternative"
+     ]
+    },
+    {
+     "canonical": "tank tops",
+     "df": 87,
+     "surfaces": [
+      "tank top",
+      "tank tops",
+      "tanktops"
+     ]
+    },
+    {
+     "canonical": "dance",
+     "df": 85,
+     "surfaces": [
+      "dance",
+      "dances"
+     ]
+    },
+    {
+     "canonical": "footies",
+     "df": 84,
+     "surfaces": [
+      "footie",
+      "footies",
+      "footy"
+     ]
+    },
+    {
+     "canonical": "short sets",
+     "df": 84,
+     "surfaces": [
+      "short set",
+      "short sets",
+      "shortsets"
+     ]
+    },
+    {
+     "canonical": "tracksuits",
+     "df": 84,
+     "surfaces": [
+      "tracksuit",
+      "tracksuits"
+     ]
+    },
+    {
+     "canonical": "wigs",
+     "df": 84,
+     "surfaces": [
+      "wig",
+      "wigs"
+     ]
+    },
+    {
+     "canonical": "barbells",
+     "df": 83,
+     "surfaces": [
+      "barbell",
+      "barbells"
+     ]
+    },
+    {
+     "canonical": "pendants only",
+     "df": 83,
+     "surfaces": [
+      "pendants only",
+      "pendants onlys",
+      "pendantsonly"
+     ]
+    },
+    {
+     "canonical": "skateboarding",
+     "df": 83,
+     "surfaces": [
+      "skateboarding",
+      "skateboardings"
+     ]
+    },
+    {
+     "canonical": "work utility",
+     "df": 83,
+     "surfaces": [
+      "work utility",
+      "work utilitys",
+      "workutility"
+     ]
+    },
+    {
+     "canonical": "board shorts",
+     "df": 82,
+     "surfaces": [
+      "board short",
+      "board shorts",
+      "boardshorts"
+     ]
+    },
+    {
+     "canonical": "rash guard shirts",
+     "df": 81,
+     "surfaces": [
+      "rash guard shirt",
+      "rash guard shirts",
+      "rashguardshirts"
+     ]
+    },
+    {
+     "canonical": "lightweight jackets",
+     "df": 80,
+     "surfaces": [
+      "lightweight jacket",
+      "lightweight jackets",
+      "lightweightjackets"
+     ]
+    },
+    {
+     "canonical": "luggage tags",
+     "df": 80,
+     "surfaces": [
+      "luggage tag",
+      "luggage tags",
+      "luggagetags"
+     ]
+    },
+    {
+     "canonical": "racquet sports",
+     "df": 80,
+     "surfaces": [
+      "racquet sport",
+      "racquet sports",
+      "racquetsports"
+     ]
+    },
+    {
+     "canonical": "military",
+     "df": 79,
+     "surfaces": [
+      "military",
+      "militarys"
+     ]
+    },
+    {
+     "canonical": "body jewelry",
+     "df": 78,
+     "surfaces": [
+      "body jewelry",
+      "body jewelrys",
+      "bodyjewelry"
+     ]
+    },
+    {
+     "canonical": "shapewear",
+     "df": 78,
+     "surfaces": [
+      "shapewear",
+      "shapewears"
+     ]
+    },
+    {
+     "canonical": "travel duffels",
+     "df": 78,
+     "surfaces": [
+      "travel duffel",
+      "travel duffels",
+      "travelduffels"
+     ]
+    },
+    {
+     "canonical": "chokers",
+     "df": 77,
+     "surfaces": [
+      "choker",
+      "chokers"
+     ]
+    },
+    {
+     "canonical": "stretch",
+     "df": 75,
+     "surfaces": [
+      "stretch",
+      "stretchs"
+     ]
+    },
+    {
+     "canonical": "umbrellas",
+     "df": 73,
+     "surfaces": [
+      "umbrella",
+      "umbrellas"
+     ]
+    },
+    {
+     "canonical": "watch accessories",
+     "df": 72,
+     "surfaces": [
+      "watch accessorie",
+      "watch accessories",
+      "watch accessory",
+      "watchaccessories"
+     ]
+    },
+    {
+     "canonical": "anklets",
+     "df": 71,
+     "surfaces": [
+      "anklet",
+      "anklets"
+     ]
+    },
+    {
+     "canonical": "sleep bottoms",
+     "df": 68,
+     "surfaces": [
+      "sleep bottom",
+      "sleep bottoms",
+      "sleepbottoms"
+     ]
+    },
+    {
+     "canonical": "id cases",
+     "df": 67,
+     "surfaces": [
+      "id cas",
+      "id case",
+      "id cases",
+      "idcases"
+     ]
+    },
+    {
+     "canonical": "track",
+     "df": 67,
+     "surfaces": [
+      "track",
+      "tracks"
+     ]
+    },
+    {
+     "canonical": "buttons",
+     "df": 66,
+     "surfaces": [
+      "button",
+      "buttons"
+     ]
+    },
+    {
+     "canonical": "neckties",
+     "df": 66,
+     "surfaces": [
+      "necktie",
+      "neckties",
+      "neckty"
+     ]
+    },
+    {
+     "canonical": "shoelaces",
+     "df": 66,
+     "surfaces": [
+      "shoelac",
+      "shoelace",
+      "shoelaces"
+     ]
+    },
+    {
+     "canonical": "sun hats",
+     "df": 66,
+     "surfaces": [
+      "sun hat",
+      "sun hats",
+      "sunhats"
+     ]
+    },
+    {
+     "canonical": "thermal underwear",
+     "df": 64,
+     "surfaces": [
+      "thermal underwear",
+      "thermal underwears",
+      "thermalunderwear"
+     ]
+    },
+    {
+     "canonical": "headwear",
+     "df": 62,
+     "surfaces": [
+      "headwear",
+      "headwears"
+     ]
+    },
+    {
+     "canonical": "wool",
+     "df": 62,
+     "surfaces": [
+      "wool",
+      "wools"
+     ]
+    },
+    {
+     "canonical": "card",
+     "df": 61,
+     "surfaces": [
+      "card",
+      "cards"
+     ]
+    },
+    {
+     "canonical": "compression pants",
+     "df": 61,
+     "surfaces": [
+      "compression pant",
+      "compression pants",
+      "compressionpants"
+     ]
+    },
+    {
+     "canonical": "replacement sunglass lenses",
+     "df": 61,
+     "surfaces": [
+      "replacement sunglass lens",
+      "replacement sunglass lense",
+      "replacement sunglass lenses",
+      "replacementsunglasslenses"
+     ]
+    },
+    {
+     "canonical": "satchels",
+     "df": 61,
+     "surfaces": [
+      "satchel",
+      "satchels"
+     ]
+    },
+    {
+     "canonical": "gym bags",
+     "df": 60,
+     "surfaces": [
+      "gym bag",
+      "gym bags",
+      "gymbags"
+     ]
+    },
+    {
+     "canonical": "skorts",
+     "df": 59,
+     "surfaces": [
+      "skort",
+      "skorts"
+     ]
+    },
+    {
+     "canonical": "messenger bags",
+     "df": 58,
+     "surfaces": [
+      "messenger bag",
+      "messenger bags",
+      "messengerbags"
+     ]
+    },
+    {
+     "canonical": "scrub tops",
+     "df": 58,
+     "surfaces": [
+      "scrub top",
+      "scrub tops",
+      "scrubtops"
+     ]
+    },
+    {
+     "canonical": "active sweatshirts",
+     "df": 57,
+     "surfaces": [
+      "active sweatshirt",
+      "active sweatshirts",
+      "activesweatshirts"
+     ]
+    },
+    {
+     "canonical": "cycling",
+     "df": 57,
+     "surfaces": [
+      "cycling",
+      "cyclings"
+     ]
+    },
+    {
+     "canonical": "packing organizers",
+     "df": 57,
+     "surfaces": [
+      "packing organizer",
+      "packing organizers",
+      "packingorganizers"
+     ]
+    },
+    {
+     "canonical": "headbands",
+     "df": 55,
+     "surfaces": [
+      "headband",
+      "headbands"
+     ]
+    },
+    {
+     "canonical": "henleys",
+     "df": 55,
+     "surfaces": [
+      "henley",
+      "henleys"
+     ]
+    },
+    {
+     "canonical": "carry ons",
+     "df": 54,
+     "surfaces": [
+      "carry on",
+      "carry ons",
+      "carryons"
+     ]
+    },
+    {
+     "canonical": "denim",
+     "df": 54,
+     "surfaces": [
+      "denim",
+      "denims"
+     ]
+    },
+    {
+     "canonical": "active jackets",
+     "df": 53,
+     "surfaces": [
+      "active jacket",
+      "active jackets",
+      "activejackets"
+     ]
+    },
+    {
+     "canonical": "calf socks",
+     "df": 52,
+     "surfaces": [
+      "calf sock",
+      "calf socks",
+      "calfsocks"
+     ]
+    },
+    {
+     "canonical": "pashminas",
+     "df": 52,
+     "surfaces": [
+      "pashmina",
+      "pashminas"
+     ]
+    },
+    {
+     "canonical": "suitcases",
+     "df": 50,
+     "surfaces": [
+      "suitcas",
+      "suitcase",
+      "suitcases"
+     ]
+    },
+    {
+     "canonical": "cold weather scarves",
+     "df": 49,
+     "surfaces": [
+      "cold weather scarv",
+      "cold weather scarve",
+      "cold weather scarves",
+      "coldweatherscarves"
+     ]
+    },
+    {
+     "canonical": "raincoats",
+     "df": 49,
+     "surfaces": [
+      "raincoat",
+      "raincoats"
+     ]
+    },
+    {
+     "canonical": "food service",
+     "df": 48,
+     "surfaces": [
+      "food service",
+      "food services",
+      "foodservice"
+     ]
+    },
+    {
+     "canonical": "jewelry accessories",
+     "df": 48,
+     "surfaces": [
+      "jewelry accessorie",
+      "jewelry accessories",
+      "jewelry accessory",
+      "jewelryaccessories"
+     ]
+    },
+    {
+     "canonical": "undershirts",
+     "df": 48,
+     "surfaces": [
+      "undershirt",
+      "undershirts"
+     ]
+    },
+    {
+     "canonical": "construction boots",
+     "df": 47,
+     "surfaces": [
+      "construction boot",
+      "construction boots",
+      "constructionboots"
+     ]
+    },
+    {
+     "canonical": "dress",
+     "df": 47,
+     "surfaces": [
+      "dres",
+      "dress"
+     ]
+    },
+    {
+     "canonical": "flat front",
+     "df": 47,
+     "surfaces": [
+      "flat front",
+      "flat fronts",
+      "flatfront"
+     ]
+    },
+    {
+     "canonical": "industrial",
+     "df": 47,
+     "surfaces": [
+      "industrial",
+      "industrials"
+     ]
+    },
+    {
+     "canonical": "kids backpacks",
+     "df": 47,
+     "surfaces": [
+      "kids backpack",
+      "kids backpacks",
+      "kidsbackpacks"
+     ]
+    },
+    {
+     "canonical": "one piece suits",
+     "df": 47,
+     "surfaces": [
+      "one piece suit",
+      "one piece suits",
+      "onepiecesuits"
+     ]
+    },
+    {
+     "canonical": "wedding rings",
+     "df": 47,
+     "surfaces": [
+      "wedding ring",
+      "wedding rings",
+      "weddingrings"
+     ]
+    },
+    {
+     "canonical": "cargo",
+     "df": 46,
+     "surfaces": [
+      "cargo",
+      "cargos"
+     ]
+    },
+    {
+     "canonical": "casual jackets",
+     "df": 46,
+     "surfaces": [
+      "casual jacket",
+      "casual jackets",
+      "casualjackets"
+     ]
+    },
+    {
+     "canonical": "shearling",
+     "df": 46,
+     "surfaces": [
+      "shearling",
+      "shearlings"
+     ]
+    },
+    {
+     "canonical": "slipper socks",
+     "df": 46,
+     "surfaces": [
+      "slipper sock",
+      "slipper socks",
+      "slippersocks"
+     ]
+    },
+    {
+     "canonical": "strand",
+     "df": 46,
+     "surfaces": [
+      "strand",
+      "strands"
+     ]
+    },
+    {
+     "canonical": "fedoras",
+     "df": 45,
+     "surfaces": [
+      "fedora",
+      "fedoras"
+     ]
+    },
+    {
+     "canonical": "active tracksuits",
+     "df": 44,
+     "surfaces": [
+      "active tracksuit",
+      "active tracksuits",
+      "activetracksuits"
+     ]
+    },
+    {
+     "canonical": "shoe decoration charms",
+     "df": 44,
+     "surfaces": [
+      "shoe decoration charm",
+      "shoe decoration charms",
+      "shoedecorationcharms"
+     ]
+    },
+    {
+     "canonical": "ballet",
+     "df": 43,
+     "surfaces": [
+      "ballet",
+      "ballets"
+     ]
+    },
+    {
+     "canonical": "tanks tops",
+     "df": 43,
+     "surfaces": [
+      "tanks top",
+      "tanks tops",
+      "tankstops"
+     ]
+    },
+    {
+     "canonical": "faux fur",
+     "df": 42,
+     "surfaces": [
+      "faux fur",
+      "faux furs",
+      "fauxfur"
+     ]
+    },
+    {
+     "canonical": "fur",
+     "df": 42,
+     "surfaces": [
+      "fur",
+      "furs"
+     ]
+    },
+    {
+     "canonical": "wristlets",
+     "df": 42,
+     "surfaces": [
+      "wristlet",
+      "wristlets"
+     ]
+    },
+    {
+     "canonical": "handle wraps",
+     "df": 41,
+     "surfaces": [
+      "handle wrap",
+      "handle wraps",
+      "handlewraps"
+     ]
+    },
+    {
+     "canonical": "neck gaiters",
+     "df": 41,
+     "surfaces": [
+      "neck gaiter",
+      "neck gaiters",
+      "neckgaiters"
+     ]
+    },
+    {
+     "canonical": "yoga",
+     "df": 41,
+     "surfaces": [
+      "yoga",
+      "yogas"
+     ]
+    },
+    {
+     "canonical": "coin purses",
+     "df": 40,
+     "surfaces": [
+      "coin purs",
+      "coin purse",
+      "coin purses",
+      "coinpurses"
+     ]
+    },
+    {
+     "canonical": "plugs",
+     "df": 40,
+     "surfaces": [
+      "plug",
+      "plugs"
+     ]
+    },
+    {
+     "canonical": "pouches",
+     "df": 40,
+     "surfaces": [
+      "pouch",
+      "pouche",
+      "pouches"
+     ]
+    },
+    {
+     "canonical": "camisoles",
+     "df": 39,
+     "surfaces": [
+      "camisol",
+      "camisole",
+      "camisoles"
+     ]
+    },
+    {
+     "canonical": "pea coats",
+     "df": 39,
+     "surfaces": [
+      "pea coat",
+      "pea coats",
+      "peacoats"
+     ]
+    },
+    {
+     "canonical": "rainwear",
+     "df": 39,
+     "surfaces": [
+      "rainwear",
+      "rainwears"
+     ]
+    },
+    {
+     "canonical": "cuffs",
+     "df": 38,
+     "surfaces": [
+      "cuff",
+      "cuffs"
+     ]
+    },
+    {
+     "canonical": "wrap",
+     "df": 38,
+     "surfaces": [
+      "wrap",
+      "wraps"
+     ]
+    },
+    {
+     "canonical": "playwear",
+     "df": 37,
+     "surfaces": [
+      "playwear",
+      "playwears"
+     ]
+    },
+    {
+     "canonical": "sleep sets",
+     "df": 37,
+     "surfaces": [
+      "sleep set",
+      "sleep sets",
+      "sleepsets"
+     ]
+    },
+    {
+     "canonical": "stacking",
+     "df": 37,
+     "surfaces": [
+      "stacking",
+      "stackings"
+     ]
+    },
+    {
+     "canonical": "track pants",
+     "df": 37,
+     "surfaces": [
+      "track pant",
+      "track pants",
+      "trackpants"
+     ]
+    },
+    {
+     "canonical": "tunnels",
+     "df": 37,
+     "surfaces": [
+      "tunnel",
+      "tunnels"
+     ]
+    },
+    {
+     "canonical": "cuff links",
+     "df": 36,
+     "surfaces": [
+      "cuff link",
+      "cuff links",
+      "cufflinks"
+     ]
+    },
+    {
+     "canonical": "hobo bags",
+     "df": 36,
+     "surfaces": [
+      "hobo bag",
+      "hobo bags",
+      "hobobags"
+     ]
+    },
+    {
+     "canonical": "kids shoes union",
+     "df": 36,
+     "surfaces": [
+      "kids shoes union",
+      "kids shoes unions",
+      "kidsshoesunion"
+     ]
+    },
+    {
+     "canonical": "leg warmers",
+     "df": 36,
+     "surfaces": [
+      "leg warmer",
+      "leg warmers",
+      "legwarmers"
+     ]
+    },
+    {
+     "canonical": "props",
+     "df": 36,
+     "surfaces": [
+      "prop",
+      "props"
+     ]
+    },
+    {
+     "canonical": "special occasion accessories",
+     "df": 36,
+     "surfaces": [
+      "special occasion accessorie",
+      "special occasion accessories",
+      "special occasion accessory",
+      "specialoccasionaccessories"
+     ]
+    },
+    {
+     "canonical": "boxers",
+     "df": 35,
+     "surfaces": [
+      "boxer",
+      "boxers"
+     ]
+    },
+    {
+     "canonical": "eyeglass cases",
+     "df": 35,
+     "surfaces": [
+      "eyeglass cas",
+      "eyeglass case",
+      "eyeglass cases",
+      "eyeglasscases"
+     ]
+    },
+    {
+     "canonical": "fascinators",
+     "df": 34,
+     "surfaces": [
+      "fascinator",
+      "fascinators"
+     ]
+    },
+    {
+     "canonical": "fashion backpacks",
+     "df": 34,
+     "surfaces": [
+      "fashion backpack",
+      "fashion backpacks",
+      "fashionbackpacks"
+     ]
+    },
+    {
+     "canonical": "newsboy caps",
+     "df": 34,
+     "surfaces": [
+      "newsboy cap",
+      "newsboy caps",
+      "newsboycaps"
+     ]
+    },
+    {
+     "canonical": "outerwear",
+     "df": 34,
+     "surfaces": [
+      "outerwear",
+      "outerwears"
+     ]
+    },
+    {
+     "canonical": "shells",
+     "df": 34,
+     "surfaces": [
+      "shell",
+      "shells"
+     ]
+    },
+    {
+     "canonical": "suit sets",
+     "df": 34,
+     "surfaces": [
+      "suit set",
+      "suit sets",
+      "suitsets"
+     ]
+    },
+    {
+     "canonical": "bandanas",
+     "df": 33,
+     "surfaces": [
+      "bandana",
+      "bandanas"
+     ]
+    },
+    {
+     "canonical": "bow ties",
+     "df": 33,
+     "surfaces": [
+      "bow tie",
+      "bow ties",
+      "bow ty",
+      "bowties"
+     ]
+    },
+    {
+     "canonical": "handbag accessories",
+     "df": 33,
+     "surfaces": [
+      "handbag accessorie",
+      "handbag accessories",
+      "handbag accessory",
+      "handbagaccessories"
+     ]
+    },
+    {
+     "canonical": "liner socks",
+     "df": 33,
+     "surfaces": [
+      "liner sock",
+      "liner socks",
+      "linersocks"
+     ]
+    },
+    {
+     "canonical": "no show",
+     "df": 33,
+     "surfaces": [
+      "no show",
+      "no shows",
+      "noshow"
+     ]
+    },
+    {
+     "canonical": "wear to work",
+     "df": 32,
+     "surfaces": [
+      "wear to work",
+      "wear to works",
+      "weartowork"
+     ]
+    },
+    {
+     "canonical": "body chains",
+     "df": 31,
+     "surfaces": [
+      "body chain",
+      "body chains",
+      "bodychains"
+     ]
+    },
+    {
+     "canonical": "folding umbrellas",
+     "df": 31,
+     "surfaces": [
+      "folding umbrella",
+      "folding umbrellas",
+      "foldingumbrellas"
+     ]
+    },
+    {
+     "canonical": "scrub bottoms",
+     "df": 31,
+     "surfaces": [
+      "scrub bottom",
+      "scrub bottoms",
+      "scrubbottoms"
+     ]
+    },
+    {
+     "canonical": "slips",
+     "df": 31,
+     "surfaces": [
+      "slip",
+      "slips"
+     ]
+    },
+    {
+     "canonical": "stick umbrellas",
+     "df": 31,
+     "surfaces": [
+      "stick umbrella",
+      "stick umbrellas",
+      "stickumbrellas"
+     ]
+    },
+    {
+     "canonical": "windbreakers",
+     "df": 31,
+     "surfaces": [
+      "windbreaker",
+      "windbreakers"
+     ]
+    },
+    {
+     "canonical": "armor",
+     "df": 30,
+     "surfaces": [
+      "armor",
+      "armors"
+     ]
+    },
+    {
+     "canonical": "sheers",
+     "df": 30,
+     "surfaces": [
+      "sheer",
+      "sheers"
+     ]
+    },
+    {
+     "canonical": "tie sets",
+     "df": 30,
+     "surfaces": [
+      "tie set",
+      "tie sets",
+      "tiesets"
+     ]
+    },
+    {
+     "canonical": "weapons",
+     "df": 30,
+     "surfaces": [
+      "weapon",
+      "weapons"
+     ]
+    },
+    {
+     "canonical": "bibs",
+     "df": 29,
+     "surfaces": [
+      "bib",
+      "bibs"
+     ]
+    },
+    {
+     "canonical": "cowboy hats",
+     "df": 29,
+     "surfaces": [
+      "cowboy hat",
+      "cowboy hats",
+      "cowboyhats"
+     ]
+    },
+    {
+     "canonical": "jewelry trays",
+     "df": 29,
+     "surfaces": [
+      "jewelry tray",
+      "jewelry trays",
+      "jewelrytrays"
+     ]
+    },
+    {
+     "canonical": "one piece pajamas",
+     "df": 29,
+     "surfaces": [
+      "one piece pajama",
+      "one piece pajamas",
+      "onepiecepajamas"
+     ]
+    },
+    {
+     "canonical": "plus size fashion",
+     "df": 29,
+     "surfaces": [
+      "plus size fashion",
+      "plus size fashions",
+      "plussizefashion"
+     ]
+    },
+    {
+     "canonical": "shoe",
+     "df": 29,
+     "surfaces": [
+      "shoe",
+      "shoes"
+     ]
+    },
+    {
+     "canonical": "sports duffels",
+     "df": 29,
+     "surfaces": [
+      "sports duffel",
+      "sports duffels",
+      "sportsduffels"
+     ]
+    },
+    {
+     "canonical": "strands",
+     "df": 29,
+     "surfaces": [
+      "strand",
+      "strands"
+     ]
+    },
+    {
+     "canonical": "suspenders",
+     "df": 29,
+     "surfaces": [
+      "suspender",
+      "suspenders"
+     ]
+    },
+    {
+     "canonical": "swimwear test",
+     "df": 29,
+     "surfaces": [
+      "swimwear test",
+      "swimwear tests",
+      "swimweartest"
+     ]
+    },
+    {
+     "canonical": "baby girls",
+     "df": 28,
+     "surfaces": [
+      "baby girl",
+      "baby girls",
+      "babygirls"
+     ]
+    },
+    {
+     "canonical": "boy shorts",
+     "df": 28,
+     "surfaces": [
+      "boy short",
+      "boy shorts",
+      "boyshorts"
+     ]
+    },
+    {
+     "canonical": "loose gemstones",
+     "df": 28,
+     "surfaces": [
+      "loose gemston",
+      "loose gemstone",
+      "loose gemstones",
+      "loosegemstones"
+     ]
+    },
+    {
+     "canonical": "hipsters",
+     "df": 27,
+     "surfaces": [
+      "hipster",
+      "hipsters"
+     ]
+    },
+    {
+     "canonical": "jewelry towers",
+     "df": 27,
+     "surfaces": [
+      "jewelry tower",
+      "jewelry towers",
+      "jewelrytowers"
+     ]
+    },
+    {
+     "canonical": "luggage sets",
+     "df": 27,
+     "surfaces": [
+      "luggage set",
+      "luggage sets",
+      "luggagesets"
+     ]
+    },
+    {
+     "canonical": "wedding bands",
+     "df": 27,
+     "surfaces": [
+      "wedding band",
+      "wedding bands",
+      "weddingbands"
+     ]
+    },
+    {
+     "canonical": "baby dolls",
+     "df": 26,
+     "surfaces": [
+      "baby doll",
+      "baby dolls",
+      "babydolls"
+     ]
+    },
+    {
+     "canonical": "blanket sleepers",
+     "df": 26,
+     "surfaces": [
+      "blanket sleeper",
+      "blanket sleepers",
+      "blanketsleepers"
+     ]
+    },
+    {
+     "canonical": "capes",
+     "df": 26,
+     "surfaces": [
+      "cap",
+      "cape",
+      "capes"
+     ]
+    },
+    {
+     "canonical": "chemises",
+     "df": 26,
+     "surfaces": [
+      "chemis",
+      "chemise",
+      "chemises"
+     ]
+    },
+    {
+     "canonical": "corsets",
+     "df": 26,
+     "surfaces": [
+      "corset",
+      "corsets"
+     ]
+    },
+    {
+     "canonical": "swimwear",
+     "df": 26,
+     "surfaces": [
+      "swimwear",
+      "swimwears"
+     ]
+    },
+    {
+     "canonical": "waist packs",
+     "df": 26,
+     "surfaces": [
+      "waist pack",
+      "waist packs",
+      "waistpacks"
+     ]
+    },
+    {
+     "canonical": "skirt sets",
+     "df": 25,
+     "surfaces": [
+      "skirt set",
+      "skirt sets",
+      "skirtsets"
+     ]
+    },
+    {
+     "canonical": "studs",
+     "df": 25,
+     "surfaces": [
+      "stud",
+      "studs"
+     ]
+    },
+    {
+     "canonical": "trench coats",
+     "df": 25,
+     "surfaces": [
+      "trench coat",
+      "trench coats",
+      "trenchcoats"
+     ]
+    },
+    {
+     "canonical": "baby boys",
+     "df": 24,
+     "surfaces": [
+      "baby boy",
+      "baby boys",
+      "babyboys"
+     ]
+    },
+    {
+     "canonical": "briefcases",
+     "df": 24,
+     "surfaces": [
+      "briefcas",
+      "briefcase",
+      "briefcases"
+     ]
+    },
+    {
+     "canonical": "capris",
+     "df": 24,
+     "surfaces": [
+      "capri",
+      "capris"
+     ]
+    },
+    {
+     "canonical": "control panties",
+     "df": 24,
+     "surfaces": [
+      "control pantie",
+      "control panties",
+      "control panty",
+      "controlpanties"
+     ]
+    },
+    {
+     "canonical": "g strings",
+     "df": 24,
+     "surfaces": [
+      "g string",
+      "g strings",
+      "gstrings"
+     ]
+    },
+    {
+     "canonical": "thongs",
+     "df": 24,
+     "surfaces": [
+      "thong",
+      "thongs"
+     ]
+    },
+    {
+     "canonical": "blends",
+     "df": 23,
+     "surfaces": [
+      "blends"
+     ]
+    },
+    {
+     "canonical": "bustiers",
+     "df": 23,
+     "surfaces": [
+      "bustier",
+      "bustiers"
+     ]
+    },
+    {
+     "canonical": "clip ons",
+     "df": 23,
+     "surfaces": [
+      "clip on",
+      "clip ons",
+      "clipons"
+     ]
+    },
+    {
+     "canonical": "insulated",
+     "df": 23,
+     "surfaces": [
+      "insulated",
+      "insulateds"
+     ]
+    },
+    {
+     "canonical": "kits",
+     "df": 23,
+     "surfaces": [
+      "kit",
+      "kits"
+     ]
+    },
+    {
+     "canonical": "repair tools",
+     "df": 23,
+     "surfaces": [
+      "repair tool",
+      "repair tools",
+      "repairtools"
+     ]
+    },
+    {
+     "canonical": "y necklaces",
+     "df": 23,
+     "surfaces": [
+      "y necklac",
+      "y necklace",
+      "y necklaces",
+      "ynecklaces"
+     ]
+    },
+    {
+     "canonical": "accessory sets",
+     "df": 22,
+     "surfaces": [
+      "accessory set",
+      "accessory sets",
+      "accessorysets"
+     ]
+    },
+    {
+     "canonical": "active skirts",
+     "df": 22,
+     "surfaces": [
+      "active skirt",
+      "active skirts",
+      "activeskirts"
+     ]
+    },
+    {
+     "canonical": "cabinets",
+     "df": 22,
+     "surfaces": [
+      "cabinet",
+      "cabinets"
+     ]
+    },
+    {
+     "canonical": "cases",
+     "df": 22,
+     "surfaces": [
+      "cas",
+      "case",
+      "cases"
+     ]
+    },
+    {
+     "canonical": "engagement rings",
+     "df": 22,
+     "surfaces": [
+      "engagement ring",
+      "engagement rings",
+      "engagementrings"
+     ]
+    },
+    {
+     "canonical": "half slips",
+     "df": 22,
+     "surfaces": [
+      "half slip",
+      "half slips",
+      "halfslips"
+     ]
+    },
+    {
+     "canonical": "lingerie sets",
+     "df": 22,
+     "surfaces": [
+      "lingerie set",
+      "lingerie sets",
+      "lingeriesets"
+     ]
+    },
+    {
+     "canonical": "lockets",
+     "df": 22,
+     "surfaces": [
+      "locket",
+      "lockets"
+     ]
+    },
+    {
+     "canonical": "scrub sets",
+     "df": 22,
+     "surfaces": [
+      "scrub set",
+      "scrub sets",
+      "scrubsets"
+     ]
+    },
+    {
+     "canonical": "shrugs",
+     "df": 22,
+     "surfaces": [
+      "shrug",
+      "shrugs"
+     ]
+    },
+    {
+     "canonical": "swimwear sets",
+     "df": 22,
+     "surfaces": [
+      "swimwear set",
+      "swimwear sets",
+      "swimwearsets"
+     ]
+    },
+    {
+     "canonical": "baseball",
+     "df": 21,
+     "surfaces": [
+      "baseball",
+      "baseballs"
+     ]
+    },
+    {
+     "canonical": "bucket hats",
+     "df": 21,
+     "surfaces": [
+      "bucket hat",
+      "bucket hats",
+      "buckethats"
+     ]
+    },
+    {
+     "canonical": "business card cases",
+     "df": 21,
+     "surfaces": [
+      "business card cas",
+      "business card case",
+      "business card cases",
+      "businesscardcases"
+     ]
+    },
+    {
+     "canonical": "denim jackets",
+     "df": 21,
+     "surfaces": [
+      "denim jacket",
+      "denim jackets",
+      "denimjackets"
+     ]
+    },
+    {
+     "canonical": "eyeglass chains",
+     "df": 21,
+     "surfaces": [
+      "eyeglass chain",
+      "eyeglass chains",
+      "eyeglasschains"
+     ]
+    },
+    {
+     "canonical": "maternity",
+     "df": 21,
+     "surfaces": [
+      "maternity",
+      "maternitys"
+     ]
+    },
+    {
+     "canonical": "bowling",
+     "df": 20,
+     "surfaces": [
+      "bowling",
+      "bowlings"
+     ]
+    },
+    {
+     "canonical": "bridal sets",
+     "df": 20,
+     "surfaces": [
+      "bridal set",
+      "bridal sets",
+      "bridalsets"
+     ]
+    },
+    {
+     "canonical": "everyday apparel essentials",
+     "df": 20,
+     "surfaces": [
+      "everyday apparel essential",
+      "everyday apparel essentials",
+      "everydayapparelessentials"
+     ]
+    },
+    {
+     "canonical": "handbag organizers",
+     "df": 20,
+     "surfaces": [
+      "handbag organizer",
+      "handbag organizers",
+      "handbagorganizers"
+     ]
+    },
+    {
+     "canonical": "health care",
+     "df": 20,
+     "surfaces": [
+      "health care",
+      "health cares",
+      "healthcare"
+     ]
+    },
+    {
+     "canonical": "softball",
+     "df": 20,
+     "surfaces": [
+      "softball",
+      "softballs"
+     ]
+    },
+    {
+     "canonical": "travel totes",
+     "df": 20,
+     "surfaces": [
+      "travel tot",
+      "travel tote",
+      "travel totes",
+      "traveltotes"
+     ]
+    },
+    {
+     "canonical": "compression socks",
+     "df": 19,
+     "surfaces": [
+      "compression sock",
+      "compression socks",
+      "compressionsocks"
+     ]
+    },
+    {
+     "canonical": "drawstring bags",
+     "df": 19,
+     "surfaces": [
+      "drawstring bag",
+      "drawstring bags",
+      "drawstringbags"
+     ]
+    },
+    {
+     "canonical": "girls sneakers",
+     "df": 19,
+     "surfaces": [
+      "girls sneaker",
+      "girls sneakers",
+      "girlssneakers"
+     ]
+    },
+    {
+     "canonical": "nursing",
+     "df": 19,
+     "surfaces": [
+      "nursing",
+      "nursings"
+     ]
+    },
+    {
+     "canonical": "toe rings",
+     "df": 19,
+     "surfaces": [
+      "toe ring",
+      "toe rings",
+      "toerings"
+     ]
+    },
+    {
+     "canonical": "active sweatsuits",
+     "df": 18,
+     "surfaces": [
+      "active sweatsuit",
+      "active sweatsuits",
+      "activesweatsuits"
+     ]
+    },
+    {
+     "canonical": "belt buckles",
+     "df": 18,
+     "surfaces": [
+      "belt buckl",
+      "belt buckle",
+      "belt buckles",
+      "beltbuckles"
+     ]
+    },
+    {
+     "canonical": "pearl strands",
+     "df": 18,
+     "surfaces": [
+      "pearl strand",
+      "pearl strands",
+      "pearlstrands"
+     ]
+    },
+    {
+     "canonical": "rash guard sets",
+     "df": 18,
+     "surfaces": [
+      "rash guard set",
+      "rash guard sets",
+      "rashguardsets"
+     ]
+    },
+    {
+     "canonical": "ankle socks",
+     "df": 17,
+     "surfaces": [
+      "ankle sock",
+      "ankle socks",
+      "anklesocks"
+     ]
+    },
+    {
+     "canonical": "boot trees",
+     "df": 17,
+     "surfaces": [
+      "boot tre",
+      "boot tree",
+      "boot trees",
+      "boottrees"
+     ]
+    },
+    {
+     "canonical": "climbing",
+     "df": 17,
+     "surfaces": [
+      "climbing",
+      "climbings"
+     ]
+    },
+    {
+     "canonical": "liners",
+     "df": 17,
+     "surfaces": [
+      "liner",
+      "liners"
+     ]
+    },
+    {
+     "canonical": "waist cinchers",
+     "df": 17,
+     "surfaces": [
+      "waist cincher",
+      "waist cinchers",
+      "waistcinchers"
+     ]
+    },
+    {
+     "canonical": "active skorts",
+     "df": 16,
+     "surfaces": [
+      "active skort",
+      "active skorts",
+      "activeskorts"
+     ]
+    },
+    {
+     "canonical": "applique patches",
+     "df": 16,
+     "surfaces": [
+      "applique patch",
+      "applique patche",
+      "applique patches",
+      "appliquepatches"
+     ]
+    },
+    {
+     "canonical": "clasp",
+     "df": 16,
+     "surfaces": [
+      "clasp",
+      "clasps"
+     ]
+    },
+    {
+     "canonical": "eternity rings",
+     "df": 16,
+     "surfaces": [
+      "eternity ring",
+      "eternity rings",
+      "eternityrings"
+     ]
+    },
+    {
+     "canonical": "jammers",
+     "df": 16,
+     "surfaces": [
+      "jammer",
+      "jammers"
+     ]
+    },
+    {
+     "canonical": "over the knee",
+     "df": 16,
+     "surfaces": [
+      "over the knee",
+      "over the knees",
+      "overtheknee"
+     ]
+    },
+    {
+     "canonical": "pattyboutik apparel",
+     "df": 16,
+     "surfaces": [
+      "pattyboutik apparel",
+      "pattyboutik apparels",
+      "pattyboutikapparel"
+     ]
+    },
+    {
+     "canonical": "snow suits",
+     "df": 16,
+     "surfaces": [
+      "snow suit",
+      "snow suits",
+      "snowsuits"
+     ]
+    },
+    {
+     "canonical": "women s swimwear",
+     "df": 16,
+     "surfaces": [
+      "women s swimwear",
+      "women s swimwears",
+      "womensswimwear"
+     ]
+    },
+    {
+     "canonical": "luggage straps",
+     "df": 15,
+     "surfaces": [
+      "luggage strap",
+      "luggage straps",
+      "luggagestraps"
+     ]
+    },
+    {
+     "canonical": "quilted lightweight jackets",
+     "df": 15,
+     "surfaces": [
+      "quilted lightweight jacket",
+      "quilted lightweight jackets",
+      "quiltedlightweightjackets"
+     ]
+    },
+    {
+     "canonical": "rain footwear",
+     "df": 15,
+     "surfaces": [
+      "rain footwear",
+      "rain footwears",
+      "rainfootwear"
+     ]
+    },
+    {
+     "canonical": "rain jackets",
+     "df": 15,
+     "surfaces": [
+      "rain jacket",
+      "rain jackets",
+      "rainjackets"
+     ]
+    },
+    {
+     "canonical": "tie clips",
+     "df": 15,
+     "surfaces": [
+      "tie clip",
+      "tie clips",
+      "tieclips"
+     ]
+    },
+    {
+     "canonical": "women s halloween costumes",
+     "df": 15,
+     "surfaces": [
+      "women s halloween costum",
+      "women s halloween costume",
+      "women s halloween costumes",
+      "womenshalloweencostumes"
+     ]
+    },
+    {
+     "canonical": "cross country",
+     "df": 14,
+     "surfaces": [
+      "cross country",
+      "cross countrys",
+      "crosscountry"
+     ]
+    },
+    {
+     "canonical": "field",
+     "df": 14,
+     "surfaces": [
+      "field",
+      "fields"
+     ]
+    },
+    {
+     "canonical": "insulated shells",
+     "df": 14,
+     "surfaces": [
+      "insulated shell",
+      "insulated shells",
+      "insulatedshells"
+     ]
+    },
+    {
+     "canonical": "money clips",
+     "df": 14,
+     "surfaces": [
+      "money clip",
+      "money clips",
+      "moneyclips"
+     ]
+    },
+    {
+     "canonical": "screws",
+     "df": 14,
+     "surfaces": [
+      "screw",
+      "screws"
+     ]
+    },
+    {
+     "canonical": "scrub jackets",
+     "df": 14,
+     "surfaces": [
+      "scrub jacket",
+      "scrub jackets",
+      "scrubjackets"
+     ]
+    },
+    {
+     "canonical": "sport headbands",
+     "df": 14,
+     "surfaces": [
+      "sport headband",
+      "sport headbands",
+      "sportheadbands"
+     ]
+    },
+    {
+     "canonical": "coveralls",
+     "df": 13,
+     "surfaces": [
+      "coverall",
+      "coveralls"
+     ]
+    },
+    {
+     "canonical": "footwear",
+     "df": 13,
+     "surfaces": [
+      "footwear",
+      "footwears"
+     ]
+    },
+    {
+     "canonical": "passport covers",
+     "df": 13,
+     "surfaces": [
+      "passport cover",
+      "passport covers",
+      "passportcovers"
+     ]
+    },
+    {
+     "canonical": "pocket watches",
+     "df": 13,
+     "surfaces": [
+      "pocket watch",
+      "pocket watche",
+      "pocket watches",
+      "pocketwatches"
+     ]
+    },
+    {
+     "canonical": "skiing",
+     "df": 13,
+     "surfaces": [
+      "skiing",
+      "skiings"
+     ]
+    },
+    {
+     "canonical": "travel wallets",
+     "df": 13,
+     "surfaces": [
+      "travel wallets",
+      "travelwallets"
+     ]
+    },
+    {
+     "canonical": "two pieces",
+     "df": 13,
+     "surfaces": [
+      "two piec",
+      "two piece",
+      "two pieces",
+      "twopieces"
+     ]
+    },
+    {
+     "canonical": "cold weather headbands",
+     "df": 12,
+     "surfaces": [
+      "cold weather headband",
+      "cold weather headbands",
+      "coldweatherheadbands"
+     ]
+    },
+    {
+     "canonical": "dress socks",
+     "df": 12,
+     "surfaces": [
+      "dress sock",
+      "dress socks",
+      "dresssocks"
+     ]
+    },
+    {
+     "canonical": "handbag hangers",
+     "df": 12,
+     "surfaces": [
+      "handbag hanger",
+      "handbag hangers",
+      "handbaghangers"
+     ]
+    },
+    {
+     "canonical": "identification",
+     "df": 12,
+     "surfaces": [
+      "identification",
+      "identifications"
+     ]
+    },
+    {
+     "canonical": "jewelry armoires",
+     "df": 12,
+     "surfaces": [
+      "jewelry armoir",
+      "jewelry armoire",
+      "jewelry armoires",
+      "jewelryarmoires"
+     ]
+    },
+    {
+     "canonical": "knit hats",
+     "df": 12,
+     "surfaces": [
+      "knit hat",
+      "knit hats",
+      "knithats"
+     ]
+    },
+    {
+     "canonical": "mary jane",
+     "df": 12,
+     "surfaces": [
+      "mary jane",
+      "mary janes",
+      "maryjane"
+     ]
+    },
+    {
+     "canonical": "women s apparel",
+     "df": 12,
+     "surfaces": [
+      "women s apparel",
+      "women s apparels",
+      "womensapparel"
+     ]
+    },
+    {
+     "canonical": "wrestling",
+     "df": 12,
+     "surfaces": [
+      "wrestling",
+      "wrestlings"
+     ]
+    },
+    {
+     "canonical": "arm warmers",
+     "df": 11,
+     "surfaces": [
+      "arm warmer",
+      "arm warmers",
+      "armwarmers"
+     ]
+    },
+    {
+     "canonical": "ball",
+     "df": 11,
+     "surfaces": [
+      "ball",
+      "balls"
+     ]
+    },
+    {
+     "canonical": "business pricing",
+     "df": 11,
+     "surfaces": [
+      "business pricing",
+      "business pricings",
+      "businesspricing"
+     ]
+    },
+    {
+     "canonical": "clearance",
+     "df": 11,
+     "surfaces": [
+      "clearance",
+      "clearances"
+     ]
+    },
+    {
+     "canonical": "compression shorts",
+     "df": 11,
+     "surfaces": [
+      "compression short",
+      "compression shorts",
+      "compressionshorts"
+     ]
+    },
+    {
+     "canonical": "earmuffs",
+     "df": 11,
+     "surfaces": [
+      "earmuff",
+      "earmuffs"
+     ]
+    },
+    {
+     "canonical": "fashion forward finds",
+     "df": 11,
+     "surfaces": [
+      "fashion forward find",
+      "fashion forward finds",
+      "fashionforwardfinds"
+     ]
+    },
+    {
+     "canonical": "football",
+     "df": 11,
+     "surfaces": [
+      "football",
+      "footballs"
+     ]
+    },
+    {
+     "canonical": "healthcare uniforms",
+     "df": 11,
+     "surfaces": [
+      "healthcare uniform",
+      "healthcare uniforms",
+      "healthcareuniforms"
+     ]
+    },
+    {
+     "canonical": "polishes",
+     "df": 11,
+     "surfaces": [
+      "polish",
+      "polishe",
+      "polishes"
+     ]
+    },
+    {
+     "canonical": "quantity discounts",
+     "df": 11,
+     "surfaces": [
+      "quantity discount",
+      "quantity discounts",
+      "quantitydiscounts"
+     ]
+    },
+    {
+     "canonical": "shoe treatments",
+     "df": 11,
+     "surfaces": [
+      "shoe treatment",
+      "shoe treatments",
+      "shoetreatments"
+     ]
+    },
+    {
+     "canonical": "tapers",
+     "df": 11,
+     "surfaces": [
+      "taper",
+      "tapers"
+     ]
+    },
+    {
+     "canonical": "aprons",
+     "df": 10,
+     "surfaces": [
+      "apron",
+      "aprons"
+     ]
+    },
+    {
+     "canonical": "backpacking boots",
+     "df": 10,
+     "surfaces": [
+      "backpacking boot",
+      "backpacking boots",
+      "backpackingboots"
+     ]
+    },
+    {
+     "canonical": "berets",
+     "df": 10,
+     "surfaces": [
+      "beret",
+      "berets"
+     ]
+    },
+    {
+     "canonical": "chef jackets",
+     "df": 10,
+     "surfaces": [
+      "chef jacket",
+      "chef jackets",
+      "chefjackets"
+     ]
+    },
+    {
+     "canonical": "collars",
+     "df": 10,
+     "surfaces": [
+      "collar",
+      "collars"
+     ]
+    },
+    {
+     "canonical": "faux body piercing jewelry",
+     "df": 10,
+     "surfaces": [
+      "faux body piercing jewelry",
+      "faux body piercing jewelrys",
+      "fauxbodypiercingjewelry"
+     ]
+    },
+    {
+     "canonical": "handkerchiefs",
+     "df": 10,
+     "surfaces": [
+      "handkerchief",
+      "handkerchiefs"
+     ]
+    },
+    {
+     "canonical": "hunting",
+     "df": 10,
+     "surfaces": [
+      "hunting",
+      "huntings"
+     ]
+    },
+    {
+     "canonical": "minimizers",
+     "df": 10,
+     "surfaces": [
+      "minimizer",
+      "minimizers"
+     ]
+    },
+    {
+     "canonical": "snake",
+     "df": 10,
+     "surfaces": [
+      "snake",
+      "snakes"
+     ]
+    },
+    {
+     "canonical": "training bras",
+     "df": 10,
+     "surfaces": [
+      "training bra",
+      "training bras",
+      "trainingbras"
+     ]
+    },
+    {
+     "canonical": "visors",
+     "df": 10,
+     "surfaces": [
+      "visor",
+      "visors"
+     ]
+    },
+    {
+     "canonical": "bloomers",
+     "df": 9,
+     "surfaces": [
+      "bloomer",
+      "bloomers"
+     ]
+    },
+    {
+     "canonical": "checkbook covers",
+     "df": 9,
+     "surfaces": [
+      "checkbook cover",
+      "checkbook covers",
+      "checkbookcovers"
+     ]
+    },
+    {
+     "canonical": "enhancers",
+     "df": 9,
+     "surfaces": [
+      "enhancer",
+      "enhancers"
+     ]
+    },
+    {
+     "canonical": "garment bags",
+     "df": 9,
+     "surfaces": [
+      "garment bag",
+      "garment bags",
+      "garmentbags"
+     ]
+    },
+    {
+     "canonical": "oxford",
+     "df": 9,
+     "surfaces": [
+      "oxford",
+      "oxfords"
+     ]
+    },
+    {
+     "canonical": "pads",
+     "df": 9,
+     "surfaces": [
+      "pad",
+      "pads"
+     ]
+    },
+    {
+     "canonical": "suit separates",
+     "df": 9,
+     "surfaces": [
+      "suit separat",
+      "suit separate",
+      "suit separates",
+      "suitseparates"
+     ]
+    },
+    {
+     "canonical": "uniforms",
+     "df": 9,
+     "surfaces": [
+      "uniform",
+      "uniforms"
+     ]
+    },
+    {
+     "canonical": "watch winders",
+     "df": 9,
+     "surfaces": [
+      "watch winder",
+      "watch winders",
+      "watchwinders"
+     ]
+    },
+    {
+     "canonical": "wedding dresses",
+     "df": 9,
+     "surfaces": [
+      "wedding dress",
+      "wedding dresse",
+      "wedding dresses",
+      "weddingdresses"
+     ]
+    },
+    {
+     "canonical": "active underwear",
+     "df": 8,
+     "surfaces": [
+      "active underwear",
+      "active underwears",
+      "activeunderwear"
+     ]
+    },
+    {
+     "canonical": "adhesive bras",
+     "df": 8,
+     "surfaces": [
+      "adhesive bra",
+      "adhesive bras",
+      "adhesivebras"
+     ]
+    },
+    {
+     "canonical": "baby halloween costumes",
+     "df": 8,
+     "surfaces": [
+      "baby halloween costum",
+      "baby halloween costume",
+      "baby halloween costumes",
+      "babyhalloweencostumes"
+     ]
+    },
+    {
+     "canonical": "bomber hats",
+     "df": 8,
+     "surfaces": [
+      "bomber hat",
+      "bomber hats",
+      "bomberhats"
+     ]
+    },
+    {
+     "canonical": "boot jacks",
+     "df": 8,
+     "surfaces": [
+      "boot jack",
+      "boot jacks",
+      "bootjacks"
+     ]
+    },
+    {
+     "canonical": "breeches",
+     "df": 8,
+     "surfaces": [
+      "breech",
+      "breeche",
+      "breeches"
+     ]
+    },
+    {
+     "canonical": "bridal accessories",
+     "df": 8,
+     "surfaces": [
+      "bridal accessorie",
+      "bridal accessories",
+      "bridal accessory",
+      "bridalaccessories"
+     ]
+    },
+    {
+     "canonical": "bridal veils",
+     "df": 8,
+     "surfaces": [
+      "bridal veil",
+      "bridal veils",
+      "bridalveils"
+     ]
+    },
+    {
+     "canonical": "cardigan",
+     "df": 8,
+     "surfaces": [
+      "cardigan",
+      "cardigans"
+     ]
+    },
+    {
+     "canonical": "dress coats",
+     "df": 8,
+     "surfaces": [
+      "dress coat",
+      "dress coats",
+      "dresscoats"
+     ]
+    },
+    {
+     "canonical": "eyewear",
+     "df": 8,
+     "surfaces": [
+      "eyewear",
+      "eyewears"
+     ]
+    },
+    {
+     "canonical": "futsal",
+     "df": 8,
+     "surfaces": [
+      "futsal",
+      "futsals"
+     ]
+    },
+    {
+     "canonical": "gym totes",
+     "df": 8,
+     "surfaces": [
+      "gym tot",
+      "gym tote",
+      "gym totes",
+      "gymtotes"
+     ]
+    },
+    {
+     "canonical": "ice",
+     "df": 8,
+     "surfaces": [
+      "ice",
+      "ices"
+     ]
+    },
+    {
+     "canonical": "kids luggage",
+     "df": 8,
+     "surfaces": [
+      "kids luggage",
+      "kids luggages",
+      "kidsluggage"
+     ]
+    },
+    {
+     "canonical": "layette sets",
+     "df": 8,
+     "surfaces": [
+      "layette set",
+      "layette sets",
+      "layettesets"
+     ]
+    },
+    {
+     "canonical": "pullover",
+     "df": 8,
+     "surfaces": [
+      "pullover",
+      "pullovers"
+     ]
+    },
+    {
+     "canonical": "shoe horns",
+     "df": 8,
+     "surfaces": [
+      "shoe horn",
+      "shoe horns",
+      "shoehorns"
+     ]
+    },
+    {
+     "canonical": "snow grips",
+     "df": 8,
+     "surfaces": [
+      "snow grip",
+      "snow grips",
+      "snowgrips"
+     ]
+    },
+    {
+     "canonical": "sport watches",
+     "df": 8,
+     "surfaces": [
+      "sport watch",
+      "sport watche",
+      "sport watches",
+      "sportwatches"
+     ]
+    },
+    {
+     "canonical": "tactical",
+     "df": 8,
+     "surfaces": [
+      "tactical",
+      "tacticals"
+     ]
+    },
+    {
+     "canonical": "tie pins",
+     "df": 8,
+     "surfaces": [
+      "tie pin",
+      "tie pins",
+      "tiepins"
+     ]
+    },
+    {
+     "canonical": "varsity jackets",
+     "df": 8,
+     "surfaces": [
+      "varsity jacket",
+      "varsity jackets",
+      "varsityjackets"
+     ]
+    },
+    {
+     "canonical": "volleyball",
+     "df": 8,
+     "surfaces": [
+      "volleyball",
+      "volleyballs"
+     ]
+    }
+   ]
+  },
+  "color": {
+   "count": 107,
+   "entries": [
+    {
+     "canonical": "black",
+     "df": 524,
+     "surfaces": [
+      "black",
+      "blacks"
+     ]
+    },
+    {
+     "canonical": "silver",
+     "df": 168,
+     "surfaces": [
+      "silver",
+      "silvers"
+     ]
+    },
+    {
+     "canonical": "white",
+     "df": 155,
+     "surfaces": [
+      "white",
+      "whites"
+     ]
+    },
+    {
+     "canonical": "blue",
+     "df": 104,
+     "surfaces": [
+      "blue",
+      "blues"
+     ]
+    },
+    {
+     "canonical": "red",
+     "df": 89,
+     "surfaces": [
+      "red",
+      "reds"
+     ]
+    },
+    {
+     "canonical": "brown",
+     "df": 75,
+     "surfaces": [
+      "brown",
+      "browns"
+     ]
+    },
+    {
+     "canonical": "gold",
+     "df": 58,
+     "surfaces": [
+      "gold",
+      "golds"
+     ]
+    },
+    {
+     "canonical": "pink",
+     "df": 51,
+     "surfaces": [
+      "pink",
+      "pinks"
+     ]
+    },
+    {
+     "canonical": "green",
+     "df": 44,
+     "surfaces": [
+      "green",
+      "greens"
+     ]
+    },
+    {
+     "canonical": "yellow",
+     "df": 38,
+     "surfaces": [
+      "yellow",
+      "yellows"
+     ]
+    },
+    {
+     "canonical": "grey",
+     "df": 37,
+     "surfaces": [
+      "gray",
+      "grey",
+      "greys"
+     ]
+    },
+    {
+     "canonical": "purple",
+     "df": 34,
+     "surfaces": [
+      "purple",
+      "purples"
+     ]
+    },
+    {
+     "canonical": "navy",
+     "df": 32,
+     "surfaces": [
+      "navy",
+      "navys"
+     ]
+    },
+    {
+     "canonical": "gray",
+     "df": 21,
+     "surfaces": [
+      "gray",
+      "grays",
+      "grey"
+     ]
+    },
+    {
+     "canonical": "multicolored",
+     "df": 21,
+     "surfaces": [
+      "multicolored",
+      "multicoloreds"
+     ]
+    },
+    {
+     "canonical": "beige",
+     "df": 16,
+     "surfaces": [
+      "beige",
+      "beiges"
+     ]
+    },
+    {
+     "canonical": "orange",
+     "df": 16,
+     "surfaces": [
+      "orange",
+      "oranges"
+     ]
+    },
+    {
+     "canonical": "clear",
+     "df": 13,
+     "surfaces": [
+      "clear",
+      "clears"
+     ]
+    },
+    {
+     "canonical": "multicoloured",
+     "df": 11,
+     "surfaces": [
+      "multicoloured",
+      "multicoloureds"
+     ]
+    },
+    {
+     "canonical": "navy blue",
+     "df": 11,
+     "surfaces": [
+      "navy blue",
+      "navy blues",
+      "navyblue"
+     ]
+    },
+    {
+     "canonical": "rose",
+     "df": 10,
+     "surfaces": [
+      "rose",
+      "roses"
+     ]
+    },
+    {
+     "canonical": "dark brown",
+     "df": 8,
+     "surfaces": [
+      "dark brown",
+      "dark browns",
+      "darkbrown"
+     ]
+    },
+    {
+     "canonical": "natural",
+     "df": 8,
+     "surfaces": [
+      "natural",
+      "naturals"
+     ]
+    },
+    {
+     "canonical": "rose gold",
+     "df": 8,
+     "surfaces": [
+      "rose gold",
+      "rose golds",
+      "rosegold"
+     ]
+    },
+    {
+     "canonical": "turquoise",
+     "df": 8,
+     "surfaces": [
+      "turquoise",
+      "turquoises"
+     ]
+    },
+    {
+     "canonical": "multi colored",
+     "df": 7,
+     "surfaces": [
+      "multi colored",
+      "multi coloreds",
+      "multicolored"
+     ]
+    },
+    {
+     "canonical": "tan",
+     "df": 7,
+     "surfaces": [
+      "tan",
+      "tans"
+     ]
+    },
+    {
+     "canonical": "bronze",
+     "df": 6,
+     "surfaces": [
+      "bronze",
+      "bronzes"
+     ]
+    },
+    {
+     "canonical": "golden",
+     "df": 6,
+     "surfaces": [
+      "golden",
+      "goldens"
+     ]
+    },
+    {
+     "canonical": "hot pink",
+     "df": 6,
+     "surfaces": [
+      "hot pink",
+      "hot pinks",
+      "hotpink"
+     ]
+    },
+    {
+     "canonical": "white gold",
+     "df": 6,
+     "surfaces": [
+      "white gold",
+      "white golds",
+      "whitegold"
+     ]
+    },
+    {
+     "canonical": "light blue",
+     "df": 5,
+     "surfaces": [
+      "light blue",
+      "light blues",
+      "lightblue"
+     ]
+    },
+    {
+     "canonical": "metallic silver",
+     "df": 5,
+     "surfaces": [
+      "metallic silver",
+      "metallic silvers",
+      "metallicsilver"
+     ]
+    },
+    {
+     "canonical": "rainbow",
+     "df": 5,
+     "surfaces": [
+      "rainbow",
+      "rainbows"
+     ]
+    },
+    {
+     "canonical": "charcoal",
+     "df": 4,
+     "surfaces": [
+      "charcoal",
+      "charcoals"
+     ]
+    },
+    {
+     "canonical": "coffee",
+     "df": 4,
+     "surfaces": [
+      "coffee",
+      "coffees"
+     ]
+    },
+    {
+     "canonical": "coral",
+     "df": 4,
+     "surfaces": [
+      "coral",
+      "corals"
+     ]
+    },
+    {
+     "canonical": "cream",
+     "df": 4,
+     "surfaces": [
+      "cream",
+      "creams"
+     ]
+    },
+    {
+     "canonical": "dark blue",
+     "df": 4,
+     "surfaces": [
+      "dark blue",
+      "dark blues",
+      "darkblue"
+     ]
+    },
+    {
+     "canonical": "dark gray",
+     "df": 4,
+     "surfaces": [
+      "dark gray",
+      "dark grays",
+      "dark grey",
+      "darkgray"
+     ]
+    },
+    {
+     "canonical": "khaki",
+     "df": 4,
+     "surfaces": [
+      "khaki",
+      "khakis"
+     ]
+    },
+    {
+     "canonical": "olive",
+     "df": 4,
+     "surfaces": [
+      "olive",
+      "olives"
+     ]
+    },
+    {
+     "canonical": "royal",
+     "df": 4,
+     "surfaces": [
+      "royal",
+      "royals"
+     ]
+    },
+    {
+     "canonical": "amethyst",
+     "df": 3,
+     "surfaces": [
+      "amethyst",
+      "amethysts"
+     ]
+    },
+    {
+     "canonical": "ash",
+     "df": 3,
+     "surfaces": [
+      "ash",
+      "ashs"
+     ]
+    },
+    {
+     "canonical": "burgundy",
+     "df": 3,
+     "surfaces": [
+      "burgundy",
+      "burgundys"
+     ]
+    },
+    {
+     "canonical": "chocolate",
+     "df": 3,
+     "surfaces": [
+      "chocolate",
+      "chocolates"
+     ]
+    },
+    {
+     "canonical": "chrome",
+     "df": 3,
+     "surfaces": [
+      "chrome",
+      "chromes"
+     ]
+    },
+    {
+     "canonical": "cognac",
+     "df": 3,
+     "surfaces": [
+      "cognac",
+      "cognacs"
+     ]
+    },
+    {
+     "canonical": "dark grey",
+     "df": 3,
+     "surfaces": [
+      "dark gray",
+      "dark grey",
+      "dark greys",
+      "darkgrey"
+     ]
+    },
+    {
+     "canonical": "fuchsia",
+     "df": 3,
+     "surfaces": [
+      "fuchsia",
+      "fuchsias"
+     ]
+    },
+    {
+     "canonical": "mint",
+     "df": 3,
+     "surfaces": [
+      "mint",
+      "mints"
+     ]
+    },
+    {
+     "canonical": "obsidian",
+     "df": 3,
+     "surfaces": [
+      "obsidian",
+      "obsidians"
+     ]
+    },
+    {
+     "canonical": "shiny silver",
+     "df": 3,
+     "surfaces": [
+      "shiny silver",
+      "shiny silvers",
+      "shinysilver"
+     ]
+    },
+    {
+     "canonical": "smoke",
+     "df": 3,
+     "surfaces": [
+      "smoke",
+      "smokes"
+     ]
+    },
+    {
+     "canonical": "true black",
+     "df": 3,
+     "surfaces": [
+      "true black",
+      "true blacks",
+      "trueblack"
+     ]
+    },
+    {
+     "canonical": "yellow gold",
+     "df": 3,
+     "surfaces": [
+      "yellow gold",
+      "yellow golds",
+      "yellowgold"
+     ]
+    },
+    {
+     "canonical": "army green",
+     "df": 2,
+     "surfaces": [
+      "army green",
+      "army greens",
+      "armygreen"
+     ]
+    },
+    {
+     "canonical": "baroque",
+     "df": 2,
+     "surfaces": [
+      "baroque",
+      "baroques"
+     ]
+    },
+    {
+     "canonical": "black multi",
+     "df": 2,
+     "surfaces": [
+      "black multi",
+      "black multis",
+      "blackmulti"
+     ]
+    },
+    {
+     "canonical": "blond",
+     "df": 2,
+     "surfaces": [
+      "blond",
+      "blonds"
+     ]
+    },
+    {
+     "canonical": "bordeaux",
+     "df": 2,
+     "surfaces": [
+      "bordeaux",
+      "bordeauxs"
+     ]
+    },
+    {
+     "canonical": "bubblegum",
+     "df": 2,
+     "surfaces": [
+      "bubblegum",
+      "bubblegums"
+     ]
+    },
+    {
+     "canonical": "camo",
+     "df": 2,
+     "surfaces": [
+      "camo",
+      "camos"
+     ]
+    },
+    {
+     "canonical": "camouflage",
+     "df": 2,
+     "surfaces": [
+      "camouflage",
+      "camouflages"
+     ]
+    },
+    {
+     "canonical": "carbon",
+     "df": 2,
+     "surfaces": [
+      "carbon",
+      "carbons"
+     ]
+    },
+    {
+     "canonical": "carbon black",
+     "df": 2,
+     "surfaces": [
+      "carbon black",
+      "carbon blacks",
+      "carbonblack"
+     ]
+    },
+    {
+     "canonical": "champagne",
+     "df": 2,
+     "surfaces": [
+      "champagne",
+      "champagnes"
+     ]
+    },
+    {
+     "canonical": "charcoal gray",
+     "df": 2,
+     "surfaces": [
+      "charcoal gray",
+      "charcoal grays",
+      "charcoal grey",
+      "charcoalgray"
+     ]
+    },
+    {
+     "canonical": "chocolate brown",
+     "df": 2,
+     "surfaces": [
+      "chocolate brown",
+      "chocolate browns",
+      "chocolatebrown"
+     ]
+    },
+    {
+     "canonical": "cocoa",
+     "df": 2,
+     "surfaces": [
+      "cocoa",
+      "cocoas"
+     ]
+    },
+    {
+     "canonical": "coral pink",
+     "df": 2,
+     "surfaces": [
+      "coral pink",
+      "coral pinks",
+      "coralpink"
+     ]
+    },
+    {
+     "canonical": "dark pink",
+     "df": 2,
+     "surfaces": [
+      "dark pink",
+      "dark pinks",
+      "darkpink"
+     ]
+    },
+    {
+     "canonical": "flower",
+     "df": 2,
+     "surfaces": [
+      "flower",
+      "flowers"
+     ]
+    },
+    {
+     "canonical": "granite",
+     "df": 2,
+     "surfaces": [
+      "granite",
+      "granites"
+     ]
+    },
+    {
+     "canonical": "granite heather",
+     "df": 2,
+     "surfaces": [
+      "granite heather",
+      "granite heathers",
+      "graniteheather"
+     ]
+    },
+    {
+     "canonical": "graphite",
+     "df": 2,
+     "surfaces": [
+      "graphite",
+      "graphites"
+     ]
+    },
+    {
+     "canonical": "heather",
+     "df": 2,
+     "surfaces": [
+      "heather",
+      "heathers"
+     ]
+    },
+    {
+     "canonical": "indigo",
+     "df": 2,
+     "surfaces": [
+      "indigo",
+      "indigos"
+     ]
+    },
+    {
+     "canonical": "ivory",
+     "df": 2,
+     "surfaces": [
+      "ivory",
+      "ivorys"
+     ]
+    },
+    {
+     "canonical": "jaiden green",
+     "df": 2,
+     "surfaces": [
+      "jaiden green",
+      "jaiden greens",
+      "jaidengreen"
+     ]
+    },
+    {
+     "canonical": "kelly green",
+     "df": 2,
+     "surfaces": [
+      "kelly green",
+      "kelly greens",
+      "kellygreen"
+     ]
+    },
+    {
+     "canonical": "leopard",
+     "df": 2,
+     "surfaces": [
+      "leopard",
+      "leopards"
+     ]
+    },
+    {
+     "canonical": "light green",
+     "df": 2,
+     "surfaces": [
+      "light green",
+      "light greens",
+      "lightgreen"
+     ]
+    },
+    {
+     "canonical": "light grey",
+     "df": 2,
+     "surfaces": [
+      "light gray",
+      "light grey",
+      "light greys",
+      "lightgrey"
+     ]
+    },
+    {
+     "canonical": "lime",
+     "df": 2,
+     "surfaces": [
+      "lime",
+      "limes"
+     ]
+    },
+    {
+     "canonical": "metallic",
+     "df": 2,
+     "surfaces": [
+      "metallic",
+      "metallics"
+     ]
+    },
+    {
+     "canonical": "olive green",
+     "df": 2,
+     "surfaces": [
+      "olive green",
+      "olive greens",
+      "olivegreen"
+     ]
+    },
+    {
+     "canonical": "one color",
+     "df": 2,
+     "surfaces": [
+      "one color",
+      "one colors",
+      "onecolor"
+     ]
+    },
+    {
+     "canonical": "orchid",
+     "df": 2,
+     "surfaces": [
+      "orchid",
+      "orchids"
+     ]
+    },
+    {
+     "canonical": "passion pink",
+     "df": 2,
+     "surfaces": [
+      "passion pink",
+      "passion pinks",
+      "passionpink"
+     ]
+    },
+    {
+     "canonical": "rafaelian silver",
+     "df": 2,
+     "surfaces": [
+      "rafaelian silver",
+      "rafaelian silvers",
+      "rafaeliansilver"
+     ]
+    },
+    {
+     "canonical": "rose red",
+     "df": 2,
+     "surfaces": [
+      "rose red",
+      "rose reds",
+      "rosered"
+     ]
+    },
+    {
+     "canonical": "scarlet",
+     "df": 2,
+     "surfaces": [
+      "scarlet",
+      "scarlets"
+     ]
+    },
+    {
+     "canonical": "silver tone",
+     "df": 2,
+     "surfaces": [
+      "silver tone",
+      "silver tones",
+      "silvertone"
+     ]
+    },
+    {
+     "canonical": "silvery",
+     "df": 2,
+     "surfaces": [
+      "silvery",
+      "silverys"
+     ]
+    },
+    {
+     "canonical": "sky blue",
+     "df": 2,
+     "surfaces": [
+      "sky blue",
+      "sky blues",
+      "skyblue"
+     ]
+    },
+    {
+     "canonical": "stripe",
+     "df": 2,
+     "surfaces": [
+      "stripe",
+      "stripes"
+     ]
+    },
+    {
+     "canonical": "sugar plum",
+     "df": 2,
+     "surfaces": [
+      "sugar plum",
+      "sugar plums",
+      "sugarplum"
+     ]
+    },
+    {
+     "canonical": "taupe",
+     "df": 2,
+     "surfaces": [
+      "taupe",
+      "taupes"
+     ]
+    },
+    {
+     "canonical": "teal",
+     "df": 2,
+     "surfaces": [
+      "teal",
+      "teals"
+     ]
+    },
+    {
+     "canonical": "tiger eye",
+     "df": 2,
+     "surfaces": [
+      "tiger eye",
+      "tiger eyes",
+      "tigereye"
+     ]
+    },
+    {
+     "canonical": "transparent",
+     "df": 2,
+     "surfaces": [
+      "transparent",
+      "transparents"
+     ]
+    },
+    {
+     "canonical": "two tone",
+     "df": 2,
+     "surfaces": [
+      "two tone",
+      "two tones",
+      "twotone"
+     ]
+    },
+    {
+     "canonical": "volt",
+     "df": 2,
+     "surfaces": [
+      "volt",
+      "volts"
+     ]
+    },
+    {
+     "canonical": "wine",
+     "df": 2,
+     "surfaces": [
+      "wine",
+      "wines"
+     ]
+    },
+    {
+     "canonical": "wine red",
+     "df": 2,
+     "surfaces": [
+      "wine red",
+      "wine reds",
+      "winered"
+     ]
+    }
+   ]
+  },
+  "material": {
+   "count": 107,
+   "entries": [
+    {
+     "canonical": "leather",
+     "df": 385,
+     "surfaces": [
+      "leather",
+      "leathers"
+     ]
+    },
+    {
+     "canonical": "polyester",
+     "df": 382,
+     "surfaces": [
+      "polyester",
+      "polyesters"
+     ]
+    },
+    {
+     "canonical": "cotton",
+     "df": 236,
+     "surfaces": [
+      "cotton",
+      "cottons"
+     ]
+    },
+    {
+     "canonical": "metal",
+     "df": 215,
+     "surfaces": [
+      "metal",
+      "metals"
+     ]
+    },
+    {
+     "canonical": "nylon",
+     "df": 134,
+     "surfaces": [
+      "nylon",
+      "nylons"
+     ]
+    },
+    {
+     "canonical": "stainless steel",
+     "df": 129,
+     "surfaces": [
+      "stainless steel",
+      "stainless steels",
+      "stainlesssteel"
+     ]
+    },
+    {
+     "canonical": "faux leather",
+     "df": 104,
+     "surfaces": [
+      "faux leather",
+      "faux leathers",
+      "fauxleather"
+     ]
+    },
+    {
+     "canonical": "rubber",
+     "df": 67,
+     "surfaces": [
+      "rubber",
+      "rubbers"
+     ]
+    },
+    {
+     "canonical": "spandex",
+     "df": 67,
+     "surfaces": [
+      "spandex",
+      "spandexs"
+     ]
+    },
+    {
+     "canonical": "plastic",
+     "df": 52,
+     "surfaces": [
+      "plastic",
+      "plastics"
+     ]
+    },
+    {
+     "canonical": "synthetic",
+     "df": 49,
+     "surfaces": [
+      "synthetic",
+      "synthetics"
+     ]
+    },
+    {
+     "canonical": "wood",
+     "df": 42,
+     "surfaces": [
+      "wood",
+      "woods"
+     ]
+    },
+    {
+     "canonical": "silicone",
+     "df": 39,
+     "surfaces": [
+      "silicone",
+      "silicones"
+     ]
+    },
+    {
+     "canonical": "crystal",
+     "df": 33,
+     "surfaces": [
+      "crystal",
+      "crystals"
+     ]
+    },
+    {
+     "canonical": "glass",
+     "df": 33,
+     "surfaces": [
+      "glas",
+      "glass"
+     ]
+    },
+    {
+     "canonical": "acrylic",
+     "df": 30,
+     "surfaces": [
+      "acrylic",
+      "acrylics"
+     ]
+    },
+    {
+     "canonical": "fabric",
+     "df": 24,
+     "surfaces": [
+      "fabric",
+      "fabrics"
+     ]
+    },
+    {
+     "canonical": "sterling silver",
+     "df": 24,
+     "surfaces": [
+      "sterling silver",
+      "sterling silvers",
+      "sterlingsilver"
+     ]
+    },
+    {
+     "canonical": "alloy",
+     "df": 23,
+     "surfaces": [
+      "alloy",
+      "alloys"
+     ]
+    },
+    {
+     "canonical": "all other heathers cotton",
+     "df": 22,
+     "surfaces": [
+      "all other heathers cotton",
+      "all other heathers cottons",
+      "allotherheatherscotton"
+     ]
+    },
+    {
+     "canonical": "gemstone",
+     "df": 22,
+     "surfaces": [
+      "gemstone",
+      "gemstones"
+     ]
+    },
+    {
+     "canonical": "heather grey cotton",
+     "df": 22,
+     "surfaces": [
+      "heather gray cotton",
+      "heather grey cotton",
+      "heather grey cottons",
+      "heathergreycotton"
+     ]
+    },
+    {
+     "canonical": "stone",
+     "df": 21,
+     "surfaces": [
+      "stone",
+      "stones"
+     ]
+    },
+    {
+     "canonical": "blend",
+     "df": 19,
+     "surfaces": [
+      "blend"
+     ]
+    },
+    {
+     "canonical": "polyurethane",
+     "df": 19,
+     "surfaces": [
+      "polyurethane",
+      "polyurethanes"
+     ]
+    },
+    {
+     "canonical": "aluminium",
+     "df": 18,
+     "surfaces": [
+      "aluminium",
+      "aluminiums"
+     ]
+    },
+    {
+     "canonical": "rhinestone",
+     "df": 18,
+     "surfaces": [
+      "rhinestone",
+      "rhinestones"
+     ]
+    },
+    {
+     "canonical": "brass",
+     "df": 17,
+     "surfaces": [
+      "brass"
+     ]
+    },
+    {
+     "canonical": "neoprene",
+     "df": 17,
+     "surfaces": [
+      "neoprene",
+      "neoprenes"
+     ]
+    },
+    {
+     "canonical": "mesh",
+     "df": 15,
+     "surfaces": [
+      "mesh",
+      "meshs"
+     ]
+    },
+    {
+     "canonical": "velvet",
+     "df": 15,
+     "surfaces": [
+      "velvet",
+      "velvets"
+     ]
+    },
+    {
+     "canonical": "rayon",
+     "df": 14,
+     "surfaces": [
+      "rayon",
+      "rayons"
+     ]
+    },
+    {
+     "canonical": "vinyl",
+     "df": 14,
+     "surfaces": [
+      "vinyl",
+      "vinyls"
+     ]
+    },
+    {
+     "canonical": "aluminum",
+     "df": 13,
+     "surfaces": [
+      "aluminum",
+      "aluminums"
+     ]
+    },
+    {
+     "canonical": "cotton blend",
+     "df": 13,
+     "surfaces": [
+      "cotton blend",
+      "cotton blends",
+      "cottonblend"
+     ]
+    },
+    {
+     "canonical": "canvas",
+     "df": 12,
+     "surfaces": [
+      "canva",
+      "canvas"
+     ]
+    },
+    {
+     "canonical": "not applicable",
+     "df": 12,
+     "surfaces": [
+      "not applicable",
+      "not applicables",
+      "notapplicable"
+     ]
+    },
+    {
+     "canonical": "resin",
+     "df": 12,
+     "surfaces": [
+      "resin",
+      "resins"
+     ]
+    },
+    {
+     "canonical": "thermoplastic polyurethane",
+     "df": 12,
+     "surfaces": [
+      "thermoplastic polyurethane",
+      "thermoplastic polyurethanes",
+      "thermoplasticpolyurethane"
+     ]
+    },
+    {
+     "canonical": "polyester see more",
+     "df": 11,
+     "surfaces": [
+      "polyester see more",
+      "polyester see mores",
+      "polyesterseemore"
+     ]
+    },
+    {
+     "canonical": "polyestersolid colors cotton",
+     "df": 11,
+     "surfaces": [
+      "polyestersolid colors cotton",
+      "polyestersolid colors cottons",
+      "polyestersolidcolorscotton"
+     ]
+    },
+    {
+     "canonical": "solid colors cotton",
+     "df": 11,
+     "surfaces": [
+      "solid colors cotton",
+      "solid colors cottons",
+      "solidcolorscotton"
+     ]
+    },
+    {
+     "canonical": "polyvinyl chloride",
+     "df": 10,
+     "surfaces": [
+      "polyvinyl chloride",
+      "polyvinyl chlorides",
+      "polyvinylchloride"
+     ]
+    },
+    {
+     "canonical": "suede",
+     "df": 10,
+     "surfaces": [
+      "suede",
+      "suedes"
+     ]
+    },
+    {
+     "canonical": "silk",
+     "df": 9,
+     "surfaces": [
+      "silk",
+      "silks"
+     ]
+    },
+    {
+     "canonical": "zinc",
+     "df": 9,
+     "surfaces": [
+      "zinc",
+      "zincs"
+     ]
+    },
+    {
+     "canonical": "ceramic",
+     "df": 8,
+     "surfaces": [
+      "ceramic",
+      "ceramics"
+     ]
+    },
+    {
+     "canonical": "elastane",
+     "df": 8,
+     "surfaces": [
+      "elastane",
+      "elastanes"
+     ]
+    },
+    {
+     "canonical": "engineered wood",
+     "df": 8,
+     "surfaces": [
+      "engineered wood",
+      "engineered woods",
+      "engineeredwood"
+     ]
+    },
+    {
+     "canonical": "ethylene vinyl acetate",
+     "df": 8,
+     "surfaces": [
+      "ethylene vinyl acetate",
+      "ethylene vinyl acetates",
+      "ethylenevinylacetate"
+     ]
+    },
+    {
+     "canonical": "paper",
+     "df": 8,
+     "surfaces": [
+      "paper",
+      "papers"
+     ]
+    },
+    {
+     "canonical": "synthetic fiber",
+     "df": 8,
+     "surfaces": [
+      "synthetic fiber",
+      "synthetic fibers",
+      "syntheticfiber"
+     ]
+    },
+    {
+     "canonical": "iron",
+     "df": 7,
+     "surfaces": [
+      "iron",
+      "irons"
+     ]
+    },
+    {
+     "canonical": "jersey",
+     "df": 7,
+     "surfaces": [
+      "jersey"
+     ]
+    },
+    {
+     "canonical": "latex",
+     "df": 7,
+     "surfaces": [
+      "latex",
+      "latexs"
+     ]
+    },
+    {
+     "canonical": "copper",
+     "df": 6,
+     "surfaces": [
+      "copper",
+      "coppers"
+     ]
+    },
+    {
+     "canonical": "ethylene vinyl acetate eva",
+     "df": 6,
+     "surfaces": [
+      "ethylene vinyl acetate eva",
+      "ethylene vinyl acetate evas",
+      "ethylenevinylacetateeva"
+     ]
+    },
+    {
+     "canonical": "linen",
+     "df": 6,
+     "surfaces": [
+      "linen",
+      "linens"
+     ]
+    },
+    {
+     "canonical": "pu leather",
+     "df": 6,
+     "surfaces": [
+      "pu leather",
+      "pu leathers",
+      "puleather"
+     ]
+    },
+    {
+     "canonical": "satin",
+     "df": 6,
+     "surfaces": [
+      "satin",
+      "satins"
+     ]
+    },
+    {
+     "canonical": "steel",
+     "df": 6,
+     "surfaces": [
+      "steel",
+      "steels"
+     ]
+    },
+    {
+     "canonical": "alloy steel",
+     "df": 5,
+     "surfaces": [
+      "alloy steel",
+      "alloy steels",
+      "alloysteel"
+     ]
+    },
+    {
+     "canonical": "carbon fiber",
+     "df": 5,
+     "surfaces": [
+      "carbon fiber",
+      "carbon fibers",
+      "carbonfiber"
+     ]
+    },
+    {
+     "canonical": "felt",
+     "df": 5,
+     "surfaces": [
+      "felt",
+      "felts"
+     ]
+    },
+    {
+     "canonical": "polycotton",
+     "df": 5,
+     "surfaces": [
+      "polycotton",
+      "polycottons"
+     ]
+    },
+    {
+     "canonical": "rope",
+     "df": 5,
+     "surfaces": [
+      "rope",
+      "ropes"
+     ]
+    },
+    {
+     "canonical": "chiffon",
+     "df": 4,
+     "surfaces": [
+      "chiffon",
+      "chiffons"
+     ]
+    },
+    {
+     "canonical": "enamel",
+     "df": 4,
+     "surfaces": [
+      "enamel",
+      "enamels"
+     ]
+    },
+    {
+     "canonical": "microfiber",
+     "df": 4,
+     "surfaces": [
+      "microfiber",
+      "microfibers"
+     ]
+    },
+    {
+     "canonical": "pearl",
+     "df": 4,
+     "surfaces": [
+      "pearl",
+      "pearls"
+     ]
+    },
+    {
+     "canonical": "polycarbonate",
+     "df": 4,
+     "surfaces": [
+      "polycarbonate",
+      "polycarbonates"
+     ]
+    },
+    {
+     "canonical": "polyurethane pu",
+     "df": 4,
+     "surfaces": [
+      "polyurethane pu",
+      "polyurethane pus",
+      "polyurethanepu"
+     ]
+    },
+    {
+     "canonical": "pvc",
+     "df": 4,
+     "surfaces": [
+      "pvc",
+      "pvcs"
+     ]
+    },
+    {
+     "canonical": "titanium",
+     "df": 4,
+     "surfaces": [
+      "titanium",
+      "titaniums"
+     ]
+    },
+    {
+     "canonical": "composite",
+     "df": 3,
+     "surfaces": [
+      "composite",
+      "composites"
+     ]
+    },
+    {
+     "canonical": "eva",
+     "df": 3,
+     "surfaces": [
+      "eva",
+      "evas"
+     ]
+    },
+    {
+     "canonical": "fiberglass",
+     "df": 3,
+     "surfaces": [
+      "fiberglas",
+      "fiberglass"
+     ]
+    },
+    {
+     "canonical": "other fibers",
+     "df": 3,
+     "surfaces": [
+      "other fiber",
+      "other fibers",
+      "otherfibers"
+     ]
+    },
+    {
+     "canonical": "pewter",
+     "df": 3,
+     "surfaces": [
+      "pewter",
+      "pewters"
+     ]
+    },
+    {
+     "canonical": "polyester blend",
+     "df": 3,
+     "surfaces": [
+      "polyester blend",
+      "polyester blends",
+      "polyesterblend"
+     ]
+    },
+    {
+     "canonical": "polyester spandex",
+     "df": 3,
+     "surfaces": [
+      "polyester spandex",
+      "polyester spandexs",
+      "polyesterspandex"
+     ]
+    },
+    {
+     "canonical": "textile",
+     "df": 3,
+     "surfaces": [
+      "textile",
+      "textiles"
+     ]
+    },
+    {
+     "canonical": "thread",
+     "df": 3,
+     "surfaces": [
+      "thread",
+      "threads"
+     ]
+    },
+    {
+     "canonical": "viscose",
+     "df": 3,
+     "surfaces": [
+      "viscose",
+      "viscoses"
+     ]
+    },
+    {
+     "canonical": "cubic zirconia",
+     "df": 2,
+     "surfaces": [
+      "cubic zirconia",
+      "cubic zirconias",
+      "cubiczirconia"
+     ]
+    },
+    {
+     "canonical": "diamond",
+     "df": 2,
+     "surfaces": [
+      "diamond",
+      "diamonds"
+     ]
+    },
+    {
+     "canonical": "elastic",
+     "df": 2,
+     "surfaces": [
+      "elastic",
+      "elastics"
+     ]
+    },
+    {
+     "canonical": "feather",
+     "df": 2,
+     "surfaces": [
+      "feather",
+      "feathers"
+     ]
+    },
+    {
+     "canonical": "flannel",
+     "df": 2,
+     "surfaces": [
+      "flannel",
+      "flannels"
+     ]
+    },
+    {
+     "canonical": "horn",
+     "df": 2,
+     "surfaces": [
+      "horn",
+      "horns"
+     ]
+    },
+    {
+     "canonical": "human hair",
+     "df": 2,
+     "surfaces": [
+      "human hair",
+      "human hairs",
+      "humanhair"
+     ]
+    },
+    {
+     "canonical": "lace",
+     "df": 2,
+     "surfaces": [
+      "lace",
+      "laces"
+     ]
+    },
+    {
+     "canonical": "lead free",
+     "df": 2,
+     "surfaces": [
+      "lead free",
+      "lead frees",
+      "leadfree"
+     ]
+    },
+    {
+     "canonical": "lining polyester",
+     "df": 2,
+     "surfaces": [
+      "lining polyester",
+      "lining polyesters",
+      "liningpolyester"
+     ]
+    },
+    {
+     "canonical": "modal",
+     "df": 2,
+     "surfaces": [
+      "modal",
+      "modals"
+     ]
+    },
+    {
+     "canonical": "mother of pearl",
+     "df": 2,
+     "surfaces": [
+      "mother of pearl",
+      "mother of pearls",
+      "motherofpearl"
+     ]
+    },
+    {
+     "canonical": "nylon polyester",
+     "df": 2,
+     "surfaces": [
+      "nylon polyester",
+      "nylon polyesters",
+      "nylonpolyester"
+     ]
+    },
+    {
+     "canonical": "onyx",
+     "df": 2,
+     "surfaces": [
+      "onyx",
+      "onyxs"
+     ]
+    },
+    {
+     "canonical": "patent leather",
+     "df": 2,
+     "surfaces": [
+      "patent leather",
+      "patent leathers",
+      "patentleather"
+     ]
+    },
+    {
+     "canonical": "polyester fiber",
+     "df": 2,
+     "surfaces": [
+      "polyester fiber",
+      "polyester fibers",
+      "polyesterfiber"
+     ]
+    },
+    {
+     "canonical": "polypropylene",
+     "df": 2,
+     "surfaces": [
+      "polypropylene",
+      "polypropylenes"
+     ]
+    },
+    {
+     "canonical": "polyvinyl chloride pvc",
+     "df": 2,
+     "surfaces": [
+      "polyvinyl chloride pvc",
+      "polyvinyl chloride pvcs",
+      "polyvinylchloridepvc"
+     ]
+    },
+    {
+     "canonical": "synthetic leather",
+     "df": 2,
+     "surfaces": [
+      "synthetic leather",
+      "synthetic leathers",
+      "syntheticleather"
+     ]
+    },
+    {
+     "canonical": "thermoplastic elastomer tpe",
+     "df": 2,
+     "surfaces": [
+      "thermoplastic elastomer tpe",
+      "thermoplastic elastomer tpes",
+      "thermoplasticelastomertpe"
+     ]
+    },
+    {
+     "canonical": "tyvek",
+     "df": 2,
+     "surfaces": [
+      "tyvek",
+      "tyveks"
+     ]
+    },
+    {
+     "canonical": "vegan leather",
+     "df": 2,
+     "surfaces": [
+      "vegan leather",
+      "vegan leathers",
+      "veganleather"
+     ]
+    },
+    {
+     "canonical": "zinc alloy metal",
+     "df": 2,
+     "surfaces": [
+      "zinc alloy metal",
+      "zinc alloy metals",
+      "zincalloymetal"
+     ]
+    }
+   ]
+  },
+  "size": {
+   "count": 29,
+   "entries": [
+    {
+     "canonical": "large",
+     "df": 99,
+     "surfaces": [
+      "large",
+      "larges"
+     ]
+    },
+    {
+     "canonical": "medium",
+     "df": 92,
+     "surfaces": [
+      "medium",
+      "mediums"
+     ]
+    },
+    {
+     "canonical": "small",
+     "df": 59,
+     "surfaces": [
+      "small",
+      "smalls"
+     ]
+    },
+    {
+     "canonical": "x large",
+     "df": 45,
+     "surfaces": [
+      "x large",
+      "x larges",
+      "xlarge"
+     ]
+    },
+    {
+     "canonical": "xx large",
+     "df": 19,
+     "surfaces": [
+      "xx large",
+      "xx larges",
+      "xxlarge"
+     ]
+    },
+    {
+     "canonical": "8",
+     "df": 13,
+     "surfaces": [
+      "8",
+      "8s"
+     ]
+    },
+    {
+     "canonical": "13",
+     "df": 12,
+     "surfaces": [
+      "13",
+      "13s"
+     ]
+    },
+    {
+     "canonical": "8 inch",
+     "df": 12,
+     "surfaces": [
+      "8 inch",
+      "8 inchs",
+      "8inch"
+     ]
+    },
+    {
+     "canonical": "5",
+     "df": 9,
+     "surfaces": [
+      "5",
+      "5s"
+     ]
+    },
+    {
+     "canonical": "11",
+     "df": 8,
+     "surfaces": [
+      "11",
+      "11s"
+     ]
+    },
+    {
+     "canonical": "3x large",
+     "df": 7,
+     "surfaces": [
+      "3x large",
+      "3x larges",
+      "3xlarge"
+     ]
+    },
+    {
+     "canonical": "7 inch",
+     "df": 7,
+     "surfaces": [
+      "7 inch",
+      "7 inchs",
+      "7inch"
+     ]
+    },
+    {
+     "canonical": "9",
+     "df": 7,
+     "surfaces": [
+      "9",
+      "9s"
+     ]
+    },
+    {
+     "canonical": "10",
+     "df": 6,
+     "surfaces": [
+      "10",
+      "10s"
+     ]
+    },
+    {
+     "canonical": "10 inch",
+     "df": 6,
+     "surfaces": [
+      "10 inch",
+      "10 inchs",
+      "10inch"
+     ]
+    },
+    {
+     "canonical": "7",
+     "df": 6,
+     "surfaces": [
+      "7",
+      "7s"
+     ]
+    },
+    {
+     "canonical": "10 5",
+     "df": 5,
+     "surfaces": [
+      "10 5",
+      "10 5s",
+      "105"
+     ]
+    },
+    {
+     "canonical": "7 5 inch",
+     "df": 5,
+     "surfaces": [
+      "7 5 inch",
+      "7 5 inchs",
+      "75inch"
+     ]
+    },
+    {
+     "canonical": "9 5",
+     "df": 5,
+     "surfaces": [
+      "9 5",
+      "9 5s",
+      "95"
+     ]
+    },
+    {
+     "canonical": "9 inch",
+     "df": 5,
+     "surfaces": [
+      "9 inch",
+      "9 inchs",
+      "9inch"
+     ]
+    },
+    {
+     "canonical": "adjustable",
+     "df": 5,
+     "surfaces": [
+      "adjustable",
+      "adjustables"
+     ]
+    },
+    {
+     "canonical": "1 pcs",
+     "df": 4,
+     "surfaces": [
+      "1 pc",
+      "1 pcs",
+      "1pcs"
+     ]
+    },
+    {
+     "canonical": "11 5",
+     "df": 4,
+     "surfaces": [
+      "11 5",
+      "11 5s",
+      "115"
+     ]
+    },
+    {
+     "canonical": "3 piece set",
+     "df": 4,
+     "surfaces": [
+      "3 piece set",
+      "3 piece sets",
+      "3pieceset"
+     ]
+    },
+    {
+     "canonical": "6",
+     "df": 4,
+     "surfaces": [
+      "6",
+      "6s"
+     ]
+    },
+    {
+     "canonical": "7 5",
+     "df": 4,
+     "surfaces": [
+      "7 5",
+      "7 5s",
+      "75"
+     ]
+    },
+    {
+     "canonical": "7 inches",
+     "df": 4,
+     "surfaces": [
+      "7 inch",
+      "7 inche",
+      "7 inches",
+      "7inches"
+     ]
+    },
+    {
+     "canonical": "8 5 inches",
+     "df": 4,
+     "surfaces": [
+      "8 5 inch",
+      "8 5 inche",
+      "8 5 inches",
+      "85inches"
+     ]
+    },
+    {
+     "canonical": "x small",
+     "df": 4,
+     "surfaces": [
+      "x small",
+      "x smalls",
+      "xsmall"
+     ]
+    }
+   ]
+  },
+  "style": {
+   "count": 41,
+   "entries": [
+    {
+     "canonical": "modern",
+     "df": 156,
+     "surfaces": [
+      "modern",
+      "moderns"
+     ]
+    },
+    {
+     "canonical": "classic",
+     "df": 104,
+     "surfaces": [
+      "classic",
+      "classics"
+     ]
+    },
+    {
+     "canonical": "chain",
+     "df": 88,
+     "surfaces": [
+      "chain"
+     ]
+    },
+    {
+     "canonical": "charm",
+     "df": 72,
+     "surfaces": [
+      "charm"
+     ]
+    },
+    {
+     "canonical": "elegant",
+     "df": 61,
+     "surfaces": [
+      "elegant",
+      "elegants"
+     ]
+    },
+    {
+     "canonical": "vintage",
+     "df": 51,
+     "surfaces": [
+      "vintage",
+      "vintages"
+     ]
+    },
+    {
+     "canonical": "beads",
+     "df": 50,
+     "surfaces": [
+      "beads"
+     ]
+    },
+    {
+     "canonical": "minimalist",
+     "df": 48,
+     "surfaces": [
+      "minimalist",
+      "minimalists"
+     ]
+    },
+    {
+     "canonical": "rfid wallet",
+     "df": 48,
+     "surfaces": [
+      "rfid wallet",
+      "rfid wallets",
+      "rfidwallet"
+     ]
+    },
+    {
+     "canonical": "gold plated",
+     "df": 39,
+     "surfaces": [
+      "gold plated",
+      "gold plateds",
+      "goldplated"
+     ]
+    },
+    {
+     "canonical": "bohemian",
+     "df": 36,
+     "surfaces": [
+      "bohemian",
+      "bohemians"
+     ]
+    },
+    {
+     "canonical": "beaded",
+     "df": 34,
+     "surfaces": [
+      "beaded",
+      "beadeds"
+     ]
+    },
+    {
+     "canonical": "compact",
+     "df": 33,
+     "surfaces": [
+      "compact",
+      "compacts"
+     ]
+    },
+    {
+     "canonical": "simple",
+     "df": 28,
+     "surfaces": [
+      "simple",
+      "simples"
+     ]
+    },
+    {
+     "canonical": "comfortable",
+     "df": 20,
+     "surfaces": [
+      "comfortable",
+      "comfortables"
+     ]
+    },
+    {
+     "canonical": "traditional",
+     "df": 20,
+     "surfaces": [
+      "traditional",
+      "traditionals"
+     ]
+    },
+    {
+     "canonical": "zippered wallet",
+     "df": 20,
+     "surfaces": [
+      "zippered wallet",
+      "zippered wallets",
+      "zipperedwallet"
+     ]
+    },
+    {
+     "canonical": "travel wallet",
+     "df": 19,
+     "surfaces": [
+      "travel wallet",
+      "travelwallet"
+     ]
+    },
+    {
+     "canonical": "sports",
+     "df": 16,
+     "surfaces": [
+      "sport",
+      "sports"
+     ]
+    },
+    {
+     "canonical": "personalized",
+     "df": 15,
+     "surfaces": [
+      "personalized",
+      "personalizeds"
+     ]
+    },
+    {
+     "canonical": "retro",
+     "df": 14,
+     "surfaces": [
+      "retro",
+      "retros"
+     ]
+    },
+    {
+     "canonical": "slim wallet",
+     "df": 13,
+     "surfaces": [
+      "slim wallet",
+      "slim wallets",
+      "slimwallet"
+     ]
+    },
+    {
+     "canonical": "bifold wallet",
+     "df": 12,
+     "surfaces": [
+      "bifold wallet",
+      "bifold wallets",
+      "bifoldwallet"
+     ]
+    },
+    {
+     "canonical": "earloop",
+     "df": 12,
+     "surfaces": [
+      "earloop",
+      "earloops"
+     ]
+    },
+    {
+     "canonical": "hoodie",
+     "df": 10,
+     "surfaces": [
+      "hoodie"
+     ]
+    },
+    {
+     "canonical": "card case wallet",
+     "df": 9,
+     "surfaces": [
+      "card case wallet",
+      "card case wallets",
+      "cardcasewallet"
+     ]
+    },
+    {
+     "canonical": "leather wrap",
+     "df": 9,
+     "surfaces": [
+      "leather wrap",
+      "leather wraps",
+      "leatherwrap"
+     ]
+    },
+    {
+     "canonical": "protection",
+     "df": 9,
+     "surfaces": [
+      "protection",
+      "protections"
+     ]
+    },
+    {
+     "canonical": "soft",
+     "df": 9,
+     "surfaces": [
+      "soft",
+      "softs"
+     ]
+    },
+    {
+     "canonical": "thermal",
+     "df": 8,
+     "surfaces": [
+      "thermal",
+      "thermals"
+     ]
+    },
+    {
+     "canonical": "trifold wallet",
+     "df": 8,
+     "surfaces": [
+      "trifold wallet",
+      "trifold wallets",
+      "trifoldwallet"
+     ]
+    },
+    {
+     "canonical": "unisex",
+     "df": 8,
+     "surfaces": [
+      "unisex",
+      "unisexs"
+     ]
+    },
+    {
+     "canonical": "antique",
+     "df": 7,
+     "surfaces": [
+      "antique",
+      "antiques"
+     ]
+    },
+    {
+     "canonical": "contemporary",
+     "df": 7,
+     "surfaces": [
+      "contemporary",
+      "contemporarys"
+     ]
+    },
+    {
+     "canonical": "fitted",
+     "df": 7,
+     "surfaces": [
+      "fitted",
+      "fitteds"
+     ]
+    },
+    {
+     "canonical": "laptop",
+     "df": 7,
+     "surfaces": [
+      "laptop",
+      "laptops"
+     ]
+    },
+    {
+     "canonical": "stylish",
+     "df": 7,
+     "surfaces": [
+      "stylish",
+      "stylishs"
+     ]
+    },
+    {
+     "canonical": "unique",
+     "df": 7,
+     "surfaces": [
+      "unique",
+      "uniques"
+     ]
+    },
+    {
+     "canonical": "backpack",
+     "df": 6,
+     "surfaces": [
+      "backpack"
+     ]
+    },
+    {
+     "canonical": "embroidered",
+     "df": 6,
+     "surfaces": [
+      "embroidered",
+      "embroidereds"
+     ]
+    },
+    {
+     "canonical": "straight",
+     "df": 6,
+     "surfaces": [
+      "straight",
+      "straights"
+     ]
+    }
+   ]
+  }
+ },
+ "catalog": "data/catalog.jsonl",
+ "catalog_sha256": "da979b05a68af864cb0dcf9ee6a81c010c7e66a57978ad286c7a2e005fc69a67",
+ "floors": {
+  "brand": 40,
+  "category": 8,
+  "color": 2,
+  "material": 2,
+  "size": 4,
+  "style": 6
+ },
+ "generated_at": "2026-08-31T02:53:43+00:00",
+ "lexicon_version": 1
+}
