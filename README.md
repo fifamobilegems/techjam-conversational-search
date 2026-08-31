@@ -1,178 +1,257 @@
-# Shopping Copilot — Conversational Search Agent
+# Conversational E-Commerce Search Agent — TechJam 2026, Track 4
 
-TechJam 2026, Track 4. A conversational shopping agent that finds a customer's
-intended product inside a frozen 50,000-item Amazon catalog within ten turns.
+A stateful conversational retrieval agent that finds a shopper's hidden target
+product in a frozen 50,000-item catalog within 10 turns.
 
-Built on the official participant kit. `evaluator/local_evaluator.py` and
-`data/public_set.jsonl` are byte-identical to the organizer's copies — the
-scoring contract is untouched.
+**TechnicalScore `0.8427` on the 200-session public set — 7.9× the provided
+BM25 baseline (`0.1067`).** Zero tokens, zero API cost, ~65 ms per turn, and the
+scored path runs on the Python standard library alone.
+
+| | HR@10 | MRR | MTTC | Efficiency | TechnicalScore |
+|---|--:|--:|--:|--:|--:|
+| **This agent** | 0.9500 | 0.6840 | 2.875 | 0.8125 | **0.8427** |
+| Provided baseline | 0.1250 | 0.0680 | 9.810 | 0.1190 | 0.1067 |
+
+---
 
 ## Project overview
 
-The starter agent matches keywords. That works when the customer happens to use
-the catalog's own words and fails completely when they do not, which is most of
-the time: on real Amazon search queries the original pipeline produced an
-**empty search query for 86% of messages**, because it built the query only from
-template-matched slots and real phrasing matches no template.
+The starter agent treats each turn as a fresh keyword search. That loses the two
+things a shopping conversation is actually made of: constraints accumulate, and
+sometimes they get retracted. We built the agent around those two facts.
 
-The system addresses that with four layers.
+**1. Extraction is a cascade, not a parser.** Three tiers run in order and stop
+as soon as one produces something. Tier 0 is a template matcher for the
+structured phrasing the simulator uses. Tier 1 is a gazetteer mined from the
+catalog itself — 107 colours and 107 materials against the 12 and 10 a hand-written
+list would carry — which catches free-text phrasing that no template matches.
+Tier 2 is an optional LLM, off by default, gated on both earlier tiers returning
+nothing. A separate polarity layer marks what the shopper *rejected*, so "without
+underwire" removes a term from the query instead of searching for it.
 
-**1. Extraction cascade** (`starter/extractor.py`)
+**2. State is an append-only event log.** Every disclosure is an immutable event;
+the constraint set is *replayed* from that log rather than mutated in place. This
+is what makes intent overrides correct: "actually, ignore my earlier preference"
+appends a superseding event, so the old constraint drops out of the active set
+but survives as weak evidence at 0.4 weight — because an overridden preference
+still describes the same target product.
 
-| Tier | What it does | When it runs |
-|---|---|---|
-| Tier 0 | template regex, captures verbatim catalog metadata | always, authoritative |
-| Tier 1 | lexicon tagging from a catalog-mined vocabulary | only when Tier 0 found nothing |
-| Tier 2 | LLM extraction, schema-constrained and verbatim-guarded | only when both are silent |
+**3. Retrieval is staged so hard constraints cannot be outvoted.** BM25 over
+SQLite FTS5 generates candidates, a prefilter drops determinate violators before
+the candidate budget is spent, and reranking runs in four ordered stages: hard
+constraint coverage, then lexical relevance, then soft preferences, then the user
+profile as a pure tie-break. A hard-match floor reserves 2 of the 10 returned
+slots for the strongest lexical matches, because a product BM25 ranks first can
+otherwise finish outside the Top-10 on an unremarkable constraint total.
 
-Tier 1 exists because the original extractor hardcoded 12 colours and 10
-materials against a catalog holding **1,165 colours and 463 materials**.
-`scripts/build_lexicon.py` mines the vocabulary from catalog metadata into
-`data/lexicon.json` (908 entries), so "burgundy" and "vegan leather" are
-understood without anyone typing them into a list.
+### What we think is the interesting part
 
-Tier 1 runs *only* when Tier 0 returns nothing. That single condition is what
-keeps template phrasing untouched, and it is verified by a test.
+We built a second and third customer simulator to attack our own agent.
 
-A polarity layer marks negations ("wig **without** horns"). It is deliberately
-narrow: measured over 1,400 messages, genuine product-attribute negation is 1
-in 1,400, while naive negation detection fires on product *names* containing a
-cue — "No Closure closure", "Non-Polarized", "no show socks" — and destroys
-real constraints. Guards run before scope is computed.
+The official simulator has the shopper recite the target product's own catalog
+metadata verbatim. An agent tuned only against it learns to exploit that, and we
+could not tell from a single score whether we had built a shopping agent or a
+template matcher. So we wrote `realistic` (a paraphrasing shopper) and `esci`
+(opening turns taken verbatim from real Amazon shopping queries in the ESCI
+Shopping Queries dataset), and we score every change against all three.
 
-**2. Event-sourced dialogue state** (`state/state_manager.py`)
+An early version scored 0.87 on official phrasing and **0.04** on real queries.
+That gap was the single most useful number in the project, and closing it drove
+almost every architectural decision that followed.
 
-An append-only event log; effective state is a replay. Handles incremental slot
-accumulation and intent override, where a superseded preference is *demoted*
-(weight 0.4) rather than deleted — in this dataset the old and new values of an
-override describe the same target product, so the old one is still evidence.
+| dataset × simulator | n | HR@10 | MRR | MTTC | TechnicalScore |
+|---|--:|--:|--:|--:|--:|
+| public200 × official | 200 | 0.9500 | 0.6840 | 2.875 | **0.8427** |
+| public200 × realistic | 200 | 0.9950 | 0.7084 | 2.520 | 0.8796 |
+| synth800 × official | 200 | 0.9700 | 0.7491 | 2.600 | 0.8777 |
+| synth800 × realistic | 200 | 1.0000 | 0.7981 | 2.295 | 0.9135 |
+| esci1000 × official | 200 | 0.9500 | 0.7909 | 2.785 | 0.8766 |
+| esci1000 × realistic | 200 | 0.9950 | 0.7257 | 2.415 | 0.8869 |
+| **esci1000 × esci** (real queries) | 200 | 0.9850 | 0.6818 | 2.575 | **0.8655** |
+| | | | | **mean** | **0.8775** |
 
-**3. Retrieval and staged reranking** (`starter/retriever.py`)
+1,400 sessions. The spread across the three phrasings is now 0.04, not 0.83.
+
+---
+
+## Setup
+
+**Python 3.10+** (developed and measured on **3.13.9**).
+
+```bash
+git clone https://github.com/fifamobilegems/techjam-conversational-search.git
+cd techjam-conversational-search
+```
+
+### The catalog
+
+Not committed — download `catalog.jsonl.gz` from the GitHub Release, then:
+
+```bash
+gzip -dkc catalog.jsonl.gz > data/catalog.jsonl
+```
+
+Expected: 50,000 rows. Verify against the published `SHA256SUMS` if present.
+
+### Dependencies
+
+**The scored agent path requires no third-party packages.** It is Python standard
+library only — `sqlite3` FTS5 for the index, `re` for extraction, `json`/`gzip`
+for the catalog. This is verified in CI-style by importing the agent with
+`numpy`, `torch`, `openai` and `sentence-transformers` blocked at the import
+hook.
+
+Optional extras, none of which the scored path uses:
+
+```bash
+pip install -r requirements.txt              # numpy — dense-retrieval package only
+pip install -r requirements-llm.txt          # openai — optional Tier-2 extractor
+pip install -r requirements-embeddings.txt   # sentence-transformers (~2 GB)
+```
+
+---
+
+## Reproducing our results
+
+One command, the unmodified official evaluator:
 
 BM25 over an in-memory SQLite FTS5 index (50k products, field-weighted), then
 staged reranking so hard-constraint coverage cannot be traded away by lexical
 relevance. Everything runs in-process; no vector database.
 
-**4. Dense retrieval foundation** (`retrieval/`)
+Writes `results.json` with per-session results and the aggregate metrics quoted
+at the top of this README. Runtime ~35 s for all 200 sessions on an Apple M-series
+laptop.
 
-A pretrained sentence encoder over the catalog, 50k × 384, brute-force cosine
-in memory. Built, tested, and **not currently wired into the scored path** —
-see *Limitations*.
-
-## Setup
-
-Python 3.10+.
+The wider robustness matrix (3 datasets × 3 simulators):
 
 ```bash
-git clone <this-repo> && cd techjam-conversational-search
-gzip -dkc catalog.jsonl.gz > data/catalog.jsonl     # 50,000 products
-pip install -r requirements.txt                      # numpy only
+python3 -m tools.bench --limit 200
 ```
 
-The deterministic agent needs **no** further dependencies, no API key, and no
-network access.
-
-Optional extras:
+Other reproducible artifacts:
 
 ```bash
-pip install -r requirements-llm.txt          # Tier 2 LLM extraction
-pip install -r requirements-embeddings.txt   # dense retrieval encoder
-```
-
-For Tier 2, copy `.env_example` to `.env` and set your own key. `.env` is
-gitignored; **no credentials are committed anywhere in this repository.**
-
-## Reproducing our results
-
-```bash
-python3 -m evaluator.local_evaluator          # official scorer, public 200
 python3 -m unittest discover tests            # 198 tests
+python3 -m scripts.measure_recall             # BM25 recall gate -> docs/recall.md
+python3 -m scripts.calibrate_rerank           # weight calibration + miss classification
+python3 -m scripts.measure_attribute_yield    # answerability -> docs/attribute_yield.json
+python3 -m tools.trace_runner --simulator esci -v   # full turn-by-turn transcripts
 ```
-
-Rebuild the committed artifacts from the frozen catalog (both deterministic):
-
-```bash
-python3 -m scripts.build_lexicon              # -> data/lexicon.json
-python3 -m scripts.build_embeddings           # -> data/embeddings/ (optional)
-```
-
-We also evaluate against paraphrased and real-query phrasings, to check the
-agent is not merely fitted to the simulator's templates:
-
-```bash
-python3 -m tools.bench --limit 200            # 3 datasets x 3 phrasings
-python3 -m scripts.measure_recall             # BM25 recall diagnostic
-```
-
-`tools/` and the extra datasets are ours, not the organizer's. `data/synth_set_800.jsonl`
-and `data/esci_set_1000.jsonl` are held-out evaluation sets we generated to test
-robustness; they are never used to fit anything.
 
 ### Environment variables
 
-All optional; defaults give the scored deterministic path.
+**None are required.** All defaults are the measured-best configuration.
 
 | Variable | Default | Effect |
 |---|---|---|
-| `TECHJAM_LLM_EXTRACTOR` | unset | `1` enables Tier 2 |
-| `TECHJAM_LLM_MODEL` | `gpt-4o-mini` | Tier 2 model |
-| `TECHJAM_LLM_MAX_CALLS` | `250` | per-process call ceiling |
-| `RERANK_WEIGHTS` | `default` | `calibrated` uses swept weights |
-| `CLARIFY_POLICY` | `other` | clarification attribute policy |
-| `TIER1_ATTRIBUTES` | `color,material,size,style,brand` | which slots Tier 1 may set |
-| `AGENT_DEBUG_LOG` | unset | writes turn-level traces |
+| `RERANK_WEIGHTS` | `calibrated` | `default` restores pre-calibration weights |
+| `CLARIFY_POLICY` | `other` | `formula` uses the candidate-reduction question policy |
+| `RERANK_HARD_FLOOR` / `_RESERVE` | `1` / `2` | Top-K slots reserved for best BM25 matches |
+| `RERANK_STAGED`, `RERANK_PREFILTER`, `RERANK_EXCLUDE_NEGATED`, `RERANK_SOFT_ABSTAIN`, `RERANK_DEPARTMENT_PENALTY`, `RERANK_PROFILE_TIEBREAK` | `1` | Individual reranker ablations |
+| `RERANK_COVERAGE`, `RERANK_IDF`, `RERANK_CONSENSUS` | `0` | Ranking experiments that measured neutral-to-harmful |
+| `EMIT_CREDIBILITY` | `0` | Score-based emit policy (measured worse than the swept turn threshold) |
+| `TECHJAM_LLM_EXTRACTOR` | unset | `1` enables the optional Tier-2 LLM extractor |
+| `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `TECHJAM_LLM_MODEL`, `TECHJAM_LLM_MAX_CALLS` | unset | Credentials and model id for Tier 2 only |
+| `AGENT_DEBUG_LOG`, `AGENT_TRACE_CANDIDATES` | unset | Opt-in JSONL tracing |
 
-## Model choice, cost, and latency
+No API key is needed to reproduce any number in this README.
 
-The scored path is **fully deterministic and offline**: standard library plus
-numpy, zero tokens, no network. Every result above was produced that way.
+---
 
-Tier 2 is optional and additive — it may only add constraint spans the rules
-missed, never delete one or change a decision. With it enabled (`gpt-4o-mini`),
-measured demand is **0.06 calls/session** on template phrasing and **1.61** on
-real queries, so a 200-session run costs single-digit dollars at most.
+## Disclosure: model, network, cost, latency
 
-## Limitations, and what we would do next
+Required by `docs/submission_rules.md` and `docs/final_evaluation_faq.md`.
 
-**Dense retrieval is built but not connected.** `retrieval/` has a working
-in-memory index with 25 tests, and the catalog embeddings build in about four
-minutes — but no route in `retrieve_and_rerank` calls it. Our own measurements
-say this is the largest remaining win: on real-query phrasing **20–28% of
-sessions never surface the target at all**, and BM25 cannot bridge "warm winter
-coat" to "insulated fleece parka" because they share no word. Wiring the dense
-channel into the existing reciprocal-rank fusion is the first thing we would do.
+| | |
+|---|---|
+| **Model used for the reported results** | **None.** Fully deterministic — BM25 over SQLite FTS5 plus a rule-and-gazetteer extractor. |
+| **Network dependency** | **None.** The reported run makes no network calls. |
+| **Token usage** | **0** prompt, **0** completion (`reported_token_usage` in `results.json`). |
+| **Estimated model cost** | **$0.00** |
+| **Latency** | Index build ~5.4 s once at startup; **median 65 ms**, p95 77 ms per turn. Full 200-session evaluation ~35 s. |
+| **Hardware / Python** | Apple Silicon laptop, CPU only, Python 3.13.9. No GPU. |
+| **Optional LLM tier** | `state/llm_extractor.py` speaks the OpenAI Chat Completions protocol (so any compatible gateway works). **Disabled by default and unused in all reported results.** It is additive-only: it may contribute verbatim spans the deterministic tiers missed, and can never delete a constraint, clear a slot, or change retrieval timing. Any failure — no key, no network, bad JSON, rate limit — silently falls back to the deterministic result. Enabling it requires `TECHJAM_LLM_EXTRACTOR=1` and `OPENAI_API_KEY`; per-call usage is reported through the standard `usage` field. |
+| **Fallback behaviour** | The deterministic path *is* the primary path, so there is nothing to fall back from. |
 
-**Intent is detected but not acted on.** The extractor classifies buying vs
-browsing and the state manager publishes it, but both tracks then run an
-identical pipeline. The brief's dual-track routing is therefore only half
-delivered: we know the intent, we do not yet branch on it.
+Reported results were produced with the unmodified official evaluator
+(`evaluator/local_evaluator.py`, byte-identical to the organiser's upstream copy).
 
-**Efficiency is our weakest metric.** MTTC is 2.4 turns on the official public
-set but 4.7–5.3 on harder phrasings, partly because a miss is scored as turn 11.
-Fixing recall would improve this without touching the dialogue policy.
+---
 
-**The lexicon's filters are hand-tuned.** The 908 vocabulary entries are mined
-from the catalog, but roughly 150 words of stoplists that clean them were
-written by hand against this catalog. They are small and legible, but they are
-fitted to this data.
+## Limitations, and what we would do with more time
 
-**Tier 1 cannot yet set `category`.** Measured on real queries, guessing a
-category *hurt* (0.6437 against 0.7268 with Tier 1 off) because the reranker
-penalises a miss by −20, and a category guessed from a short query is often
-right in spirit and wrong in wording. It is one environment variable away from
-returning once soft constraints abstain rather than penalise.
+**Where we are weakest.** `intent_override` is our lowest scenario at HR@10 0.90
+and MTTC 4.37. The override arrives mid-session and every turn spent recovering
+is a turn not spent converging. We handle the retraction correctly, but we do not
+yet *anticipate* it.
+
+**Negation is correct but barely exercised.** We built NegEx-style scope
+detection with a false-friend guard, so "no show socks" stays a product type
+while "without underwire" becomes an exclusion. Measured on real queries, true
+attribute negation is under 1% — so this is correctness work, not score work, and
+we deliberately kept it small.
+
+**Three ranking ideas we tried and rejected.** Cross-turn rank fusion, a
+constraint-coverage bonus, and IDF-weighted span evidence all measured neutral to
+harmful (consensus was worst: 0.7732 vs 0.8183). They ship disabled with their
+numbers recorded in the source, so nobody re-tries them blind. Rank fusion across
+turns is a feedback loop — it entrenches the mistakes made when the agent knew
+least.
+
+**Dense retrieval is built and deliberately unused.** `retrieval/` implements a
+local embedding channel. We classified every miss as either "target never entered
+the candidate pool" or "target was in the pool and out-ranked" and got **100%
+reachability, zero recall misses**. A dense channel buys candidates; there were
+none left to buy. Kept, tested, and gated behind that measurement.
+
+**Given another week**, in priority order: (1) an override-aware retrieval reset
+that re-ranks from scratch rather than re-weighting, targeting the 0.90; (2) a
+learned reranker trained on the 234 human-labelled ESCI gold rows rather than on
+our own generators, since fitting to a simulator we wrote can only teach the
+model to imitate it; (3) enabling the Tier-2 LLM on the free-text path, where the
+gate says it fires on roughly the queries our gazetteer cannot reach.
+
+---
+
+## Repository layout
+
+```text
+starter/agent.py           Agent API entry point — reset() / respond()
+starter/extractor.py       Tier 0 templates, Tier 1 gazetteer, polarity layer
+starter/retriever.py       BM25 candidates, prefilter, 4-stage reranker
+state/state_manager.py     Append-only event log, replay, dialogue policy
+state/clarification.py     Candidate-reduction question scoring
+state/llm_extractor.py     Optional Tier-2 LLM (off by default)
+retrieval/                 Dense-retrieval foundation (built, gated off)
+evaluator/local_evaluator.py   Official scorer — UNMODIFIED
+tools/bench.py             3 datasets x 3 simulators matrix
+tools/customer_sim.py      `realistic` and `esci` adversarial simulators
+tools/trace_runner.py      Turn-by-turn transcripts
+scripts/                   Lexicon build, recall gate, calibration, yield
+docs/fix_report.md         Code-review fixes and ranking ablations
+docs/ARCHITECTURE.md       Full design rationale
+tests/                     198 tests
+```
+
+---
 
 ## Team contributions
 
-| Area | Work |
+| Member | Contribution |
 |---|---|
-| Harness & evaluation | bench matrix across 3 datasets × 3 phrasings, ESCI simulator, recall diagnostic |
-| Extraction / NLU | lexicon miner, Tier 0/1/2 cascade, polarity layer, LLM escalation gate |
-| State & policy | event-sourced state, replay, clarification policy, emit policy |
-| Retrieval | staged reranking, hard-constraint handling, weight calibration, dense foundation |
+| **LEE JIN TIMOTHY** | Catalog indexing, lexical retrieval, and semantic candidate prototyping |
+| **RAVICHANDRAN GOKUL** | Constraint-aware ranking and scoring |
+| **MAX LIM HAO YAN** | Conversation state, clarification, and intent overrides |
+| **CHEN DONG JUN** | Agent API orchestration, caching, and integration |
+| **SHANANTH SIVAKUMAR** | Evaluation, reproducibility, Git workflow, and submission documentation |
 
-## Data and attribution
+---
 
-Catalog and sessions derive from Amazon Reviews 2023 (McAuley Lab, UCSD). See
-`DATA_ATTRIBUTION.md`. The catalog is read-only: nothing here mutates it or
-injects ASINs.
+## Data attribution
+
+Catalog and sessions derive from **Amazon Reviews 2023** (McAuley Lab, UCSD).
+The `esci` simulator's opening queries come from the public **Amazon ESCI /
+Shopping Queries Dataset**; only query text and relevance labels are used, joined
+onto the frozen competition catalog. No external data was used to reconstruct
+unreleased evaluation labels. See `DATA_ATTRIBUTION.md`.
