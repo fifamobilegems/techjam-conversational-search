@@ -160,3 +160,42 @@ behavioural risk. Note `RerankWeights.profile_scale` currently defaults to
 `0.0`: profile scoring stays off until it can be measured against a live
 profile, so wiring it up alone changes nothing until that default is raised.
 Status: open
+
+### 2026-08-31 · D → A · Decide whether to adopt `RERANK_WEIGHTS=calibrated`
+`scripts/calibrate_rerank.py` fitted the ~30 reranker weights on
+`synth800/realistic` and held them out on the 234 ESCI `provenance=="gold"`
+rows (real human E/S/C/I labels). They transfer: held-out technical
+0.7651 → 0.8120. Validated on the real agent loop, n=200 stratified:
+
+| dataset x simulator | default | calibrated | delta |
+|---|--:|--:|--:|
+| esci1000/realistic | 0.7385 | 0.8440 | +0.1055 |
+| synth800/realistic | 0.7495 | 0.8690 | +0.1195 |
+| esci1000/esci | 0.7718 | 0.8161 | +0.0443 |
+| synth800/official | 0.8681 | 0.8668 | −0.0012 |
+| esci1000/official | 0.8754 | 0.8616 | −0.0138 |
+| public200/official | 0.9012 | 0.8474 | **−0.0548** |
+| | | mean | +0.0332 |
+
+`docs/ARCHITECTURE.md` calls the ~0.89 official column "the constraint to not
+destroy", so D did **not** make this the default: it is a deliberate
+robustness-for-official trade and belongs to whoever owns final integration.
+D recommends adopting it — under robustness-first the two realistic columns are
+the primary objective and they gain +0.11 each — but the branch ships with
+`RERANK_WEIGHTS=default` so the choice stays explicit and reversible. Enable
+with `RERANK_WEIGHTS=calibrated`. Re-run
+`python3 -m scripts.calibrate_rerank` after any extractor or query-builder
+change; the fitted values are not portable across those.
+Status: open
+
+### 2026-08-31 · D → A · Measured cost of the `record_message` ordering bug
+Reinforcing C's open request with a number, since it caps what retrieval can do.
+`Agent.respond` calls `record_message(..., "user", ...)` *after* `export()`, so
+`build_search_context()` cannot see the current turn's text.
+`python3 -m scripts.measure_recall --limit 400` still reports **67.8% empty
+pipeline queries at turn 1** on `esci1000 × esci` (raw recall@500 0.830 vs
+pipeline 0.152). Turn 1 is therefore wasted on most real-query sessions, which
+shows up as MTTC 3.37 and caps both MRR (30% of the score) and efficiency (20%).
+No reranker change can recover a turn that retrieved nothing. This is the
+highest-value remaining item D can see and it is not in a D-owned file.
+Status: open
