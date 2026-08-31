@@ -1,6 +1,11 @@
 from __future__ import annotations
 
+import json
+import os
 import re
+from collections import Counter
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Iterable
 
 from state.state_manager import AttributeUpdate, ExtractedTurn
@@ -177,10 +182,448 @@ def classify_constraint(value: str) -> str:
     return "feature"
 
 
+DEFAULT_LEXICON_PATH = Path("data/lexicon.json")
+
+# Which attributes Tier 1 is allowed to emit.
+#
+# Tier 1 values reach `retriever._constraint_score_details` as ordinary
+# constraints, where a miss is a penalty rather than a zero: category, colour
+# and material cost -20, brand -50. A gazetteer guess is therefore a bet, not
+# a free hint, and it has to be measured per attribute.
+#
+# `category` is excluded by default because that measurement is unambiguous.
+# Ablated on esci1000 x esci, 200 samples, TechnicalScore:
+#
+#     Tier 1 off                          0.7268
+#     category only                       0.6437   (-0.083)
+#     category + colour + material        0.6684
+#     everything except category          0.7713   (+0.045)
+#
+# A category guessed from a short real query is frequently right in spirit and
+# wrong in wording -- "bras" against a listing filed under "Lingerie
+# Accessories" -- and the -20 lands on the true target. The other attributes
+# name substances and shades that appear verbatim in the product text, so they
+# hit or abstain rather than misfire.
+#
+# Re-run the ablation after any retrieval change, and re-enable `category`
+# once the reranker honours `strength="soft"` (filed for Role D in
+# REQUESTS.md), which converts that -20 into an abstention:
+#
+#     TIER1_ATTRIBUTES=category,color,material,size,style,brand python3 -m tools.bench
+TIER1_ATTRIBUTES = tuple(
+    item.strip()
+    for item in os.environ.get(
+        "TIER1_ATTRIBUTES", "color,material,size,style,brand"
+    ).split(",")
+    if item.strip()
+)
+
+# Tokens plus their offsets in the original message, so a canonical value can
+# be stored in the slot while the shopper's own wording survives as raw_text.
+TOKEN_SPAN_RE = re.compile(r"[a-z0-9]+")
+
+# Structural templates Tier 0 keys on. Used only by the Phase 8 escalation
+# gate, which asks "did the message look like anything we know?" -- not by
+# extraction itself.
+TEMPLATE_MARKER_RE = re.compile(
+    r"(a key requirement is|what i need is|what matters is|looking for|shopping for|"
+    r"searching for|ignore (?:my )?(?:earlier|previous) preference|no preference|"
+    r"(?:do not|don'?t) have (?:a|an additional) preference|(?:do not|don'?t) care)",
+    re.IGNORECASE,
+)
+
+# --- polarity layer -------------------------------------------------------
+#
+# NegEx-style: a closed cue set and a short forward scope. Deliberately not a
+# parser -- true product-attribute negation is under 1% of real queries, so the
+# risk here is entirely on the false-positive side.
+
+NEGATION_CUES = {
+    "without", "not", "no", "non", "never", "avoid", "exclude", "excluding",
+    "anti", "sans", "isn", "aren", "doesn", "dont",
+}
+
+# Two-token cues, matched before single tokens.
+NEGATION_PHRASES = {
+    ("do", "not"), ("don", "t"), ("does", "not"), ("other", "than"),
+    ("rather", "than"), ("free", "of"), ("free", "from"), ("instead", "of"),
+}
+
+# A negation stops at a clause boundary. Coordinating conjunctions end it too:
+# "no leather and cotton" negates leather, not cotton.
+SCOPE_TERMINATORS = {
+    "but", "however", "although", "though", "and", "or", "yet", "so",
+    "while", "whereas", "plus",
+    # Budget and prepositional markers start a new constraint. Without these,
+    # "without laces under $120" negates the budget as well as the laces.
+    "under", "below", "over", "above", "less", "more", "than", "around",
+    "about", "between", "within", "up", "max", "maximum", "min", "minimum",
+    "for", "with", "size", "in",
+}
+
+# Longest run of tokens a single cue may negate. Short on purpose: a wide
+# window swallows the next constraint, and over-negating is the failure mode
+# that makes this layer a net regression.
+SCOPE_WINDOW = 3
+
+# Only these tiers may be negated.
+#
+# Tier 0 spans are verbatim catalog metadata the customer recited AS a
+# requirement, and a negation word inside one belongs to the attribute's name,
+# not to the shopper. Audited over 1,400 opening messages, every Tier 0
+# negation was a false positive:
+#
+#     "No Closure closure"                    a details value
+#     "Non-Polarized"                         a details value
+#     "...meaning 'Never Truly Part'..."      a product description
+#     "...there is no better leather..."      marketing prose
+#
+# Negating those drops a real constraint, so Tier 0 is excluded outright. That
+# also restores the flatness guarantee: with Tier 1 gated on Tier 0 being
+# empty and polarity gated on provenance, official phrasing cannot be touched
+# by anything in this module.
+NEGATABLE_PROVENANCE = frozenset({"tier1", "tier2"})
+
+# A shopper negates a thing, not a paragraph. The one true negation in the
+# audit was "without horns"; every false positive was a long recited span.
+MAX_NEGATABLE_SPAN_WORDS = 3
+
+# Product-feature idioms whose names contain a negation cue. The lexicon guard
+# catches these only when the catalog evidences them as a multi-word entry
+# ("no show" is mined; "no iron" is not), so the plan's named cases are held
+# explicitly. Each is a garment feature, never an operator.
+NEGATION_FALSE_FRIENDS = {
+    ("no", "show"), ("no", "iron"), ("no", "tie"), ("no", "slip"),
+    ("non", "slip"), ("non", "iron"), ("no", "fade"), ("no", "roll"),
+    ("no", "dig"), ("no", "chafe"), ("no", "sew"), ("no", "seam"),
+    ("no", "gap"), ("non", "skid"), ("non", "stick"), ("no", "pull"),
+}
+
+CLAUSE_PUNCTUATION = set(".,;:!?()")
+
+
+@dataclass(frozen=True)
+class LexiconMatch:
+    """One gazetteer hit, located in the original message."""
+
+    attribute: str
+    canonical: str
+    text: str
+    token_start: int
+    token_end: int
+    char_start: int
+    char_end: int
+    df: int
+
+    @property
+    def word_count(self) -> int:
+        return self.token_end - self.token_start + 1
+
+
+class LexiconTagger:
+    """Longest-match gazetteer over `data/lexicon.json`.
+
+    The lexicon is mined from catalog metadata by `scripts/build_lexicon.py`,
+    which turns 12 hardcoded colours into 107 and 10 materials into 107, and
+    adds 525 category terms where Tier 0 has no vocabulary at all.
+
+    A missing or unreadable lexicon yields an empty tagger rather than an
+    error: Tier 1 then contributes nothing and the agent behaves exactly as it
+    did before this cascade existed.
+    """
+
+    def __init__(self, index: dict[str, tuple[str, str, int]] | None = None) -> None:
+        self.index = index or {}
+        self.max_words = max((len(key.split()) for key in self.index), default=0)
+
+    @classmethod
+    def load(cls, path: str | Path | None = None) -> "LexiconTagger":
+        lexicon_path = Path(path) if path is not None else DEFAULT_LEXICON_PATH
+        try:
+            payload = json.loads(lexicon_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return cls({})
+
+        index: dict[str, tuple[str, str, int]] = {}
+        for attribute, block in sorted((payload.get("attributes") or {}).items()):
+            for entry in block.get("entries", []):
+                canonical = str(entry.get("canonical", ""))
+                df = int(entry.get("df", 0))
+                for surface in entry.get("surfaces", []):
+                    key = str(surface)
+                    # The build script resolves cross-attribute ownership, but
+                    # a generated variant can still collide. Higher document
+                    # frequency wins so the result never depends on file order.
+                    existing = index.get(key)
+                    if existing is None or df > existing[2]:
+                        index[key] = (attribute, canonical, df)
+        return cls(index)
+
+    def scan(self, message: str) -> list[LexiconMatch]:
+        """Non-overlapping longest matches, left to right."""
+        if not self.index:
+            return []
+
+        tokens = [
+            (match.group(0), match.start(), match.end())
+            for match in TOKEN_SPAN_RE.finditer(message.lower())
+        ]
+        matches: list[LexiconMatch] = []
+        position = 0
+        while position < len(tokens):
+            span = 0
+            found: tuple[str, str, int] | None = None
+            for width in range(min(self.max_words, len(tokens) - position), 0, -1):
+                surface = " ".join(token for token, _, _ in tokens[position:position + width])
+                entry = self.index.get(surface)
+                if entry is not None:
+                    span, found = width, entry
+                    break
+            if found is None:
+                position += 1
+                continue
+            attribute, canonical, df = found
+            char_start = tokens[position][1]
+            char_end = tokens[position + span - 1][2]
+            matches.append(
+                LexiconMatch(
+                    attribute=attribute,
+                    canonical=canonical,
+                    text=message[char_start:char_end],
+                    token_start=position,
+                    token_end=position + span - 1,
+                    char_start=char_start,
+                    char_end=char_end,
+                    df=df,
+                )
+            )
+            position += span
+        return matches
+
+
+class PolarityScanner:
+    """Mark operations the shopper actually rejected.
+
+    A gazetteer has no notion of scope, so "not blue" tags `color=blue` as a
+    positive constraint -- worse than missing it, because the value then enters
+    the BM25 query and spends candidate budget retrieving what was rejected.
+
+    This layer only ever *tags*: it sets `polarity="negate"` and never drops an
+    operation. Acting on the tag -- stripping the value from the query text and
+    applying it as an exclusion filter -- belongs to retrieval, and is filed in
+    REQUESTS.md for Role D. Tagging alone cannot move any score, which is the
+    point: negation is here for correctness, not for points.
+    """
+
+    def apply(
+        self,
+        message: str,
+        operations: list[AttributeUpdate],
+        matches: list[LexiconMatch],
+    ) -> None:
+        spans = self.negated_spans(message, matches)
+        if not spans:
+            return
+
+        lowered = message.lower()
+        for operation in operations:
+            # Only positive assertions can be negated. `no_preference`,
+            # `clear` and `demote` already encode their own semantics, and
+            # re-marking them would double-count the same cue.
+            if operation.action != "set":
+                continue
+            if getattr(operation, "provenance", "legacy") not in NEGATABLE_PROVENANCE:
+                continue
+            raw = str(operation.raw_text or operation.value or "").lower().strip()
+            if not raw or len(raw.split()) > MAX_NEGATABLE_SPAN_WORDS:
+                continue
+            start = lowered.find(raw)
+            if start < 0:
+                continue
+            end = start + len(raw)
+            if any(start < span_end and end > span_start for span_start, span_end in spans):
+                operation.polarity = "negate"
+
+    def negated_spans(self, message: str, matches: list[LexiconMatch]) -> list[tuple[int, int]]:
+        """Character ranges falling inside the scope of a negation cue."""
+        lowered = message.lower()
+        tokens = [
+            (match.group(0), match.start(), match.end())
+            for match in TOKEN_SPAN_RE.finditer(lowered)
+        ]
+        if not tokens:
+            return []
+
+        # FALSE-FRIEND GUARD, applied before any scope is computed.
+        #
+        # "no show socks" and "no iron shirt" are product types whose names
+        # contain a negation cue. A multi-word lexicon entry covering the cue
+        # token means the cue is part of a product name, not an operator.
+        # Getting this wrong is a net regression on real queries, which is why
+        # it runs first rather than as a post-filter.
+        guarded = {
+            index
+            for match in matches
+            if match.word_count > 1
+            for index in range(match.token_start, match.token_end + 1)
+        }
+        for position in range(len(tokens) - 1):
+            if (tokens[position][0], tokens[position + 1][0]) in NEGATION_FALSE_FRIENDS:
+                guarded.update((position, position + 1))
+
+        spans: list[tuple[int, int]] = []
+        index = 0
+        while index < len(tokens):
+            width = self._cue_width(tokens, index)
+            if width == 0 or index in guarded:
+                index += 1
+                continue
+            scope = self._scope(lowered, tokens, index + width)
+            if scope is not None:
+                spans.append(scope)
+            index += width
+        return spans
+
+    def _cue_width(self, tokens: list[tuple[str, int, int]], index: int) -> int:
+        if index + 1 < len(tokens):
+            pair = (tokens[index][0], tokens[index + 1][0])
+            if pair in NEGATION_PHRASES:
+                return 2
+        return 1 if tokens[index][0] in NEGATION_CUES else 0
+
+    def _scope(
+        self,
+        lowered: str,
+        tokens: list[tuple[str, int, int]],
+        start_index: int,
+    ) -> tuple[int, int] | None:
+        """Forward window from the cue, cut at the first clause boundary."""
+        if start_index >= len(tokens):
+            return None
+        span_start = tokens[start_index][1]
+        span_end = None
+        for offset in range(min(SCOPE_WINDOW, len(tokens) - start_index)):
+            position = start_index + offset
+            token, token_start, token_end = tokens[position]
+            if token in SCOPE_TERMINATORS:
+                break
+            if offset > 0:
+                gap = lowered[tokens[position - 1][2]:token_start]
+                if any(character in CLAUSE_PUNCTUATION for character in gap):
+                    break
+            span_end = token_end
+        return None if span_end is None else (span_start, span_end)
+
+
 class HeuristicTurnExtractor:
-    """Small deterministic fallback for the competition simulator phrasing."""
+    """Deterministic extraction cascade.
+
+    Tier 0 -- the template regex pipeline in :meth:`_extract_tier0` -- runs
+    first and stays authoritative. It is worth 0.84 on official phrasing
+    because it captures catalog metadata the simulator recites verbatim, so it
+    is deliberately left untouched: fuzzy-matching it would damage exactly the
+    thing that makes it work.
+
+    Tier 1 -- lexicon tagging -- runs ONLY when Tier 0 returned no operations.
+    That single condition is what keeps official phrasing flat: wherever a
+    template matches, Tier 1 never executes and the output is byte-identical
+    to before the cascade existed.
+
+    Tier 2 -- the LLM in :mod:`state.llm_extractor` -- wraps this class from
+    outside and is gated on :attr:`last_trace`.
+    """
+
+    def __init__(self, lexicon_path: str | Path | None = None) -> None:
+        self.tagger = LexiconTagger.load(lexicon_path)
+        self.polarity = PolarityScanner()
+        # Cumulative per-tier yield, and a per-turn record the LLM tier reads
+        # to decide whether escalation is structurally justified.
+        self.tier_counts: Counter = Counter()
+        self.last_trace: dict[str, object] = {}
 
     def extract(self, user_message: str, state: object | None = None) -> ExtractedTurn:
+        """Run the cascade and tag every operation with its origin."""
+
+        turn = self._extract_tier0(user_message, state)
+        for operation in turn.operations:
+            operation.provenance = "tier0"
+
+        tier0_count = len(turn.operations)
+        tier1_count = 0
+
+        # The lexicon scan runs unconditionally, but only *emits* when Tier 0
+        # came back empty. The matches themselves are needed either way: the
+        # polarity layer uses them as its false-friend guard, and a cue sitting
+        # inside "no show socks" must be recognised as part of a product name
+        # even on a turn where Tier 0 did all the work.
+        matches = self.tagger.scan(user_message)
+
+        if not turn.operations:
+            for operation in self._tier1_operations(matches):
+                turn.operations.append(operation)
+            tier1_count = len(turn.operations)
+
+        self.polarity.apply(user_message, turn.operations, matches)
+
+        turn.provenance = "tier1" if tier1_count else "tier0"
+        self.tier_counts["turns"] += 1
+        self.tier_counts["tier0_operations"] += tier0_count
+        self.tier_counts["tier1_operations"] += tier1_count
+        self.tier_counts["tier0_turns"] += 1 if tier0_count else 0
+        self.tier_counts["tier1_turns"] += 1 if tier1_count else 0
+        self.tier_counts["empty_turns"] += 0 if turn.operations else 1
+
+        self.last_trace = {
+            "tier0_operations": tier0_count,
+            "tier1_operations": tier1_count,
+            "lexicon_matches": len(matches),
+            "template_matched": bool(TEMPLATE_MARKER_RE.search(user_message)),
+            "negated_operations": sum(
+                1 for item in turn.operations if getattr(item, "polarity", "must") == "negate"
+            ),
+        }
+        return turn
+
+    def _tier1_operations(self, matches: list[LexiconMatch]) -> list[AttributeUpdate]:
+        """Turn lexicon matches into at most one operation per attribute.
+
+        Slots hold one value each, so emitting two categories would simply
+        overwrite. The longest match wins -- "running shoes" beats "shoes" --
+        and document frequency breaks ties toward the value the catalog
+        actually evidences.
+        """
+
+        allowed = set(TIER1_ATTRIBUTES)
+        best: dict[str, LexiconMatch] = {}
+        for match in matches:
+            if match.attribute not in allowed:
+                continue
+            current = best.get(match.attribute)
+            if current is None or (match.word_count, match.df) > (current.word_count, current.df):
+                best[match.attribute] = match
+
+        operations = []
+        for attribute in sorted(best):
+            match = best[attribute]
+            operations.append(
+                AttributeUpdate(
+                    attribute=attribute,
+                    action="set",
+                    # Canonical value drives the slot and the constraint
+                    # scorer; the shopper's own wording is kept as the span
+                    # retrieval matches literally.
+                    value=match.canonical,
+                    raw_text=match.text,
+                    provenance="tier1",
+                    # A gazetteer hit is weaker evidence than a template the
+                    # customer explicitly framed as a requirement.
+                    strength="soft",
+                    confidence=0.6,
+                )
+            )
+        return operations
+
+    def _extract_tier0(self, user_message: str, state: object | None = None) -> ExtractedTurn:
         lowered = user_message.lower()
         information_exhausted = bool(EXHAUSTED_RE.search(lowered))
         scenario = self._scenario(lowered, state)
