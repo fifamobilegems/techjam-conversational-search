@@ -4,6 +4,8 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Literal
 
+from state.clarification import choose_question
+
 
 # Hard session limit imposed by the evaluator.
 MAX_TURNS = 10
@@ -33,6 +35,14 @@ AttributeAction = Literal[
     "no_preference",
     "demote",
 ]
+
+ConstraintPolarity = Literal["must", "prefer", "negate"]
+ConstraintStrength = Literal["hard", "soft"]
+
+# Stable provenance names produced by the extraction cascade.  ``legacy`` is
+# deliberately the default for pre-schema callers so existing deterministic
+# extraction keeps its current authority until it is upgraded.
+ConstraintProvenance = Literal["legacy", "tier0", "tier1", "tier2"]
 
 
 Intent = Literal[
@@ -107,6 +117,14 @@ class AttributeUpdate:
     # what retrieval actually matches on.
     raw_text: str | None = None
 
+    # Schema freeze: all extraction tiers carry these fields. Defaults retain
+    # legacy Tier-0 semantics for callers that have not adopted the cascade.
+    polarity: ConstraintPolarity = "must"
+    strength: ConstraintStrength = "hard"
+    confidence: float = 1.0
+    provenance: ConstraintProvenance = "legacy"
+    superseded: bool = False
+
 
 @dataclass
 class ExtractedTurn:
@@ -127,6 +145,14 @@ class ExtractedTurn:
 
     # Observable scenario label, derived from message wording only.
     scenario: str | None = None
+
+    # Turn-level defaults let a tier annotate a whole extraction result while
+    # individual AttributeUpdate values remain authoritative when present.
+    polarity: ConstraintPolarity = "must"
+    strength: ConstraintStrength = "hard"
+    confidence: float = 1.0
+    provenance: ConstraintProvenance = "legacy"
+    superseded: bool = False
 
 
 @dataclass
@@ -168,20 +194,32 @@ class ConversationState:
 
     turn: int = 0
 
-    # Useful for debugging and presentation.
+    # Authoritative immutable event log. `slots`, `no_preference`, and
+    # `raw_constraints` are replayed caches, never sources of truth.
     history: list[dict] = field(
         default_factory=list
     )
 
     # Compact transcript for optional model extraction and trace inspection.
-    # Retrieval still consumes only explicit constraints, never free-form chat.
+    # User messages are also retained as lexical retrieval evidence. Extracted
+    # constraints complement the shopper's words; they must not replace them.
     messages: list[dict] = field(default_factory=list)
+
+    # Latest provisional retrieval summary. Rankings are a derived cache, not
+    # user events, and must be refreshed by the Agent each turn.
+    retrieval_diagnostics: dict[str, Any] = field(default_factory=dict)
 
     def record_span(
         self,
         attribute: str,
         text: str,
         turn: int,
+        *,
+        polarity: ConstraintPolarity = "must",
+        strength: ConstraintStrength = "hard",
+        confidence: float = 1.0,
+        provenance: ConstraintProvenance = "legacy",
+        superseded: bool = False,
     ) -> None:
         """
         Store one disclosed constraint verbatim.
@@ -206,6 +244,11 @@ class ConversationState:
                 "attribute": attribute,
                 "turn": turn,
                 "weight": 1.0,
+                "polarity": polarity,
+                "strength": strength,
+                "confidence": confidence,
+                "provenance": provenance,
+                "superseded": superseded,
             }
         )
 
@@ -229,6 +272,7 @@ class ConversationState:
 
             if matches_attribute or matches_text:
                 span["weight"] = DEMOTED_WEIGHT
+                span["superseded"] = True
                 demoted += 1
 
         return demoted
@@ -253,6 +297,8 @@ class StateManager:
     def __init__(
         self,
         hold_until_turn: int = 2,
+        credibility_score_floor: float = 10.0,
+        credibility_margin_floor: float = 1.0,
     ):
         """
         `hold_until_turn` controls when recommendations are first emitted.
@@ -270,6 +316,8 @@ class StateManager:
         """
 
         self.hold_until_turn = hold_until_turn
+        self.credibility_score_floor = credibility_score_floor
+        self.credibility_margin_floor = credibility_margin_floor
 
         self.sessions: dict[
             str,
@@ -322,158 +370,91 @@ class StateManager:
         turn: int,
     ) -> None:
         """
-        Apply one attribute-level mutation.
+        Append one immutable attribute event, then rebuild derived state.
 
-        The three possible operations are:
-
-        SET
-            Unknown -> value
-            Existing value -> replacement value
-
-        CLEAR
-            Existing value -> unknown
-
-        NO_PREFERENCE
-            Existing/unknown -> explicitly irrelevant
+        Do not edit old events on overrides. A later ``demote`` event is the
+        evidence that causes replay to mark matching earlier spans superseded
+        and assign their effective retrieval weight of ``DEMOTED_WEIGHT``.
         """
 
         attribute = operation.attribute
         action = operation.action
-        value = operation.value
-
         if attribute not in ALLOWED_ATTRIBUTES:
             return
 
-        # -----------------------------------------------------
-        # SET
-        # -----------------------------------------------------
+        if action == "set" and operation.value is None:
+            return
 
-        if action == "set":
+        state.history.append(
+            {
+                "event_id": len(state.history),
+                "turn": turn,
+                "event_type": "attribute",
+                "attribute": attribute,
+                "action": action,
+                "value": operation.value,
+                "raw_text": operation.raw_text,
+                "polarity": operation.polarity,
+                "strength": operation.strength,
+                "confidence": operation.confidence,
+                "provenance": operation.provenance,
+                # Immutable source fact. Replay projects superseded status.
+                "superseded": operation.superseded,
+            }
+        )
+        self.replay(state)
 
-            if value is None:
-                return
+    def replay(self, state: ConversationState) -> None:
+        """Rebuild all effective retrieval state from the append-only log."""
 
-            old_value = state.slots.get(
-                attribute
-            )
+        state.intent = "unknown"
+        state.slots = {}
+        state.no_preference = set()
+        state.raw_constraints = []
+        state.information_exhausted = False
+        state.scenario = "unknown"
 
-            # User has supplied a value, therefore they no
-            # longer have "no preference" for this attribute.
-            state.no_preference.discard(
-                attribute
-            )
+        for event in state.history:
+            event_type = event.get("event_type")
+            if event_type == "intent":
+                state.intent = event["new_value"]
+                continue
+            if event_type == "scenario":
+                if state.scenario == "unknown":
+                    state.scenario = event["value"]
+                continue
+            if event_type == "exhausted":
+                state.information_exhausted = True
+                continue
+            if event_type != "attribute":
+                continue
 
-            state.slots[attribute] = value
-
-            # Slots collide; spans do not. Keep both.
-            state.record_span(
-                attribute,
-                str(operation.raw_text or value),
-                turn,
-            )
-
-            if old_value is None:
-                change_type = "add"
-
-            elif old_value != value:
-                change_type = "override"
-
-            else:
-                change_type = "unchanged"
-
-            state.history.append(
-                {
-                    "turn": turn,
-                    "attribute": attribute,
-                    "action": change_type,
-                    "old_value": old_value,
-                    "new_value": value,
-                }
-            )
-
-        # -----------------------------------------------------
-        # CLEAR
-        # -----------------------------------------------------
-
-        elif action == "clear":
-
-            old_value = state.slots.pop(
-                attribute,
-                None,
-            )
-
-            # CLEAR does NOT mean "I don't care".
-            #
-            # It means the previous value is no longer valid
-            # and this attribute becomes unknown again.
-            state.no_preference.discard(
-                attribute
-            )
-
-            state.history.append(
-                {
-                    "turn": turn,
-                    "attribute": attribute,
-                    "action": "clear",
-                    "old_value": old_value,
-                    "new_value": None,
-                }
-            )
-
-        # -----------------------------------------------------
-        # NO PREFERENCE
-        # -----------------------------------------------------
-
-        # -----------------------------------------------------
-        # DEMOTE
-        # -----------------------------------------------------
-
-        elif action == "demote":
-
-            demoted = state.demote_spans(
-                attribute=attribute,
-                text=operation.raw_text or value,
-            )
-
-            # An explicit override invalidates the old active slot.  Keeping it in
-            # ``slots`` made an "ignore my earlier preference" message continue to
-            # steer ranking toward the superseded value.
-            old_value = state.slots.pop(attribute, None)
-
-            # The slot value is deliberately left in place: an overridden
-            # preference still describes the same target product.
-            if demoted:
-                state.history.append(
-                    {
-                        "turn": turn,
-                        "attribute": attribute,
-                        "action": "demote",
-                        "old_value": old_value,
-                        "new_value": None,
-                    }
+            attribute = event["attribute"]
+            action = event["action"]
+            value = event.get("value")
+            if action == "set":
+                state.no_preference.discard(attribute)
+                if event.get("polarity", "must") != "negate":
+                    state.slots[attribute] = value
+                state.record_span(
+                    attribute,
+                    str(event.get("raw_text") or value),
+                    int(event["turn"]),
+                    polarity=event.get("polarity", "must"),
+                    strength=event.get("strength", "hard"),
+                    confidence=float(event.get("confidence", 1.0)),
+                    provenance=event.get("provenance", "legacy"),
+                    superseded=bool(event.get("superseded", False)),
                 )
-
-        elif action == "no_preference":
-
-            old_value = state.slots.pop(
-                attribute,
-                None,
-            )
-
-            # Explicitly remember that the user does not care.
-            state.no_preference.add(
-                attribute
-            )
-
-            state.history.append(
-                {
-                    "turn": turn,
-                    "attribute": attribute,
-                    "action": "no_preference",
-                    "old_value": old_value,
-                    "new_value": None,
-                }
-            )
+            elif action == "clear":
+                state.slots.pop(attribute, None)
+                state.no_preference.discard(attribute)
+            elif action == "no_preference":
+                state.slots.pop(attribute, None)
+                state.no_preference.add(attribute)
+            elif action == "demote":
+                state.demote_spans(attribute=attribute, text=event.get("raw_text") or value)
+                state.slots.pop(attribute, None)
 
     # =========================================================
     # WHOLE-TURN UPDATE
@@ -509,29 +490,40 @@ class StateManager:
 
         state.turn = turn
 
-        # Latching flag: the customer never un-exhausts.
+        # Each observation is an event. Replay, rather than direct mutation,
+        # establishes the effective state consumed by retrieval.
         if extracted.information_exhausted:
-            state.information_exhausted = True
+            state.history.append(
+                {
+                    "event_id": len(state.history),
+                    "turn": turn,
+                    "event_type": "exhausted",
+                }
+            )
 
         # Scenario is fixed by the opening message.
         if extracted.scenario and state.scenario == "unknown":
-            state.scenario = extracted.scenario
+            state.history.append(
+                {
+                    "event_id": len(state.history),
+                    "turn": turn,
+                    "event_type": "scenario",
+                    "value": extracted.scenario,
+                }
+            )
 
         # Update intent if extractor has meaningful evidence.
         if (
             extracted.intent is not None
             and extracted.intent != "unknown"
         ):
-            old_intent = state.intent
-
-            state.intent = extracted.intent
-
-            if old_intent != extracted.intent:
+            if state.intent != extracted.intent:
                 state.history.append(
                     {
+                        "event_id": len(state.history),
                         "turn": turn,
-                        "action": "intent_change",
-                        "old_value": old_intent,
+                        "event_type": "intent",
+                        "old_value": state.intent,
                         "new_value": extracted.intent,
                     }
                 )
@@ -544,6 +536,10 @@ class StateManager:
                 operation,
                 turn,
             )
+
+        # This also applies metadata-only events when the extractor produced
+        # no attribute operations.
+        self.replay(state)
 
         return state
 
@@ -577,6 +573,11 @@ class StateManager:
         state = self.get(session_id)
         state.messages.append({"turn": turn, "role": role, "content": str(content)[:600]})
         del state.messages[:-20]
+
+    def set_retrieval_diagnostics(self, session_id: str, diagnostics: dict[str, Any]) -> None:
+        """Store current provisional retrieval statistics for policy decisions."""
+        state = self.get(session_id)
+        state.retrieval_diagnostics = {**diagnostics, "_turn": state.turn}
 
     def get_missing_attributes(
         self,
@@ -619,14 +620,9 @@ class StateManager:
         """
         Select one clarification attribute.
 
-        While the customer still has undisclosed constraints, the highest
-        yield attribute is asked every turn. It is answered without being
-        classified, so it never returns the empty reply and never runs out
-        the way a per-class question does.
-
-        Once the customer reports nothing further, fall back to the
-        measured class order. That costs nothing here and keeps the policy
-        working if a simulator classifies replies differently.
+        Choose a typed question from current candidate statistics. ``other``
+        is intentionally excluded: its special evaluator behaviour is not a
+        credible shopper-facing policy.
         """
 
         state = self.get(session_id)
@@ -634,12 +630,20 @@ class StateManager:
         if state.turn >= MAX_TURNS:
             return None
 
-        if not state.information_exhausted:
+        if state.information_exhausted:
+            return None
+
+        attribute_stats = state.retrieval_diagnostics.get("attribute_stats", {})
+        if not isinstance(attribute_stats, dict) or not attribute_stats:
+            # The Agent has not yet supplied the provisional retrieval contract.
+            # Keep legacy behaviour until that cross-role integration lands;
+            # once stats are present, ``other`` is never selected here.
             return HIGHEST_YIELD_ATTRIBUTE
-        # The deterministic customer has explicitly said it has no further
-        # information. Cycling through every remaining attribute only repeats an
-        # identical ranking and wastes the remaining turns.
-        return None
+        return choose_question(
+            attribute_stats=attribute_stats,
+            asked_attributes=state.asked_attributes,
+            no_preference=state.no_preference,
+        )
 
     def should_emit_recommendations(
         self,
@@ -659,7 +663,37 @@ class StateManager:
         if state.information_exhausted:
             return True
 
+        if self._is_credible(state):
+            return True
+
         return state.turn >= self.hold_until_turn
+
+    def _is_credible(self, state: ConversationState) -> bool:
+        """Evaluate current-turn retrieval confidence, never stale rankings."""
+
+        diagnostics = state.retrieval_diagnostics
+        if diagnostics.get("_turn") != state.turn:
+            return False
+
+        scores = diagnostics.get("ranked_scores")
+        if not isinstance(scores, list):
+            candidate_ids = diagnostics.get("candidate_ids")
+            candidate_scores = diagnostics.get("candidate_scores")
+            if not isinstance(candidate_ids, list) or not isinstance(candidate_scores, dict):
+                return False
+            scores = [
+                candidate_scores.get(str(candidate_id), {}).get("final_score")
+                for candidate_id in candidate_ids
+            ]
+        numeric_scores = [float(score) for score in scores if isinstance(score, (int, float))]
+        if not numeric_scores:
+            return False
+        top_score = numeric_scores[0]
+        tenth_score = numeric_scores[9] if len(numeric_scores) >= 10 else numeric_scores[-1]
+        return (
+            top_score >= self.credibility_score_floor
+            or top_score - tenth_score >= self.credibility_margin_floor
+        )
 
     # =========================================================
     # SEARCH CONTEXT
@@ -671,6 +705,12 @@ class StateManager:
     ) -> str:
         """
         Turn accumulated state into a text query.
+
+        The shopper's raw wording is authoritative lexical evidence. Template
+        extraction is necessarily incomplete on realistic queries, so slot
+        values are appended to the recorded user messages rather than being the
+        sole source of the BM25 query. Therefore a session with a user message
+        always produces a non-empty query even when no extraction matched.
 
         Example:
 
@@ -688,7 +728,11 @@ class StateManager:
 
         state = self.get(session_id)
 
-        parts: list[str] = []
+        parts: list[str] = [
+            str(message["content"])
+            for message in state.messages
+            if message.get("role") == "user" and str(message.get("content", "")).strip()
+        ]
 
         # Put category first.
         category = state.slots.get(
@@ -793,6 +837,17 @@ class StateManager:
             "constraints": dict(
                 state.slots
             ),
+
+            # Immutable source log plus replayed views for downstream roles.
+            "events": [dict(event) for event in state.history],
+            "demoted_constraints": [
+                dict(span) for span in state.raw_constraints
+                if span.get("superseded") or span.get("weight") == DEMOTED_WEIGHT
+            ],
+            "negated_constraints": [
+                dict(span) for span in state.raw_constraints
+                if span.get("polarity") == "negate" and not span.get("superseded")
+            ],
 
             "no_preference": sorted(
                 state.no_preference
