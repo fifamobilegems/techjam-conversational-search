@@ -109,8 +109,27 @@ fixable noise: cross-checking `Department` against gender cues in the title only
 recovers 4 of the 53, because title and field disagree on just 2.4% of products.
 
 Well-covered evidence that is sometimes wrong earns a **penalty, not an
-exclusion**. `department_miss` therefore ships as a calibratable weight and
-`RerankConfig.department_gate` defaults to **off**.
+exclusion**. Round 2 puts that head to head on the three cells where department
+moved anything at all — `stack` is staging + prefilter + negation + soft
+abstain, with department the only variable:
+
+| config | esci/realistic | synth/official | esci/esci | mean Δ |
+|---|--:|--:|--:|--:|
+| baseline (all off) | 0.7059 | 0.8694 | 0.7713 | — |
+| stack, no department | 0.7192 (+.0134) | 0.8694 (0) | 0.7659 (−.0053) | +.0027 |
+| **stack + department penalty** | **0.7385 (+.0327)** | **0.8681 (−.0013)** | **0.7718 (+.0005)** | **+.0106** |
+| stack + department gate | 0.7196 (+.0138) | 0.8480 (−.0214) | 0.7680 (−.0033) | −.0036 |
+| stack + both | 0.7196 (+.0138) | 0.8480 (−.0214) | 0.7680 (−.0033) | −.0036 |
+
+The penalty **dominates the gate on every cell** — more than twice the gain on
+`esci/realistic` and a sixteenth of the cost on `synth/official`. "Both" is
+identical to "gate" to four decimals, which is the expected degeneracy: once the
+gate excludes a candidate the penalty never gets to matter.
+
+So `department_miss` ships as a calibratable weight and
+`RerankConfig.department_gate` defaults to **off**. This is the whole of the
+measured gain in my branch, and it comes from adding *evidence*, not from
+re-ordering the arithmetic.
 
 ## Phase 6.2 gate — dense retrieval, not built
 
