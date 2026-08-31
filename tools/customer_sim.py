@@ -676,3 +676,121 @@ class RealisticCustomer:
         if self.persona.get("tone") == "hesitant":
             bank = REPLY_HESITANT
         return self.rng.choice(bank).format(values=_join(values))
+
+
+# =============================================================================
+# ESCI CUSTOMER
+# =============================================================================
+
+# The real-query customer opens with a genuine Amazon ESCI search string and
+# then answers clarifications in the terse, comma-joined register real shoppers
+# use ("gold, prom"), rather than the full sentences RealisticCustomer speaks.
+# Phrasing wrappers only; the *content* (which facet values, in what order) is
+# deterministic so the run reconciles to logs/esci1000_esci/ regardless of RNG.
+
+# Weights mirror the observed logs/esci1000_esci/ mix: a bare fragment is about
+# twice as common as any single wrapper (the bare form is repeated below), which
+# also keeps trailing filler words out of the query where the extractor would
+# otherwise absorb them.
+ESCI_REPLY = (
+    "{values}",
+    "{values}",
+    "prefer {values}",
+    "{values} please",
+    "has to be {values}",
+    "{values} ideally",
+)
+
+ESCI_EXHAUSTED = (
+    "doesn't matter",
+    "not fussed",
+    "whatever works",
+    "no preference",
+    "any is fine",
+)
+
+ESCI_BOUNDARY = (
+    "up to you",
+    "don't mind, use your judgment",
+)
+
+# Every variant keeps an override cue ("instead" / "actually") so the extractor's
+# override detection still fires; that is what makes the scenario scorable.
+ESCI_OVERRIDE = (
+    "scratch that, instead {new_value}",
+    "actually, {new_value} instead",
+    "actually make it {new_value}",
+)
+
+# Which facet supplies the replacement constraint on an intent override.
+OVERRIDE_ATTRIBUTE_ORDER = ("material", "color", "use_case", "feature", "style")
+
+_WORD_RE = re.compile(r"[a-z0-9]+")
+
+
+class EsciCustomer(RealisticCustomer):
+    """Shopper whose opening turn is a verbatim real ESCI query.
+
+    Same contract as :class:`RealisticCustomer` (``opening`` / ``reply`` /
+    ``override_message`` / ``override_turn`` / ``boundary_used``). It reuses that
+    class's catalog-derived ``facets`` and disclosure machinery; only the surface
+    phrasing changes and facets already named in the opening query are not
+    repeated back to the agent.
+    """
+
+    def __init__(
+        self,
+        sample: dict,
+        product: dict,
+        coarse_category: str,
+        max_turns: int = 10,
+    ) -> None:
+        super().__init__(sample, product, coarse_category, max_turns)
+        self.query = str(sample.get("esci_query") or "")
+        # A shopper does not re-state what their opening query already said.
+        query_tokens = set(_WORD_RE.findall(self.query.lower()))
+        if query_tokens:
+            for attribute, value in self.facets.items():
+                if _WORD_RE.findall(str(value).lower()) and set(
+                    _WORD_RE.findall(str(value).lower())
+                ) & query_tokens:
+                    self.disclosed.add(attribute)
+
+    def opening(self) -> str:
+        return self.query if self.query.strip() else super().opening()
+
+    def override_message(self) -> tuple[str, str]:
+        new_value = None
+        for attribute in OVERRIDE_ATTRIBUTE_ORDER:
+            new_value = self._pending(attribute)
+            if new_value:
+                self.disclosed.add(attribute)
+                break
+        new_value = new_value or self.category
+        self._override_value = new_value
+        return self.rng.choice(ESCI_OVERRIDE).format(new_value=new_value), new_value
+
+    def reply(self, ask_attribute: object) -> str:
+        if self.scenario == "boundary" and not self.boundary_used and isinstance(ask_attribute, str):
+            self.boundary_used = True
+            return self.rng.choice(ESCI_BOUNDARY)
+
+        attribute = ask_attribute if isinstance(ask_attribute, str) else None
+
+        if attribute and attribute not in ("other", "category"):
+            value = self._pending(attribute)
+            values = []
+            if value:
+                self.disclosed.add(attribute)
+                values.append(value)
+        else:
+            # Wildcard / no question: volunteer the two best undisclosed facets.
+            values = self._best_pending(2)
+
+        if not values and self.spare_features:
+            values = [self.spare_features.pop(0)]
+
+        if not values:
+            return self.rng.choice(ESCI_EXHAUSTED)
+
+        return self.rng.choice(ESCI_REPLY).format(values=", ".join(values))
