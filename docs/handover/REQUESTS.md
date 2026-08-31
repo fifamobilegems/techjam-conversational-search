@@ -22,3 +22,31 @@ cleanly and each has a single `raw_constraints` binding. Role A therefore made n
 edit to `retriever.py` (Role D-owned). Branch from `main` as planned; no
 unblock-merge is outstanding.
 Status: done
+
+### 2026-08-31 · C → A · Record the current user message before state export
+`Agent.respond()` currently calls `StateManager.update()` and `export()` before
+`record_message(..., "user", user_message, turn)`. This leaves turn 1 without
+raw text, so C's `build_search_context()` cannot meet its non-empty-query
+contract in the live flow. Move that user-message record before extraction/state
+export (or provide `user_message` to the state update) while preserving one
+record per message.
+Status: open
+
+### 2026-08-31 · C → A · Make retrieval policy diagnostics available in-turn
+`choose_next_attribute()` and `should_emit_recommendations()` currently execute
+before `CatalogRetriever.retrieve_and_rerank()`, but adaptive clarification and
+the credibility test require the current candidate IDs, scores, and rank-1 vs
+rank-10 margin. Please implement a two-stage Agent flow (provisional retrieval
+then policy decision) or call a C-provided diagnostics setter before the final
+decision. Do not emit a list until the policy decision; keep `hold_until_turn`
+as fallback.
+Status: open
+
+### 2026-08-31 · C → A · Extend answerability measurement contract
+`scripts/measure_attribute_yield.py` currently counts constraint classes and
+special-cases `other`; it does not measure answerability by mission or fit a
+weight. Extend its machine-readable output with normalized per-attribute,
+per-mission answerability suitable for `state/clarification.py`, and document
+how the fitted coefficient is selected. C will consume this artifact rather
+than hand-setting a value.
+Status: open

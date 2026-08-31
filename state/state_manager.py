@@ -174,7 +174,8 @@ class ConversationState:
     )
 
     # Compact transcript for optional model extraction and trace inspection.
-    # Retrieval still consumes only explicit constraints, never free-form chat.
+    # User messages are also retained as lexical retrieval evidence. Extracted
+    # constraints complement the shopper's words; they must not replace them.
     messages: list[dict] = field(default_factory=list)
 
     def record_span(
@@ -672,6 +673,12 @@ class StateManager:
         """
         Turn accumulated state into a text query.
 
+        The shopper's raw wording is authoritative lexical evidence. Template
+        extraction is necessarily incomplete on realistic queries, so slot
+        values are appended to the recorded user messages rather than being the
+        sole source of the BM25 query. Therefore a session with a user message
+        always produces a non-empty query even when no extraction matched.
+
         Example:
 
             {
@@ -688,7 +695,11 @@ class StateManager:
 
         state = self.get(session_id)
 
-        parts: list[str] = []
+        parts: list[str] = [
+            str(message["content"])
+            for message in state.messages
+            if message.get("role") == "user" and str(message.get("content", "")).strip()
+        ]
 
         # Put category first.
         category = state.slots.get(
