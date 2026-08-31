@@ -131,7 +131,48 @@ short real queries specifically.
 
 ## 5. Does it help?
 
-<!--GATE_SCORE_TABLE-->
+Both arms, LLM tier **on**, n=200, `RERANK_WEIGHTS=calibrated`, real
+`gpt-4o-mini` calls. This is the measurement the offline sweep cannot make.
+
+| cell | `empty` | `low_confidence` | Δ | tokens `empty` → `low_confidence` |
+|---|--:|--:|--:|--:|
+| public200 × official | 0.8459 | 0.8471 | +0.0012 | 18,000 → 18,071 |
+| public200 × realistic | 0.8866 | 0.8859 | −0.0007 | 13,827 → 28,891 |
+| esci1000 × official | 0.8885 | 0.8878 | −0.0007 | 16,738 → 16,758 |
+| esci1000 × realistic | 0.8963 | **0.9020** | **+0.0057** | 21,044 → 37,189 |
+| esci1000 × esci | 0.8520 | 0.8489 | −0.0031 | 60,744 → 74,008 |
+| **mean** | **0.8739** | **0.8743** | **+0.0004** | 130,353 → 174,917 |
+
+**The verdict is neutral, and one row tells you why to believe that.**
+`public200 × official` moved **+0.0012 on identical escalation counts** — 57
+calls in both arms, the same 57 turns, the same prompts. The only difference is
+that `gpt-4o-mini` is sampled, not seeded. So ±0.001–0.005 is this experiment's
+noise floor, and the +0.0004 mean sits well inside it.
+
+The one cell that clears the floor is `esci1000 × realistic` at **+0.0057**,
+which is the cell the widening was aimed at: paraphrased shopper language where
+the gazetteer gets a partial read. `esci1000 × esci` moves the other way
+(−0.0031) — those turns were mostly escalating already through the `empty`
+opening, so widening mainly adds calls on turns where Tier 1 had in fact read
+enough.
+
+Cost is **+34% tokens** (130,353 → 174,917) for a mean inside the noise. On the
+public run that is roughly $0.0032 → $0.0043.
+
+### Recommendation
+
+**Do not flip the default.** `TECHJAM_LLM_GATE=empty` stays. The widened gate is
+correct, cheap to audit, and provably harmless to the official column — but the
+evidence that it *helps* is one cell above the noise floor, and a 34% cost
+increase for +0.0004 is not a trade worth making before a submission.
+
+It is worth keeping and worth re-running if the extraction cascade changes. The
+mechanism is sound: the model does return the spans the gazetteer misses
+(§6 below). What the numbers say is that on these simulators, the turns where
+Tier 1 gets a *partial* read are mostly turns the ranker recovers from anyway —
+the shopper discloses the same constraint again on the next turn, and MTTC
+absorbs it. That is a property of multi-turn dialogue, not a flaw in the gate,
+and it would not hold for a single-shot search box.
 
 ## 6. What a low-confidence escalation actually returns
 

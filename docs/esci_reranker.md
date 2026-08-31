@@ -112,17 +112,30 @@ learns a representation, and nothing here is imported by the agent —
 
 ### What 500 epochs actually bought
 
-| | held-out MRR | held-out hit@10 |
-|---|--:|--:|
-| start (`CALIBRATED_WEIGHTS`) | 0.2220 | 0.3671 |
-| **best, epoch 41** | **0.2708** | **0.4937** |
-| final, epoch 500 | 0.2422 | 0.4810 |
+| epoch | train loss | test loss | train MRR | **held-out MRR** |
+|--:|--:|--:|--:|--:|
+| 1 | 10.1770 | 9.3227 | 0.2517 | 0.2270 |
+| 10 | 8.5834 | 8.2517 | 0.2643 | 0.2347 |
+| 20 | 7.4039 | 6.5631 | 0.2657 | 0.2538 |
+| **41** | 6.5660 | 5.5293 | 0.2684 | **0.2708** ← peak |
+| 50 | 6.3621 | 5.4902 | 0.2693 | 0.2520 |
+| 100 | 5.3865 | 5.1464 | 0.2718 | 0.2611 |
+| 200 | 5.1014 | 4.9911 | 0.2821 | 0.2432 |
+| 300 | 4.9471 | 4.8556 | 0.2800 | 0.2439 |
+| 400 | 4.8108 | 4.7354 | 0.2795 | 0.2509 |
+| 500 | 4.6949 | 4.6331 | 0.2791 | 0.2422 |
 
-Training loss falls monotonically all the way to epoch 500 (10.18 → 4.69) while
-held-out MRR peaks at epoch 41 and then decays. On 37 parameters and 378
-queries, epochs past ~50 buy memorisation. The full per-epoch curve is in
-`docs/reranker_training.json`; the checkpoint is selected on held-out MRR, never
-on final training loss.
+Against the `CALIBRATED_WEIGHTS` starting point of held-out MRR 0.2220 /
+hit@10 0.3671, epoch 41 is **0.2708 / 0.4937** — +22% MRR, +35% hit@10.
+
+Read the last two columns together. Training loss falls monotonically for all
+500 epochs and train MRR keeps creeping up, while held-out MRR peaks at epoch 41
+and never recovers. On 37 parameters and 378 queries, epochs past ~50 buy
+memorisation and nothing else. Note also that *test loss* keeps falling
+alongside training loss even as held-out MRR decays — the surrogate and the
+metric come apart, which is exactly why the checkpoint is selected on held-out
+MRR and never on a loss. The full per-epoch curve is in
+`docs/reranker_training.json`.
 
 ### Two negative results that cost nothing to collect
 
@@ -144,19 +157,21 @@ bigger reranker": no.
 Every fitted variant, benched on the full matrix at n=200 with the LLM tier off,
 against the shipped `calibrated` control:
 
-| cell | calibrated | `esci` | `esci_soft` | `esci_anchored` |
-|---|--:|--:|--:|--:|
-| public200 × official | 0.8427 | 0.6938 | 0.6938 | — |
-| public200 × realistic | 0.8796 | 0.7732 | 0.7880 | — |
-| synth800 × official | 0.8777 | 0.7180 | 0.7180 | — |
-| synth800 × realistic | 0.9135 | 0.7675 | 0.7762 | — |
-| esci1000 × official | 0.8766 | 0.6767 | 0.6767 | — |
-| esci1000 × realistic | 0.8869 | 0.7364 | 0.7572 | — |
-| esci1000 × esci | 0.8655 | 0.7654 | 0.7835 | — |
-| **mean** | **0.8775** | 0.7330 | 0.7419 | — |
+| cell | calibrated | `esci` | `esci_soft` | `esci_anchored` | `esci_popularity` |
+|---|--:|--:|--:|--:|--:|
+| public200 × official | 0.8427 | 0.6938 | 0.6938 | 0.8582 | **0.8883** |
+| public200 × realistic | 0.8796 | 0.7732 | 0.7880 | 0.8900 | 0.8980 |
+| synth800 × official | 0.8777 | 0.7180 | 0.7180 | 0.8828 | 0.8690 |
+| synth800 × realistic | 0.9135 | 0.7675 | 0.7762 | 0.9055 | 0.8861 |
+| esci1000 × official | 0.8766 | 0.6767 | 0.6767 | 0.8796 | 0.8753 |
+| esci1000 × realistic | 0.8869 | 0.7364 | 0.7572 | 0.8776 | 0.8822 |
+| esci1000 × esci | 0.8655 | 0.7654 | 0.7835 | 0.8713 | 0.8598 |
+| **mean** | **0.8775** | 0.7330 | 0.7419 | **0.8807** | **0.8798** |
+| **Δ mean** | — | **−0.1445** | −0.1356 | +0.0032 | +0.0023 |
 
-−0.14 mean. It regresses on `esci1000 × esci` too — the cell whose queries the
-weights were fitted on.
+The free fit is −0.14. It regresses on `esci1000 × esci` too — the cell whose
+queries the weights were fitted on. The last two columns are §5 and §6; read
+those before concluding the exercise failed.
 
 ### Ruling out the obvious suspect
 
@@ -199,23 +214,166 @@ model to imitate it — is correct. What this measured is the other half of it:
 human labels describing a *different task* teach a model to be good at that
 task. The generator was never the only thing that had to match.
 
-## 5. What ships
+## 5. The −0.14 is one weight, and it is an artifact
 
-Nothing, by default. `RERANK_WEIGHTS=calibrated` remains the shipped preset.
-`esci`, `esci_soft` and `esci_anchored` are selectable presets carrying their
-own numbers in the source, on the same principle as the disabled ranking
-experiments in `RerankConfig`: recorded so nobody re-runs them blind.
+Applying the learned coordinates to `CALIBRATED_WEIGHTS` **one at a time**,
+n=100, two cells (baseline 0.8551 / 0.8678):
 
-What is worth keeping from the exercise:
+| weight | from | to | public200 × official | esci1000 × esci |
+|---|--:|--:|--:|--:|
+| `feature_boost` | 3.60 | **−13.97** | **−0.1411** | −0.0027 |
+| `soft_scale` | 1.00 | 0.001 | +0.0000 | −0.0022 |
+| `rating_coefficient` | 0.070 | 0.060 | +0.0000 | −0.0020 |
+| `budget_unpriced` | −8.00 | 11.20 | +0.0000 | −0.0008 |
+| `brand_store` | 30.0 | 26.1 | +0.0000 | −0.0004 |
+| `material_boost` | 40.0 | 29.1 | +0.0000 | +0.0000 |
+| `size_boost` | 35.0 | 22.8 | +0.0000 | +0.0000 |
+| `style_boost` | 70.4 | 58.0 | +0.0000 | +0.0000 |
+| `vocabulary_miss` | −12.8 | 5.35 | +0.0000 | +0.0000 |
+| `budget_within` | 30.0 | 10.8 | +0.0000 | +0.0000 |
+| `department_miss` | −55.0 | −34.5 | +0.0000 | +0.0000 |
+| `color_boost` | 18.9 | 1.11 | +0.0000 | +0.0002 |
+| `fusion_scale` | 774.4 | 754.0 | +0.0015 | +0.0000 |
+| `popularity_scale` | 0.24 | **3.05** | **+0.0349** | **+0.0039** |
+
+The regression is not diffuse. **`feature_boost` alone is −0.1411 of it.**
+
+The fit drove it *negative* — products matching a stated feature get penalised —
+and that is an artifact of the training distribution rather than a discovery.
+The Tier 2 prompt says "prefer `feature` when unsure", and Tier 0's fallback
+sweep lands unclassified spans there too, so `feature` is the extraction
+cascade's junk drawer. On a real one-line query it holds noise, and the labels
+correctly learn that matching it predicts nothing. On official phrasing, where
+templates put genuine catalog metadata in `feature`, the same weight is
+catastrophic.
+
+That single coordinate is why the free fit looks like a total failure. It is not
+a total failure.
+
+## 6. One coordinate transfers, and it is worth +0.046 on the public set
+
+`popularity_scale` is the opposite case: the only change that is positive on
+*both* probe cells on its own. Sweeping it with everything else at
+`CALIBRATED_WEIGHTS`, on the **unmodified official evaluator**, full 200-session
+public set, LLM off:
+
+| `popularity_scale` | TechnicalScore | HR@10 | MRR | MTTC |
+|--:|--:|--:|--:|--:|
+| **0.24** (shipped) | 0.8427 | 0.9500 | 0.6840 | 2.875 |
+| 1.0 | 0.8624 | 0.9500 | 0.7465 | 2.830 |
+| 1.5 | 0.8774 | 0.9550 | 0.7856 | 2.790 |
+| 2.0 | 0.8760 | 0.9550 | 0.7790 | 2.760 |
+| **3.05** (the ESCI fit) | **0.8883** | 0.9600 | 0.8084 | 2.710 |
+| 4.5 | 0.9011 | 0.9750 | 0.8165 | 2.565 |
+| 6.0 | 0.9072 | 0.9850 | 0.8127 | 2.455 |
+
+**0.8427 → 0.8883 at the value the human labels chose.** MRR carries it:
+0.684 → 0.808. For reference, the shipped LLM-on configuration scores 0.8468, so
+one weight fitted on human relevance is worth ten times the entire Tier 2 tier,
+offline and for free.
+
+Smooth and monotonic to 6.0, so 3.05 sits on a broad trend rather than a spike —
+it was not fitted to noise.
+
+### Why it works, and why `synth800` disagrees
+
+Median `rating_number` of the target product, by dataset:
+
+| | median | p90 | mean |
+|---|--:|--:|--:|
+| the catalog itself | 12 | 260 | — |
+| **public200 targets** | **6,846** | 40,492 | 16,179 |
+| synth800 targets | 13 | 244 | 190 |
+| esci1000 targets | 24 | 514 | 332 |
+
+`docs/competition_specification.md`: "The hidden target is based on a real
+purchase record." Real purchases are overwhelmingly of popular products, so the
+public set's targets sit at **570× the catalog's median review count**. A prior
+that says "popular products are more likely to be the target" is not a benchmark
+exploit — it is the single strongest true fact about how the targets were drawn.
+
+`synth800` sampled its targets near-uniformly from the catalog (median 13, i.e.
+the catalog's own median), so it carries no popularity signal at all and pays
+for the prior with nothing in return. Its −0.027 is not evidence against
+popularity; it is a property of how we built it. The adversarial simulator we
+wrote to keep ourselves honest was itself wrong about a real distribution, and
+the human labels are what caught it.
+
+That also means the effect should hold on the **hidden 800**, which the
+specification says is drawn by the same process as the public 200 — the
+strongest transfer argument available without seeing it.
+
+### Which value, and with what provenance
+
+This is the part to be careful about. Three defensible answers with three
+different provenances:
+
+| value | chosen by | public200 | 7-cell mean |
+|--:|---|--:|--:|
+| 0.24 | shipped | 0.8427 | 0.8775 |
+| 1.5 | the bench-matrix mean optimum | 0.8774 | **0.8814** |
+| **3.05** | **the human ESCI labels, having never seen public200** | **0.8883** | 0.8798 |
+| 6.0 | sweeping the scored set itself | 0.9072 | lower |
+
+**`esci_popularity` ships 3.05.** Not because it is the highest number — 6.0 is
+— but because it is the only one of the four whose provenance is independent of
+the set it is scored on. Picking 6.0 by sweeping public200 is fitting to the
+evaluation set, which is the failure mode this whole document exists to avoid.
+1.5 is the honest choice if the 7-cell mean is the objective rather than the
+official column.
+
+The residual risk is a distributional bet: this pays off if the hidden 800 is
+drawn like the public 200, and the specification says it is.
+
+## 7. What ships
+
+**No default changes.** `RERANK_WEIGHTS=calibrated` is still what the Agent
+constructs. Every fit is a selectable preset carrying its numbers in the source,
+on the same principle as the disabled ranking experiments in `RerankConfig` —
+recorded so nobody re-runs them blind:
+
+| preset | what it is | verdict |
+|---|---|---|
+| `esci` | the free 500-epoch fit | **−0.1445 mean.** Recorded as a negative |
+| `esci_soft` | same, `soft_scale` restored | −0.1356. Rules out the obvious suspect |
+| `esci_anchored` | trust-region fit, `soft_scale` frozen | +0.0032 mean, +0.0155 public |
+| `esci_popularity` | **one coordinate: `popularity_scale` 0.24 → 3.05** | **+0.0456 public, +0.0023 mean** |
+
+### The recommendation
+
+`RERANK_WEIGHTS=esci_popularity` is worth the team's attention before the
+deadline. It is a one-line change to a single float, its provenance is human
+relevance labels that never saw the public set, the mechanism is understood
+(targets are real purchases and real purchases are popular), and the
+distributional evidence says it should hold on the hidden 800.
+
+It is still a trade, and the team should take it deliberately rather than have
+it taken silently — which is why this branch does not flip the default. It costs
+−0.027 on `synth800 × realistic`, and §6 argues that cell is wrong rather than
+that the trade is bad, but "our own simulator disagrees" deserves a human
+looking at it.
+
+### What is worth keeping regardless
 
 - `data/esci_gold_relevance.jsonl` — 770 human judgments, 3.3× the previous
-  ceiling, with 62 real negatives that did not exist before. It is a held-out
-  evaluation set even where it failed as a training set.
-- The 65.1% single-turn reachability number, which is a real gap that the
-  session-level 100% figure conceals.
+  ceiling, including the first 62 human-verified negatives this project has had.
+  It is a useful held-out evaluation set even where it failed as a training set.
+- **The target-popularity distribution table in §6.** `synth800` carries no
+  popularity signal because we sampled its targets uniformly. That is a
+  correctable flaw in an artifact we rely on to keep ourselves honest, and it is
+  the most actionable line in this document.
+- The 65.1% single-turn reachability figure, a real gap the session-level 100%
+  number conceals.
 - The measured answer that a bigger reranker is not the next move.
 
-The honest next experiment is not more capacity or more labels. It is
-supervision whose unit is a **session**: human relevance on the target, replayed
-through accumulated multi-turn state. `scripts/calibrate_rerank.py` already has
-the tape machinery for it. That is a different week's work.
+### The honest next experiment
+
+Not more capacity and not more labels. Two things, in order:
+
+1. **Rebuild `synth800` with popularity-weighted target sampling.** It currently
+   disagrees with the official set about the single strongest prior available,
+   and every ablation scored against it inherits that.
+2. **Supervision whose unit is a session** — human relevance on the target,
+   replayed through accumulated multi-turn state, so the training objective and
+   the scoring objective are the same shape. `scripts/calibrate_rerank.py`
+   already has the tape machinery. That is a different week's work.

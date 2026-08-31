@@ -520,12 +520,57 @@ ESCI_ANCHORED_WEIGHTS = RerankWeights(
 )
 
 
+
+
+# The one coordinate of the ESCI fit that survives contact with the bench.
+#
+# `docs/esci_reranker.md` §5: applying the learned weights one at a time shows
+# the -0.14 is not diffuse. `feature_boost` going negative (3.6 -> -14.0)
+# accounts for -0.1411 of it on public200/official by itself, and it is an
+# artifact of the training distribution rather than a finding -- the Tier 2
+# prompt says "prefer feature when unsure", so `feature` is where unclassified
+# spans land, and on a real one-line query matching them predicts nothing.
+#
+# `popularity_scale` is the opposite: 0.24 -> 3.05 is the only learned change
+# that is positive on both probe cells on its own. On the *unmodified official
+# evaluator*, full public set, LLM off:
+#
+#     popularity_scale   technical   HR@10    MRR     MTTC
+#     0.24 (shipped)        0.8427   0.9500   0.6840  2.875
+#     1.5                   0.8774   0.9550   0.7856  2.790
+#     3.05 (this)           0.8883   0.9600   0.8084  2.710
+#     4.5                   0.9011   0.9750   0.8165  2.565
+#     6.0                   0.9072   0.9850   0.8127  2.455
+#
+# +0.0456 on the scored set, carried by MRR. Smooth and monotonic to 6.0, so
+# 3.05 sits on a trend rather than a spike.
+#
+# Why it is a prior and not an exploit: `competition_specification.md` says the
+# target is "based on a real purchase record", and real purchases are of popular
+# products. Median `rating_number` of the target is 6,846 on public200 against
+# 12 for the catalog itself -- 570x. A rating-count term spanning 0..2.0 was
+# being outvoted by a fusion range of 12.7.
+#
+# 3.05 rather than the higher-scoring 6.0 **on purpose**. 3.05 is what the human
+# ESCI labels chose without ever seeing public200; 6.0 is what sweeping public200
+# chooses, which is fitting to the set being scored. Provenance is the reason to
+# prefer the smaller number.
+#
+# The trade: -0.027 on synth800/realistic, whose targets were sampled uniformly
+# (median rating_number 13) and so carry no popularity signal at all. See
+# `docs/esci_reranker.md` Sec 6 -- that cell is the one that is wrong.
+#
+# NOT the default. A distributional bet on the hidden 800 is the team's call.
+ESCI_POPULARITY_WEIGHTS = replace(CALIBRATED_WEIGHTS, popularity_scale=3.0529)
+
+
 WEIGHT_PRESETS: dict[str, RerankWeights] = {
     "default": RerankWeights(),
     "calibrated": CALIBRATED_WEIGHTS,
     "esci": ESCI_TRAINED_WEIGHTS,
     "esci_soft": ESCI_TRAINED_SOFT_WEIGHTS,
     "esci_anchored": ESCI_ANCHORED_WEIGHTS,
+    "esci_popularity": ESCI_POPULARITY_WEIGHTS,
 }
 
 

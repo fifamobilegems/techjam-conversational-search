@@ -258,6 +258,42 @@ empty ones; (3) a reranker trained on the 234 human-labelled ESCI gold rows
 rather than on simulators we wrote ourselves, since fitting to your own generator
 can only teach a model to imitate it.
 
+**(2) and (3) were built.** Both are documented in full, neither changes a
+default, and the interesting outcome is not the one we expected.
+
+*The widened gate is inert where it matters.* `TECHJAM_LLM_GATE=low_confidence`
+escalates on residual coverage — how much of the message the cascade left
+unexplained — rather than on the one bit "did it emit anything". Tier 0 still
+blocks unconditionally, and that is measured: **all three official cells escalate
+57 / 34 / 59 times at every threshold setting**, identical to the shipped gate.
+It therefore cannot damage the official column and cannot lift it either. With
+the LLM on, the mean across five cells moves +0.0004 for +34% tokens — inside the
+noise floor, which the same run measures at ±0.001–0.005 from model sampling
+alone. Kept, off. `docs/tier2_gate.md`.
+
+*The reranker failed, and one weight inside it is worth more than the whole LLM
+tier.* The 234 rows turned out to be near the ceiling, not a sample: all 2.62M
+ESCI judgments join to 357 catalog products by ASIN. Adding a normalized-title
+join for child ASINs reaches **770 judgments over 748 real queries** — 3.3×, and
+the limit. Fitting the 37 reranker weights on them in PyTorch improves held-out
+single-turn MRR by 22% (peaking at **epoch 41 of 500** — past that, memorisation)
+and **regresses every bench cell by −0.14**.
+
+Attributing that per weight showed it is not diffuse: `feature_boost` going
+negative accounts for −0.1411 of it, an artifact of `feature` being the
+extraction cascade's junk drawer. Meanwhile `popularity_scale` 0.24 → 3.05 is
+positive on its own and takes the **official public-set score from 0.8427 to
+0.8883** (MRR 0.684 → 0.808), offline and free — roughly ten times what the
+entire Tier 2 tier contributes.
+
+Why: the public set's targets are real purchase records, with a median review
+count of **6,846 against the catalog's 12**. Popularity is the strongest true
+prior available about how targets were drawn. Our own `synth800` sampled targets
+uniformly (median 13), carries no such signal, and is the one cell that
+disagrees — the adversarial simulator we built to keep ourselves honest was
+itself wrong about a real distribution, and the human labels are what caught it.
+`RERANK_WEIGHTS=esci_popularity`, `docs/esci_reranker.md`.
+
 ---
 
 ## Repository layout
