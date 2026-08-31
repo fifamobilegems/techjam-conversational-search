@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-30T16:58:30.974117+00:00",
+  "generated_at": "2026-08-31T12:00:31.357661+00:00",
   "catalog": "data/catalog.jsonl",
   "limit": null,
   "select": "stratified",
@@ -11,20 +11,20 @@
       "n": 200,
       "pipeline_empty_rate": 0.0,
       "raw_recall@100": 0.52,
-      "pipeline_recall@100": 0.56,
+      "pipeline_recall@100": 0.52,
       "raw_recall@500": 0.855,
-      "pipeline_recall@500": 0.905
+      "pipeline_recall@500": 0.855
     },
     {
       "dataset": "public200",
       "simulator": "realistic",
       "phase": "turn1",
       "n": 200,
-      "pipeline_empty_rate": 0.095,
+      "pipeline_empty_rate": 0.0,
       "raw_recall@100": 0.715,
-      "pipeline_recall@100": 0.345,
+      "pipeline_recall@100": 0.715,
       "raw_recall@500": 0.945,
-      "pipeline_recall@500": 0.495
+      "pipeline_recall@500": 0.945
     },
     {
       "dataset": "synth800",
@@ -33,20 +33,20 @@
       "n": 800,
       "pipeline_empty_rate": 0.0,
       "raw_recall@100": 0.5875,
-      "pipeline_recall@100": 0.6138,
+      "pipeline_recall@100": 0.5875,
       "raw_recall@500": 0.8525,
-      "pipeline_recall@500": 0.885
+      "pipeline_recall@500": 0.8525
     },
     {
       "dataset": "synth800",
       "simulator": "realistic",
       "phase": "turn1",
       "n": 800,
-      "pipeline_empty_rate": 0.1462,
+      "pipeline_empty_rate": 0.0,
       "raw_recall@100": 0.6375,
-      "pipeline_recall@100": 0.3337,
+      "pipeline_recall@100": 0.6375,
       "raw_recall@500": 0.8263,
-      "pipeline_recall@500": 0.5225
+      "pipeline_recall@500": 0.8263
     },
     {
       "dataset": "esci1000",
@@ -55,9 +55,9 @@
       "n": 1000,
       "pipeline_empty_rate": 0.0,
       "raw_recall@100": 0.573,
-      "pipeline_recall@100": 0.616,
+      "pipeline_recall@100": 0.573,
       "raw_recall@500": 0.833,
-      "pipeline_recall@500": 0.859,
+      "pipeline_recall@500": 0.833,
       "raw_recall@100_gold": 0.6368,
       "raw_recall@500_gold": 0.8889
     },
@@ -66,11 +66,11 @@
       "simulator": "realistic",
       "phase": "turn1",
       "n": 1000,
-      "pipeline_empty_rate": 0.131,
+      "pipeline_empty_rate": 0.0,
       "raw_recall@100": 0.624,
-      "pipeline_recall@100": 0.343,
+      "pipeline_recall@100": 0.625,
       "raw_recall@500": 0.828,
-      "pipeline_recall@500": 0.545,
+      "pipeline_recall@500": 0.827,
       "raw_recall@100_gold": 0.7436,
       "raw_recall@500_gold": 0.906
     },
@@ -79,11 +79,11 @@
       "simulator": "esci",
       "phase": "turn1",
       "n": 1000,
-      "pipeline_empty_rate": 0.867,
+      "pipeline_empty_rate": 0.0,
       "raw_recall@100": 0.607,
-      "pipeline_recall@100": 0.008,
+      "pipeline_recall@100": 0.608,
       "raw_recall@500": 0.834,
-      "pipeline_recall@500": 0.032,
+      "pipeline_recall@500": 0.833,
       "raw_recall@100_gold": 0.6581,
       "raw_recall@500_gold": 0.7991
     }
