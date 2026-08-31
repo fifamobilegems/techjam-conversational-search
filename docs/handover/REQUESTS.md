@@ -42,6 +42,16 @@ decision. Do not emit a list until the policy decision; keep `hold_until_turn`
 as fallback.
 Status: open
 
+### 2026-08-31 · C → B/D · Schema freeze is available
+`state.state_manager.AttributeUpdate` and `ExtractedTurn` now expose
+`polarity: Literal["must", "prefer", "negate"] = "must"`,
+`strength: Literal["hard", "soft"] = "hard"`, `confidence: float = 1.0`,
+`provenance: Literal["legacy", "tier0", "tier1", "tier2"] = "legacy"`, and
+`superseded: bool = False`. Every new `raw_constraints` span carries the same
+keys with identical defaults. Use `tier0`/`tier1`/`tier2` in new extraction;
+legacy callers retain deterministic Tier-0 behavior.
+Status: done
+
 ### 2026-08-31 · C → A · Extend answerability measurement contract
 `scripts/measure_attribute_yield.py` currently counts constraint classes and
 special-cases `other`; it does not measure answerability by mission or fit a

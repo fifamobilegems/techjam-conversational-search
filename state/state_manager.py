@@ -34,6 +34,14 @@ AttributeAction = Literal[
     "demote",
 ]
 
+ConstraintPolarity = Literal["must", "prefer", "negate"]
+ConstraintStrength = Literal["hard", "soft"]
+
+# Stable provenance names produced by the extraction cascade.  ``legacy`` is
+# deliberately the default for pre-schema callers so existing deterministic
+# extraction keeps its current authority until it is upgraded.
+ConstraintProvenance = Literal["legacy", "tier0", "tier1", "tier2"]
+
 
 Intent = Literal[
     "buying",
@@ -107,6 +115,14 @@ class AttributeUpdate:
     # what retrieval actually matches on.
     raw_text: str | None = None
 
+    # Schema freeze: all extraction tiers carry these fields. Defaults retain
+    # legacy Tier-0 semantics for callers that have not adopted the cascade.
+    polarity: ConstraintPolarity = "must"
+    strength: ConstraintStrength = "hard"
+    confidence: float = 1.0
+    provenance: ConstraintProvenance = "legacy"
+    superseded: bool = False
+
 
 @dataclass
 class ExtractedTurn:
@@ -127,6 +143,14 @@ class ExtractedTurn:
 
     # Observable scenario label, derived from message wording only.
     scenario: str | None = None
+
+    # Turn-level defaults let a tier annotate a whole extraction result while
+    # individual AttributeUpdate values remain authoritative when present.
+    polarity: ConstraintPolarity = "must"
+    strength: ConstraintStrength = "hard"
+    confidence: float = 1.0
+    provenance: ConstraintProvenance = "legacy"
+    superseded: bool = False
 
 
 @dataclass
@@ -183,6 +207,12 @@ class ConversationState:
         attribute: str,
         text: str,
         turn: int,
+        *,
+        polarity: ConstraintPolarity = "must",
+        strength: ConstraintStrength = "hard",
+        confidence: float = 1.0,
+        provenance: ConstraintProvenance = "legacy",
+        superseded: bool = False,
     ) -> None:
         """
         Store one disclosed constraint verbatim.
@@ -207,6 +237,11 @@ class ConversationState:
                 "attribute": attribute,
                 "turn": turn,
                 "weight": 1.0,
+                "polarity": polarity,
+                "strength": strength,
+                "confidence": confidence,
+                "provenance": provenance,
+                "superseded": superseded,
             }
         )
 
@@ -371,6 +406,11 @@ class StateManager:
                 attribute,
                 str(operation.raw_text or value),
                 turn,
+                polarity=operation.polarity,
+                strength=operation.strength,
+                confidence=operation.confidence,
+                provenance=operation.provenance,
+                superseded=operation.superseded,
             )
 
             if old_value is None:
