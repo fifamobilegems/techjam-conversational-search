@@ -447,25 +447,17 @@ class RerankConfig:
     # constraints are supposed to correct. Off, and kept only as a documented
     # negative result.
     rank_consensus: bool = False
-    # Guarantee the strongest lexical matches a Top-10 slot.
-    # Diagnosed from traces: constraint scoring contributes 20-75 points while
-    # reciprocal-rank fusion contributes ~1.6 across the whole pool (RRF k=60
-    # puts rank 1 at 1.639 and rank 3 at 1.587), so 'BM25 ranked it first'
-    # barely reaches the final order. 16 of 21 esci misses were targets BM25
-    # ranked #1. Reserves the tail of the Top-10 rather than the head, so a
-    # confident constraint-driven ranking keeps its good ranks.
-    #
-    # ON by default, on measurement -- the first ranking experiment here to
-    # earn it. Full size, 2000 sessions per side: mean 0.8370 -> 0.8526 over
-    # seven cells, esci x esci 0.8158 -> 0.8614 (HR 0.915 -> 0.983), and the
-    # official columns gain rather than pay (+0.0044). No cell regressed, so
-    # this is not the robustness-for-official trade the calibrated weights are.
-    # Disable with RERANK_HARD_FLOOR=0.
+    # Reserve Top-K slots for the strongest lexical matches. Constraint scoring
+    # spans 20-75 points against a fusion range of ~1.6, so a product BM25
+    # ranked first can finish outside the Top-10 on an unremarkable constraint
+    # total -- 16 of 21 esci misses were exactly that.
+    # Measured POSITIVE (full size, 2000 sessions per side): mean technical
+    # 0.8370 -> 0.8526 over seven cells, esci x esci 0.8158 -> 0.8614, official
+    # +0.0044. No cell regressed. On.
     hard_floor: bool = True
-    # 2 is the knee. esci keeps climbing to reserve~7 (0.8747) but the official
-    # column falls monotonically past 2 -- 0.8482 / 0.8427 / 0.8358 / 0.8288 /
-    # 0.8221 at reserve 2/3/5/7/9. Two slots take 89% of the available esci
-    # gain at zero official cost; more buys esci at the scorer's expense.
+    # 2 is the knee: esci keeps climbing to reserve 7 (0.8747) but the official
+    # column falls monotonically past 2 (0.8482 / 0.8427 / 0.8358 / 0.8288 /
+    # 0.8221 at 2/3/5/7/9), so more slots buy esci at the scorer's expense.
     hard_floor_reserve: int = 2
 
 
@@ -789,29 +781,27 @@ class CatalogRetriever:
         return self._sanitize(ranked_ids, top_k)
 
     def _apply_hard_floor(self, ranked_ids: list[str], top_k: int) -> list[str]:
-        """Guarantee the strongest BM25 matches a place in the returned Top-K.
+        """Give the best BM25 candidates a place in the returned Top-K.
 
-        Constraint scoring outweighs reciprocal-rank fusion by roughly fifty to
-        one, so a product BM25 ranked first can finish outside the Top-10 on a
-        constraint total that is merely unremarkable -- not on any violation.
-        Reserved slots are taken from the *tail* of the Top-K, so a ranking the
-        reranker is confident about keeps its leading positions and only its
-        weakest entries are displaced.
+        Promoted candidates displace the *tail* of the Top-K, so a ranking the
+        reranker is confident about keeps its leading positions.
         """
-        reserve = max(0, int(self.config.hard_floor_reserve))
+        reserve = self.config.hard_floor_reserve
         if reserve <= 0 or top_k <= reserve:
             return ranked_ids
         head = ranked_ids[:top_k]
         promote = [
             parent_asin
             for parent_asin in self._last_bm25_ids[:reserve]
-            if parent_asin in self.valid_ids and parent_asin not in head
+            if parent_asin not in head
         ]
         if not promote:
             return ranked_ids
         kept = head[: top_k - len(promote)]
         keep_set = set(kept) | set(promote)
-        return kept + promote + [a for a in ranked_ids if a not in keep_set]
+        return kept + promote + [
+            parent_asin for parent_asin in ranked_ids if parent_asin not in keep_set
+        ]
 
     def build_plan(
         self,
