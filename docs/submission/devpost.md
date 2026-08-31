@@ -21,9 +21,9 @@ Constraint Compass
 ## Elevator pitch  *(200 char limit)*
 
 ```
-A conversational shopping agent that finds a hidden product in 50,000 items within 10 turns. 7.9x the baseline, zero API cost, and we built two adversarial shoppers to prove it isn't overfitted.
+Finds a shopper's hidden product among 50,000 items in under 3 turns. 7.9x the baseline for $0.003 of GPT-4o-mini, and we built two adversarial shoppers to prove it isn't overfitted.
 ```
-`194 / 200`
+`182 / 200`
 
 ---
 
@@ -53,17 +53,24 @@ believes the shopper wants, asks at most one question, and returns a ranked
 Top-10 from a frozen 50,000-product catalog. The session ends the moment the
 hidden target appears in that list.
 
-On the 200-session public set it scores **TechnicalScore 0.8427** — Hit Rate@10
-0.95, MRR 0.684, mean 2.88 turns to first hit. The provided BM25 baseline scores
-0.1067. It uses **no LLM, no API key, and no network**, at ~65 ms per turn.
+On the 200-session public set it scores **TechnicalScore 0.8468** — Hit Rate@10
+0.955, MRR 0.689, mean 2.87 turns to first hit. The provided BM25 baseline scores
+0.1067.
+
+It costs **about a third of a cent**. 18,942 tokens of `gpt-4o-mini` across all
+200 sessions, because the model is gated to fire only where the deterministic
+layers have nothing to say — roughly one call per two sessions. Pull the key out
+and it still scores 0.8427.
 
 ## How we built it
 
 **Extraction is a cascade, not a parser.** Tier 0 matches the structured phrasing
 the simulator uses. Tier 1 is a gazetteer we *mined from the catalog itself* —
 107 colours and 107 materials, against the 12 and 10 a hand-written list would
-carry — which catches free text no template matches. Tier 2 is an optional LLM,
-off by default, that fires only when both deterministic tiers return nothing.
+carry — which catches free text no template matches. Tier 2 is **`gpt-4o-mini`**,
+which fires only when both deterministic tiers return nothing *and* the message
+matched no known template — a structural gate, not a confidence score, so it is
+auditable and its cost is predictable.
 A separate polarity layer marks what the shopper *rejected*, so "without
 underwire" removes a term from the query instead of searching for it — while a
 false-friend guard keeps "no show socks" a product type rather than a negation.
@@ -123,6 +130,11 @@ Not the score. The fact that we can **prove** the score isn't an artifact.
 1,400 sessions across three independent phrasings. The spread is 0.04. It was
 0.83 when we started.
 
+We also got a verification we did not plan. Two bench cells lost network
+mid-matrix, fell back to the deterministic cascade, and scored **identically** to
+our no-LLM baseline — 0.8869 and 0.8655, to four decimal places. The graceful
+degradation is proven under real failure rather than asserted in a README.
+
 We're also proud of what we *didn't* build. We classified every remaining miss as
 "target never entered the candidate pool" versus "target was in the pool and
 out-ranked" and got **100% reachability, zero recall misses**. Dense retrieval
@@ -143,8 +155,10 @@ idea we rejected has its number in a comment next to the flag that disables it.
 An override-aware retrieval reset (intent_override is our weakest scenario at
 HR@10 0.90); a reranker trained on the 234 human-labelled ESCI gold rows rather
 than on simulators we wrote ourselves, since fitting to your own generator can
-only teach a model to imitate it; and enabling the LLM tier on the free-text path
-where our gazetteer runs out.
+only teach a model to imitate it; and widening the Tier-2 gate to cover
+low-confidence gazetteer guesses rather than only empty ones — right now the
+model fires on ~1 call per 2 sessions and contributes +0.004, and we have not
+explored what a larger role would buy.
 ```
 
 ---
@@ -167,16 +181,18 @@ rank-fusion
 numpy
 sentence-transformers
 openai
+gpt-4o-mini
 amazon-reviews-2023
 esci-dataset
 pytest
 git
 ```
-`19 / 25`
+`20 / 25`
 
-> Note: `openai` and `sentence-transformers` are **optional, disabled** components.
-> Keep them only if you also keep the "off by default" wording — do not imply the
-> scored run used them.
+> `openai` and `gpt-4o-mini` are live in the scored configuration.
+> `sentence-transformers` and `numpy` back the dense-retrieval package, which is
+> built but deliberately gated off — keep those tags only alongside the
+> "deliberately unused" wording.
 
 ---
 
@@ -208,17 +224,22 @@ customer phrasings.
 **Development tools.** VS Code, Claude Code, Git/GitHub (feature branches with
 PR review), Python 3.13.9, unittest.
 
-**APIs used.** **None for the reported results** — the scored path makes no
-network calls and reports 0 tokens and $0.00 cost. An optional, disabled-by-default
-Tier-2 extractor speaks the OpenAI Chat Completions protocol (compatible with any
-OpenAI-protocol gateway) and is additive-only: it can add spans the deterministic
-tiers missed but can never delete a constraint or change retrieval timing.
+**APIs used.** **OpenAI Chat Completions — `gpt-4o-mini`**, with a
+JSON-schema-constrained response, as Tier 2 of the extraction cascade. It is
+additive-only: it may contribute verbatim constraint spans the deterministic
+tiers missed, and can never delete a constraint, clear a slot, or change
+retrieval timing. Usage for the reported 200-session run: **18,942 tokens
+(18,046 prompt / 896 completion), ≈ $0.0032**, ~95 calls. `OPENAI_BASE_URL` makes
+any OpenAI-protocol gateway work. Without a key, the agent degrades silently to
+the deterministic cascade and scores 0.8427.
 
-**Libraries and frameworks.** The scored agent is **Python standard library only**
-— `sqlite3` (FTS5 full-text index with BM25 ranking), `re`, `json`, `gzip`,
-`math`, `dataclasses`. Optional extras, unused in the reported run: `numpy` for
-the dense-retrieval foundation, `sentence-transformers` for offline embedding
-builds, `openai` for the Tier-2 extractor.
+**Libraries and frameworks.** `openai` (Tier-2 extractor). Everything else is
+**Python standard library** — `sqlite3` (FTS5 full-text index with BM25 ranking),
+`re`, `json`, `gzip`, `math`, `dataclasses`. The deterministic path is enforced
+stdlib-only in CI by importing the agent with `numpy`, `torch`, `openai` and
+`sentence-transformers` blocked at the import hook. Optional and unused in the
+reported run: `numpy` and `sentence-transformers` for the gated dense-retrieval
+foundation.
 
 **Datasets and assets.** The organiser's frozen 50,000-product catalog and
 200-session public set, derived from **Amazon Reviews 2023** (McAuley Lab, UCSD).
@@ -230,7 +251,9 @@ forms mined from the catalog's own metadata. No external data was used to recons
 evaluation labels.
 
 **Reproducing the headline number.** `python3 -m evaluator.local_evaluator`
-against the unmodified official evaluator, ~35 s, writes `results.json`.
+against the unmodified official evaluator. ~97 s with the Tier-2 model active,
+~35 s without. Writes `results.json`. Requires `OPENAI_API_KEY` in `.env` for the
+0.8468 figure; without it the run reproduces 0.8427.
 ```
 
 ---
@@ -243,7 +266,10 @@ against the unmodified official evaluator, ~35 s, writes `results.json`.
 - [ ] Video contains no third-party trademarks or copyrighted content
 - [ ] GitHub repository is **public**
 - [ ] README covers overview, setup, reproduction, limitations, contributions
-- [ ] No API keys or secrets anywhere in the repo history
+- [ ] No API keys or secrets anywhere in the repo history (`.env` is gitignored;
+      only `.env_example` is tracked)
+- [ ] `OPENAI_API_KEY` documented by **name only** in the README (FAQ §2)
+- [ ] Model, token usage, cost, and latency disclosed (FAQ §2–3)
 - [ ] `evaluator/local_evaluator.py` is byte-identical to the organiser's upstream
 - [ ] Record the **submitted commit hash** — it is the frozen solution
 - [ ] After the final package drops: run the unmodified evaluator, **keep
