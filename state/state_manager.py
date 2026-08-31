@@ -42,7 +42,7 @@ ConstraintStrength = Literal["hard", "soft"]
 # Stable provenance names produced by the extraction cascade.  ``legacy`` is
 # deliberately the default for pre-schema callers so existing deterministic
 # extraction keeps its current authority until it is upgraded.
-ConstraintProvenance = Literal["legacy", "tier0", "tier1", "tier2"]
+ConstraintProvenance = Literal["legacy", "tier0", "tier0_fallback", "tier1", "tier2"]
 
 
 Intent = Literal[
@@ -98,6 +98,51 @@ def normalize_phrase(value: str) -> str:
         " ",
         re.sub(r"[^a-z0-9 ]", " ", value.lower()),
     ).strip()
+
+
+# --- query hygiene ---------------------------------------------------------
+#
+# The shopper's words are authoritative lexical evidence, but the simulator
+# also speaks fixed dialogue scaffolding that carries no catalog signal. Left
+# in, "I don't have a preference for color" put `color`, `preference`,
+# `please` and `judgment` into the BM25 query -- searching on the very
+# attribute the shopper had just declined.
+
+# Messages that are pure protocol: they contribute no product evidence at all.
+DIALOGUE_NOISE_RE = re.compile(
+    r"^\s*(?:"
+    r"i\s+(?:do not|don'?t|dont)\s+have\s+(?:a|an\s+additional)\s+preference\s+for\s+[a-z_ ]+"
+    r"|those\s+options\s+are\s+not\s+quite\s+right"
+    r")",
+    re.IGNORECASE,
+)
+
+# Framing that wraps real evidence. Strip the wrapper, keep the payload.
+SCAFFOLD_RE = re.compile(
+    r"(?:for that,?\s*what matters is:?"
+    r"|a key requirement is:?"
+    r"|what i need is:?"
+    r"|what matters is:?"
+    r"|i'?m looking for"
+    r"|i am looking for"
+    r"|shopping for"
+    r"|searching for"
+    r"|but i'?m still exploring"
+    r"|please use your judgment"
+    r"|ask me about one specific attribute"
+    r"|actually,?\s*ignore my earlier preference"
+    r"|ignore my earlier preference"
+    r")",
+    re.IGNORECASE,
+)
+
+
+def query_fragment(content: str) -> str:
+    """Reduce one user message to the part worth searching on."""
+
+    if DIALOGUE_NOISE_RE.search(content or ""):
+        return ""
+    return re.sub(r"\s+", " ", SCAFFOLD_RE.sub(" ", content or "")).strip()
 
 
 @dataclass
@@ -235,6 +280,19 @@ class ConversationState:
 
         for span in self.raw_constraints:
             if span["match_phrase"] == phrase:
+                # A later event for the same phrase supersedes the earlier
+                # one's metadata. Returning here instead dropped a correction:
+                # "velvet dress" then "not velvet" left the span tagged
+                # polarity="must", so the rejected value kept scoring as a
+                # requirement. Replay walks history in order, so last write
+                # wins is the correct projection. The turn stays at first
+                # disclosure; re-asserting restores full weight.
+                span["polarity"] = polarity
+                span["strength"] = strength
+                span["confidence"] = confidence
+                span["provenance"] = provenance
+                span["superseded"] = superseded
+                span["weight"] = 1.0
                 return
 
         self.raw_constraints.append(
@@ -377,13 +435,30 @@ class StateManager:
         and assign their effective retrieval weight of ``DEMOTED_WEIGHT``.
         """
 
+        if self._append_operation(state, operation, turn):
+            self.replay(state)
+
+    def _append_operation(
+        self,
+        state: ConversationState,
+        operation: AttributeUpdate,
+        turn: int,
+    ) -> bool:
+        """Append one attribute event without replaying. Returns True if added.
+
+        Split out so a whole turn can be appended and then projected once.
+        Replaying per operation rebuilt the entire log N+1 times per turn, and
+        `record_span` scans every existing span, so the cost was quadratic in
+        a session's own history for no behavioural gain.
+        """
+
         attribute = operation.attribute
         action = operation.action
         if attribute not in ALLOWED_ATTRIBUTES:
-            return
+            return False
 
         if action == "set" and operation.value is None:
-            return
+            return False
 
         state.history.append(
             {
@@ -402,7 +477,7 @@ class StateManager:
                 "superseded": operation.superseded,
             }
         )
-        self.replay(state)
+        return True
 
     def replay(self, state: ConversationState) -> None:
         """Rebuild all effective retrieval state from the append-only log."""
@@ -528,17 +603,17 @@ class StateManager:
                     }
                 )
 
-        # Apply each attribute mutation separately.
+        # Append every attribute mutation, in order, then project once.
         for operation in extracted.operations:
 
-            self.apply_operation(
+            self._append_operation(
                 state,
                 operation,
                 turn,
             )
 
-        # This also applies metadata-only events when the extractor produced
-        # no attribute operations.
+        # One projection covers the attribute events appended above and the
+        # metadata-only events appended before them.
         self.replay(state)
 
         return state
@@ -729,11 +804,21 @@ class StateManager:
 
         state = self.get(session_id)
 
-        parts: list[str] = [
-            str(message["content"])
+        spoken = [
+            fragment
             for message in state.messages
-            if message.get("role") == "user" and str(message.get("content", "")).strip()
+            if message.get("role") == "user"
+            for fragment in (query_fragment(str(message.get("content", ""))),)
+            if fragment
         ]
+
+        # Ordering is a truncation policy. `_bm25_search` keeps only the first
+        # N unique terms, so oldest-first meant that from ~turn 8 the newest
+        # disclosure -- the answer the agent just spent a turn obtaining --
+        # was the part that got cut. The opening message is kept first because
+        # it carries the category; everything after it is newest-first, so any
+        # truncation falls on the middle of the conversation instead.
+        parts: list[str] = spoken[:1] + spoken[1:][::-1]
 
         # Put category first.
         category = state.slots.get(

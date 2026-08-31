@@ -153,6 +153,13 @@ class LLMTurnExtractor:
         return True
 
     def extract(self, user_message: str, state: object | None = None) -> ExtractedTurn:
+        # Usage is per-turn, not cumulative. The Agent reports this dict on
+        # every turn and the evaluator sums across turns, so leaving the last
+        # call's numbers in place re-reported one escalation on every
+        # subsequent turn -- inflating the required token disclosure by
+        # roughly the number of turns that followed each call.
+        self.last_usage = {"prompt_tokens": 0, "completion_tokens": 0}
+
         extracted = self.fallback.extract(user_message, state)
 
         if self._client is None:
@@ -200,9 +207,13 @@ class LLMTurnExtractor:
                     confidence=0.5,
                 )
             )
+            # Must stay inside the loop: hoisted out, the `text in known`
+            # guard never saw earlier insertions, so a response repeating one
+            # span appended it twice and double-counted it as evidence.
+            known.add(text.lower())
+
         if any(item.provenance == "tier2" for item in extracted.operations):
             extracted.provenance = "tier2"
-            known.add(text.lower())
 
         return extracted
 

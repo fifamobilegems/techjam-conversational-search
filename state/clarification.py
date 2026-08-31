@@ -4,8 +4,15 @@ from __future__ import annotations
 
 import json
 import math
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Iterable, Mapping
+
+
+# Resolved from this file, not the working directory. A cwd-relative path meant
+# an agent launched from anywhere but the repo root silently lost answerability
+# entirely rather than failing loudly.
+DEFAULT_YIELD_PATH = Path(__file__).resolve().parent.parent / "docs" / "attribute_yield.json"
 
 
 QUESTION_ATTRIBUTES = (
@@ -24,12 +31,19 @@ def _normalised_entropy(value_counts: Mapping[str, int | float]) -> float:
     return entropy / math.log(len(value_counts))
 
 
+@lru_cache(maxsize=8)
 def _answerability_from_measurement(
     path: Path | None = None,
     mission: str | None = None,
 ) -> dict[str, float]:
-    """Read measured answerability for the current mission, never guess it."""
-    artifact = path or Path("docs/attribute_yield.json")
+    """Read measured answerability for the current mission, never guess it.
+
+    Cached: this is called once per turn per session, and re-parsing a static
+    artifact from disk on every clarification decision is pure overhead. Clear
+    with ``_answerability_from_measurement.cache_clear()`` after regenerating
+    the file.
+    """
+    artifact = path or DEFAULT_YIELD_PATH
     try:
         measured = json.loads(artifact.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
@@ -79,7 +93,7 @@ def choose_question(*, attribute_stats: Mapping[str, Mapping[str, Any]],
                     mission: str | None = None, measurement_path: Path | None = None,
                     minimum_value: float = 0.01) -> str | None:
     """Return the best non-repeated typed question, or no question."""
-    answerability = _answerability_from_measurement(measurement_path, mission)
+    answerability = dict(_answerability_from_measurement(measurement_path, mission))
     declined = set(no_preference)
     candidates = [attribute for attribute in QUESTION_ATTRIBUTES if attribute not in declined]
     if not candidates:

@@ -278,11 +278,13 @@ SCOPE_WINDOW = 3
 #     "...meaning 'Never Truly Part'..."      a product description
 #     "...there is no better leather..."      marketing prose
 #
-# Negating those drops a real constraint, so Tier 0 is excluded outright. That
-# also restores the flatness guarantee: with Tier 1 gated on Tier 0 being
-# empty and polarity gated on provenance, official phrasing cannot be touched
-# by anything in this module.
-NEGATABLE_PROVENANCE = frozenset({"tier1", "tier2"})
+# Negating those drops a real constraint, so template Tier 0 is excluded
+# outright. Its terminal fallback is not: `tier0_fallback` is a bare gazetteer
+# sweep over the raw message, indistinguishable in kind from a Tier 1 guess,
+# and excluding it meant "not blue" and "no polyester" survived as positive
+# hard constraints. Template spans stay un-negatable, so official phrasing --
+# which always matches a template -- is still untouched by this module.
+NEGATABLE_PROVENANCE = frozenset({"tier0_fallback", "tier1", "tier2"})
 
 # A shopper negates a thing, not a paragraph. The one true negation in the
 # audit was "without horns"; every false positive was a long recited span.
@@ -546,7 +548,11 @@ class HeuristicTurnExtractor:
 
         turn = self._extract_tier0(user_message, state)
         for operation in turn.operations:
-            operation.provenance = "tier0"
+            # `_extract_tier0` already distinguishes template spans ("tier0")
+            # from its terminal gazetteer sweep ("tier0_fallback"). Only
+            # untagged operations need the default.
+            if operation.provenance == "legacy":
+                operation.provenance = "tier0"
 
         tier0_count = len(turn.operations)
         tier1_count = 0
@@ -636,7 +642,11 @@ class HeuristicTurnExtractor:
         )
 
         def add_operation(
-            attribute: str, action: str, value: str | None = None, raw_text: str | None = None
+            attribute: str,
+            action: str,
+            value: str | None = None,
+            raw_text: str | None = None,
+            provenance: str = "tier0",
         ) -> None:
             cleaned = _clean(value or "") if value is not None else None
             key = (attribute, action, cleaned or "")
@@ -649,10 +659,11 @@ class HeuristicTurnExtractor:
                     action=action,
                     value=cleaned,
                     raw_text=_clean(raw_text or cleaned or "") or None,
+                    provenance=provenance,
                 )
             )
 
-        def add_set(attribute: str, value: str) -> None:
+        def add_set(attribute: str, value: str, provenance: str = "tier0") -> None:
             raw_value = _clean(value)
             cleaned = raw_value
             if attribute == "color":
@@ -668,7 +679,7 @@ class HeuristicTurnExtractor:
                 and str(slots[attribute]) != cleaned
             ):
                 add_operation(attribute, "demote", str(slots[attribute]))
-            add_operation(attribute, "set", cleaned, raw_value)
+            add_operation(attribute, "set", cleaned, raw_value, provenance=provenance)
 
         def has_set(attribute: str) -> bool:
             return any(item.attribute == attribute and item.action == "set" for item in operations)
@@ -793,13 +804,20 @@ class HeuristicTurnExtractor:
             ):
                 add_set("budget", _clean(budget_match.group(0)))
 
+            # Tagged `tier0_fallback`, not `tier0`. These two lines are a bare
+            # gazetteer sweep of the whole message -- the same kind of guess
+            # Tier 1 makes -- not catalog metadata the customer recited inside
+            # a template. Treating them as un-negatable Tier 0 meant "not blue"
+            # and "without leather" produced positive hard constraints, which
+            # is worse than extracting nothing: the rejected value entered the
+            # slot, the query and the scorer.
             color = _first_word_match(COLORS | set(COLOR_ALIASES), user_message)
             if color and not has_set("color"):
-                add_set("color", color)
+                add_set("color", color, provenance="tier0_fallback")
 
             material = _first_word_match(MATERIALS, user_message)
             if material and not has_set("material"):
-                add_set("material", material)
+                add_set("material", material, provenance="tier0_fallback")
 
         return ExtractedTurn(
             intent=intent,

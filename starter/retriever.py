@@ -119,6 +119,13 @@ BOILERPLATE_PHRASES = {
 
 FIELD_WEIGHTS = (0.0, 6.0, 5.0, 4.0, 2.5, 3.0, 1.0, 1.5)
 
+# Unique query terms passed to FTS5. Was 50, which a multi-turn session crosses
+# around turn 8 once the shopper's own words are part of the query -- silently
+# dropping the newest disclosures. FTS5 handles a wider OR comfortably, and
+# `state_manager.query_fragment` now removes the dialogue scaffolding that made
+# the old ceiling bind so early.
+MAX_QUERY_TERMS = 128
+
 # Fractions of the per-attribute boost awarded at partial match. Structural
 # shape rather than free parameters: calibrating both the boost and its
 # fractions makes the score bilinear and the coordinate search ill-posed.
@@ -782,7 +789,10 @@ class CatalogRetriever:
             record = self.products[parent_asin]
             stages = self.stage_contributions(record, plan)
             stages["relevance"] = [generation, *stages["relevance"]]
-            scored[parent_asin] = self.assemble(stages, self.violations(record, plan), mapping)
+            violations = self._violation_cache.get(parent_asin)
+            if violations is None:
+                violations = self.violations(record, plan)
+            scored[parent_asin] = self.assemble(stages, violations, mapping)
             scored[parent_asin]["bm25_rank"] = self._bm25_rank.get(parent_asin)
         return scored
 
@@ -1068,6 +1078,7 @@ class CatalogRetriever:
 
     def _candidate_pool(self, plan: RetrievalPlan) -> dict[str, Contribution]:
         """BM25 -> prefilter -> reciprocal-rank fusion contributions."""
+        self._violation_cache = {}
         fetch = self.candidate_limit * max(1, self.config.overfetch) if self.config.prefilter \
             else self.candidate_limit
         bm25_ids = self._bm25_search(plan.query_text, limit=fetch)
@@ -1094,17 +1105,20 @@ class CatalogRetriever:
         """
         if not self.config.prefilter or not bm25_ids:
             return bm25_ids[: self.candidate_limit], 0
-        kept = [
-            parent_asin for parent_asin in bm25_ids
-            if self.violations(self.products[parent_asin], plan) == 0
-        ]
+        # Cached so `score_pool` does not recompute the same predicates for
+        # every survivor: the prefilter already evaluated up to
+        # `candidate_limit * overfetch` products this turn.
+        counts = self._violation_cache
+        for parent_asin in bm25_ids:
+            counts[parent_asin] = self.violations(self.products[parent_asin], plan)
+        kept = [parent_asin for parent_asin in bm25_ids if counts[parent_asin] == 0]
         removed = len(bm25_ids) - len(kept)
         if len(kept) < min(self.config.min_survivors, len(bm25_ids)):
             return bm25_ids[: self.candidate_limit], 0
         return kept[: self.candidate_limit], removed
 
     def _bm25_search(self, query_text: str, limit: int | None = None) -> list[str]:
-        terms = list(dict.fromkeys(_terms(query_text)))[:50]
+        terms = list(dict.fromkeys(_terms(query_text)))[:MAX_QUERY_TERMS]
         if not terms:
             return []
         expression = " OR ".join(f'"{term}"' for term in terms)
@@ -1187,12 +1201,21 @@ class CatalogRetriever:
         return self._strip_negated(text, negated)
 
     def _strip_negated(self, text: str, negated: Iterable[str]) -> str:
+        """Remove each rejected phrase from the query, and nothing more.
+
+        The constituent-token loop this replaces deleted every word of a
+        multi-word phrase from the whole query: negating "underwire bra" also
+        removed "bra", the category the shopper actually wants. A single-word
+        phrase is unchanged by the fix; a multi-word one now loses only the
+        contiguous phrase, so the surrounding request survives.
+        """
         for phrase in negated:
             if not phrase:
                 continue
-            text = re.sub(rf"\b{re.escape(phrase)}\b", " ", text, flags=re.IGNORECASE)
-            for term in phrase.split():
-                text = re.sub(rf"\b{re.escape(term)}\b", " ", text, flags=re.IGNORECASE)
+            pattern = r"\s+".join(re.escape(term) for term in phrase.split())
+            if not pattern:
+                continue
+            text = re.sub(rf"\b{pattern}\b", " ", text, flags=re.IGNORECASE)
         return re.sub(r"\s+", " ", text).strip()
 
     def _attribute_stats(
@@ -1248,6 +1271,7 @@ class CatalogRetriever:
         self._last_bm25_ids: list[str] = []
         self._last_prefilter_removed = 0
         self._bm25_rank: dict[str, int] = {}
+        self._violation_cache: dict[str, int] = {}
         cursor = self.connection.cursor()
         cursor.execute(
             "CREATE VIRTUAL TABLE products USING fts5("
