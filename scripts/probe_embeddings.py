@@ -38,6 +38,7 @@ CEILING_KS = (10, 50, 100, 500)
 
 
 def load_catalog(path: Path) -> dict[str, dict]:
+    """Load the catalog into a parent_asin -> product map."""
     with open(path, encoding="utf-8") as handle:
         return {
             str(row["parent_asin"]): row
@@ -46,6 +47,7 @@ def load_catalog(path: Path) -> dict[str, dict]:
 
 
 def load_sessions(path: Path) -> list[dict]:
+    """Load labelled sessions from a JSONL file."""
     with open(path, encoding="utf-8") as handle:
         return [json.loads(line) for line in handle if line.strip()]
 
@@ -73,6 +75,7 @@ def oracle_query(product: dict) -> str:
 
 
 def run_query(index: VectorIndex, query: str, catalog: dict[str, dict], top_k: int) -> None:
+    """Print the nearest catalog titles for one query or product id."""
     hits = (
         index.similar_to(query, top_k=top_k)
         if query in index.store.ids
@@ -89,6 +92,12 @@ def run_ceiling(
     catalog: dict[str, dict],
     limit: int | None,
 ) -> dict[str, float]:
+    """Measure how often an oracle query surfaces the target.
+
+    An upper bound on what any dialogue policy over this index could reach:
+    if the ceiling is low, the fix belongs in the document format or the
+    encoder, not in the policy.
+    """
     largest = max(CEILING_KS)
     hits_at = {k: 0 for k in CEILING_KS}
     ranks: list[int] = []
@@ -129,6 +138,7 @@ def run_ceiling(
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Command-line entry point for the embedding diagnostics."""
     load_project_env()
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--query", default=None, help="free text, or a parent_asin for neighbours")

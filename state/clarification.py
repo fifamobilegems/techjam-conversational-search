@@ -21,6 +21,11 @@ QUESTION_ATTRIBUTES = (
 
 
 def _normalised_entropy(value_counts: Mapping[str, int | float]) -> float:
+    """Entropy of a value distribution, scaled to [0, 1].
+
+    Measures how much a candidate pool disagrees on an attribute: high
+    entropy means asking about it should split the pool most.
+    """
     total = sum(float(count) for count in value_counts.values() if float(count) > 0)
     if total <= 0 or len(value_counts) <= 1:
         return 0.0

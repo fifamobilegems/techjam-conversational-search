@@ -115,9 +115,9 @@ pip install -r requirements-embeddings.txt   # sentence-transformers (~2 GB)
 
 One command, the unmodified official evaluator:
 
-```bash
-python3 -m evaluator.local_evaluator
-```
+BM25 over an in-memory SQLite FTS5 index (50k products, field-weighted), then
+staged reranking so hard-constraint coverage cannot be traded away by lexical
+relevance. Everything runs in-process; no vector database.
 
 Writes `results.json` with per-session results and the aggregate metrics quoted
 at the top of this README. Runtime ~35 s for all 200 sessions on an Apple M-series

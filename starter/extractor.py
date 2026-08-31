@@ -100,11 +100,13 @@ CATEGORY_FILLER_WORDS = {
 
 
 def _clean(value: str, limit: int = 180) -> str:
+    """Collapse whitespace, trim punctuation, and cap length."""
     value = re.sub(r"\s+", " ", value).strip(" -;,.\t\n")
     return value[:limit].rstrip()
 
 
 def _split_constraints(value: str) -> list[str]:
+    """Split one disclosed span into separate constraints on ';' or 'and'."""
     value = _clean(value)
     if not value:
         return []
@@ -115,6 +117,7 @@ def _split_constraints(value: str) -> list[str]:
 
 
 def _first_word_match(words: Iterable[str], text: str) -> str | None:
+    """Return the first vocabulary word occurring in `text`, else None."""
     lowered = text.lower()
     for word in sorted(words):
         if re.search(rf"\b{re.escape(word)}\b", lowered):
@@ -123,6 +126,11 @@ def _first_word_match(words: Iterable[str], text: str) -> str | None:
 
 
 def _category_from_phrase(value: str) -> str | None:
+    """Strip colour, material and budget words from a phrase, leaving the product type.
+
+    "black leather boots under $50" reduces to "boots", which is what the
+    category slot should hold.
+    """
     category = re.sub(
         r"\b(?:under|below|less than|around|about)\s+\$?\d+(?:\.\d{1,2})?\b",
         " ",
@@ -143,11 +151,17 @@ def _category_from_phrase(value: str) -> str | None:
 
 
 def _state_slots(state: object | None) -> dict:
+    """Read `state.slots` defensively; returns {} for any state-like object without it."""
     slots = getattr(state, "slots", None)
     return slots if isinstance(slots, dict) else {}
 
 
 def _last_non_category_attribute(state: object | None) -> str | None:
+    """Most recently touched attribute other than category.
+
+    Used by the override path: "ignore my earlier preference" names no
+    attribute, so the one changed most recently is the one being retracted.
+    """
     history = getattr(state, "history", None)
     if not isinstance(history, list):
         return None
@@ -161,6 +175,12 @@ def _last_non_category_attribute(state: object | None) -> str | None:
 
 
 def classify_constraint(value: str) -> str:
+    """Assign a free-text constraint span to one of the allowed attributes.
+
+    An ordered cascade rather than a classifier: each test is a literal cue,
+    so every decision is traceable to text. Unrecognised spans fall through
+    to "feature", which is the least damaging bucket in the reranker.
+    """
     lowered = value.lower()
     if re.search(r"\bmaterial\s*:", lowered):
         return "material"
@@ -320,6 +340,7 @@ class LexiconMatch:
 
     @property
     def word_count(self) -> int:
+        """Number of tokens the match spans. Longest match wins in Tier 1."""
         return self.token_end - self.token_start + 1
 
 
@@ -336,11 +357,18 @@ class LexiconTagger:
     """
 
     def __init__(self, index: dict[str, tuple[str, str, int]] | None = None) -> None:
+        """Wrap a prebuilt surface-form index."""
         self.index = index or {}
         self.max_words = max((len(key.split()) for key in self.index), default=0)
 
     @classmethod
     def load(cls, path: str | Path | None = None) -> "LexiconTagger":
+        """Load `data/lexicon.json` into a surface-form lookup.
+
+        A missing or unreadable file yields an empty tagger rather than an error,
+        so a checkout without the artifact still runs -- Tier 1 simply
+        contributes nothing.
+        """
         lexicon_path = Path(path) if path is not None else DEFAULT_LEXICON_PATH
         try:
             payload = json.loads(lexicon_path.read_text(encoding="utf-8"))
@@ -424,6 +452,11 @@ class PolarityScanner:
         operations: list[AttributeUpdate],
         matches: list[LexiconMatch],
     ) -> None:
+        """Tag operations that fall inside a negation scope.
+
+        Tags only: an operation is never dropped here. What a negated slot means
+        is `state_manager.replay`'s decision.
+        """
         spans = self.negated_spans(message, matches)
         if not spans:
             return
@@ -488,6 +521,11 @@ class PolarityScanner:
         return spans
 
     def _cue_width(self, tokens: list[tuple[str, int, int]], index: int) -> int:
+        """Return how many tokens the cue at `index` spans, or 0 if it is not a cue.
+
+        Two-token phrases are checked first so "other than" is not read as a
+        bare "other".
+        """
         if index + 1 < len(tokens):
             pair = (tokens[index][0], tokens[index + 1][0])
             if pair in NEGATION_PHRASES:
@@ -537,6 +575,7 @@ class HeuristicTurnExtractor:
     """
 
     def __init__(self, lexicon_path: str | Path | None = None) -> None:
+        """Load the lexicon and prepare the polarity scanner."""
         self.tagger = LexiconTagger.load(lexicon_path)
         self.polarity = PolarityScanner()
         # Cumulative per-tier yield, and a per-turn record the LLM tier reads
@@ -631,6 +670,12 @@ class HeuristicTurnExtractor:
         return operations
 
     def _extract_tier0(self, user_message: str, state: object | None = None) -> ExtractedTurn:
+        """The original template-regex pipeline, unchanged.
+
+        Worth 0.84 on official phrasing because it captures catalog metadata the
+        simulator recites verbatim. Deliberately untouched: fuzzy-matching it
+        would damage exactly the property that makes it work.
+        """
         lowered = user_message.lower()
         # "I don't have an additional preference for X" is scoped to X.
         #
@@ -665,6 +710,7 @@ class HeuristicTurnExtractor:
             raw_text: str | None = None,
             provenance: str = "tier0",
         ) -> None:
+            """Record one attribute change, ignoring exact duplicates."""
             cleaned = _clean(value or "") if value is not None else None
             key = (attribute, action, cleaned or "")
             if key in seen:
@@ -681,6 +727,7 @@ class HeuristicTurnExtractor:
             )
 
         def add_set(attribute: str, value: str, provenance: str = "tier0") -> None:
+            """Record a `set`, canonicalizing the value and demoting any it overrides."""
             raw_value = _clean(value)
             cleaned = raw_value
             if attribute == "color":
@@ -699,6 +746,7 @@ class HeuristicTurnExtractor:
             add_operation(attribute, "set", cleaned, raw_value, provenance=provenance)
 
         def has_set(attribute: str) -> bool:
+            """True when this turn already set the given attribute."""
             return any(item.attribute == attribute and item.action == "set" for item in operations)
 
         intent = None

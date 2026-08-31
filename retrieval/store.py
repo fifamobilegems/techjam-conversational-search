@@ -70,6 +70,7 @@ class EmbeddingStore:
     manifest: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
+        """Validate shape and build the id -> row lookup."""
         if self.vectors.ndim != 2:
             raise ArtifactError(f"vectors must be 2-D, got shape {self.vectors.shape}")
         if len(self.ids) != self.vectors.shape[0]:
@@ -83,16 +84,20 @@ class EmbeddingStore:
     # ----------------------------------------------------------------
 
     def __len__(self) -> int:
+        """Number of products in the store."""
         return len(self.ids)
 
     @property
     def dimension(self) -> int:
+        """Length of one stored vector."""
         return int(self.vectors.shape[1])
 
     def row_of(self, parent_asin: str) -> int | None:
+        """Row index for a product id, or None if absent."""
         return self._row_by_id.get(parent_asin)
 
     def vector_of(self, parent_asin: str) -> np.ndarray | None:
+        """Vector for a product id, or None if absent."""
         row = self.row_of(parent_asin)
         return None if row is None else np.asarray(self.vectors[row], dtype=np.float32)
 
@@ -117,6 +122,11 @@ class EmbeddingStore:
         dtype: str = "float16",
         extra: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
+        """Describe an artifact: encoder, dimensions, document format, catalog checksum.
+
+        Dense retrieval fails quietly, so provenance is recorded at build time
+        and re-checked on every load.
+        """
         manifest: dict[str, Any] = {
             "manifest_version": MANIFEST_VERSION,
             "embedder": embedder_name,
@@ -137,6 +147,7 @@ class EmbeddingStore:
         return manifest
 
     def save(self, directory: str | Path) -> Path:
+        """Write vectors, ids and manifest to a directory."""
         directory = Path(directory)
         directory.mkdir(parents=True, exist_ok=True)
         np.save(directory / VECTORS_FILE, self.vectors, allow_pickle=False)

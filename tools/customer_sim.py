@@ -179,6 +179,7 @@ JUNK_DETAIL_VALUES = {
 
 
 def _text(value: Any) -> str:
+    """Flatten any catalog value into text."""
     if value is None:
         return ""
     if isinstance(value, dict):
@@ -221,6 +222,7 @@ def _first_present(words: tuple[str, ...], haystack: str) -> str | None:
 
 
 def _all_present(words: tuple[str, ...], haystack: str, limit: int = 3) -> list[str]:
+    """True when every word appears in the haystack."""
     lowered = haystack.lower()
     found: list[str] = []
     for word in sorted(words, key=len, reverse=True):
@@ -234,6 +236,7 @@ def _all_present(words: tuple[str, ...], haystack: str, limit: int = 3) -> list[
 
 
 def _clean_detail(value: Any, limit: int = 40) -> str | None:
+    """Normalize one metadata value for use in a customer utterance."""
     text = re.sub(r"\s+", " ", str(value)).strip(" -;,.")
     if not text or text.lower() in JUNK_DETAIL_VALUES or len(text) > limit:
         return None
@@ -243,6 +246,7 @@ def _clean_detail(value: Any, limit: int = 40) -> str | None:
 
 
 def _details(product: dict) -> dict[str, str]:
+    """Disclosable structured details for a product."""
     details = product.get("details")
     return {str(key).lower(): value for key, value in details.items()} if isinstance(details, dict) else {}
 
@@ -277,6 +281,7 @@ def _detail_facets(product: dict) -> dict[str, str]:
 
 
 def _department(product: dict) -> str | None:
+    """The product's audience department, if stated."""
     for key, value in _details(product).items():
         if "department" in key:
             return DEPARTMENTS.get(str(value).strip().lower())
@@ -321,6 +326,7 @@ def feature_pool(product: dict, limit: int = 60, count: int = 4) -> list[str]:
 
 
 def _budget_phrase(price: float | None, rng: random.Random) -> str | None:
+    """Phrase a price the way a shopper would -- "under $50", "around $40"."""
     if price is None or price <= 0:
         return None
     # Always satisfiable by the real product, so a good agent is never punished.
@@ -405,6 +411,7 @@ def extract_facets(product: dict, rng: random.Random) -> dict[str, str]:
 
 
 def build_persona(rng: random.Random, difficulty: str) -> dict:
+    """Build a shopper persona controlling verbosity and disclosure order."""
     gift = rng.random() < (0.30 if difficulty != "hard" else 0.20)
     return {
         "shopping_for": "gift" if gift else "self",
@@ -521,6 +528,7 @@ OPENING_CONSTRAINT_COUNT = {"easy": 2, "medium": 1, "hard": 0}
 
 
 def _join(values: list[str]) -> str:
+    """Join fragments into one natural utterance."""
     if len(values) <= 1:
         return values[0] if values else ""
     return "; ".join(values)
@@ -541,6 +549,7 @@ class RealisticCustomer:
         coarse_category: str,
         max_turns: int = 10,
     ) -> None:
+        """Prepare a paraphrasing customer for one target product."""
         self.sample_id = str(sample["sample_id"])
         self.scenario = str(sample["scenario_type"])
         self.difficulty = str(sample.get("difficulty_bucket") or "medium")
@@ -564,11 +573,13 @@ class RealisticCustomer:
     # ---------------------------------------------------------------------
 
     def _pending(self, attribute: str) -> str | None:
+        """Facts not yet disclosed for one attribute."""
         if attribute in self.disclosed:
             return None
         return self.facets.get(attribute)
 
     def _best_pending(self, count: int) -> list[str]:
+        """The most informative undisclosed facts, best first."""
         picked: list[str] = []
         for attribute in DISCLOSURE_ORDER:
             if len(picked) >= count:
@@ -582,6 +593,7 @@ class RealisticCustomer:
     # ---------------------------------------------------------------------
 
     def opening(self) -> str:
+        """First message: what a real shopper would type into a search box."""
         persona = self.persona
         count = OPENING_CONSTRAINT_COUNT.get(self.difficulty, 1)
 
@@ -642,6 +654,7 @@ class RealisticCustomer:
     # ---------------------------------------------------------------------
 
     def reply(self, ask_attribute: object) -> str:
+        """Answer the agent's question, disclosing a little more each turn."""
         attribute = ask_attribute if isinstance(ask_attribute, str) else None
 
         if self.scenario == "boundary" and not self.boundary_used and attribute:
@@ -745,6 +758,7 @@ class EsciCustomer(RealisticCustomer):
         coarse_category: str,
         max_turns: int = 10,
     ) -> None:
+        """Prepare a customer that speaks real Amazon query text."""
         super().__init__(sample, product, coarse_category, max_turns)
         self.query = str(sample.get("esci_query") or "")
         # A shopper does not re-state what their opening query already said.
@@ -757,9 +771,11 @@ class EsciCustomer(RealisticCustomer):
                     self.disclosed.add(attribute)
 
     def opening(self) -> str:
+        """First message: the verbatim ESCI query."""
         return self.query if self.query.strip() else super().opening()
 
     def override_message(self) -> tuple[str, str]:
+        """The mid-session change of mind, for override scenarios."""
         new_value = None
         for attribute in OVERRIDE_ATTRIBUTE_ORDER:
             new_value = self._pending(attribute)
@@ -771,6 +787,7 @@ class EsciCustomer(RealisticCustomer):
         return self.rng.choice(ESCI_OVERRIDE).format(new_value=new_value), new_value
 
     def reply(self, ask_attribute: object) -> str:
+        """Answer tersely, the way a real shopper follows up."""
         if self.scenario == "boundary" and not self.boundary_used and isinstance(ask_attribute, str):
             self.boundary_used = True
             return self.rng.choice(ESCI_BOUNDARY)

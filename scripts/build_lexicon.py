@@ -159,6 +159,7 @@ def variants_of(canonical: str) -> set[str]:
 
 
 def _iter_catalog(path: Path) -> Iterator[dict]:
+    """Stream catalog rows."""
     if not path.exists():
         raise SystemExit(f"Catalog not found: {path}")
     with open(path, encoding="utf-8") as handle:
@@ -174,6 +175,13 @@ def _split_values(raw: object) -> list[str]:
 
 
 def _acceptable(attribute: str, value: str) -> bool:
+    """True when a mined value is worth a lexicon entry.
+
+    This is where the mined vocabulary is cleaned: vendor prose, SKU
+    fragments, audience words and generic brand names are all rejected here
+    rather than by raising the frequency floor, which would also discard the
+    rare-but-real words shoppers actually use.
+    """
     if not value or value in VALUE_STOPLIST or value in BOILERPLATE_PHRASES:
         return False
     if any(marker in value for marker in JUNK_SUBSTRINGS):
@@ -278,6 +286,7 @@ def build(counts: dict[str, Counter], floors: dict[str, int]) -> dict:
 
 
 def checksum(path: Path, chunk: int = 1 << 20) -> str:
+    """SHA256 of a file, streamed."""
     digest = hashlib.sha256()
     with open(path, "rb") as handle:
         for block in iter(lambda: handle.read(chunk), b""):
@@ -286,6 +295,7 @@ def checksum(path: Path, chunk: int = 1 << 20) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Mine the catalog and write `data/lexicon.json`."""
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )

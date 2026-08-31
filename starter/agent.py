@@ -37,6 +37,11 @@ class Agent:
         catalog_path: str | Path = "data/catalog.jsonl",
         hold_until_turn: int = 2,
     ) -> None:
+        """Build the agent once per process.
+
+        The catalog index, the lexicon and the encoder are all expensive and all
+        reusable, so they are constructed here rather than per session.
+        """
         load_project_env()
         # Robustness-first integration decision (Role A): ship the calibrated
         # reranker weights by default. Measured trade vs `default`, items 1&3
@@ -67,6 +72,7 @@ class Agent:
         self._runs: dict[str, int] = {}
 
     def reset(self, session_id: str, user_profile: dict) -> None:
+        """Start a fresh session. Called by the evaluator before every dialogue."""
         self._sessions.add(session_id)
         self._profiles[session_id] = user_profile
         self._runs[session_id] = self._runs.get(session_id, 0) + 1
@@ -79,6 +85,11 @@ class Agent:
         turn: int,
         top_k: int,
     ) -> dict:
+        """Produce one turn: an optional question plus an optional ranked slate.
+
+        Asking and recommending are independent -- the contract carries both
+        fields and the evaluator reads both every turn.
+        """
         if session_id not in self._sessions:
             raise RuntimeError("reset must be called before respond")
 
