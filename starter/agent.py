@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from starter.debug import candidates_enabled, write_trace
@@ -37,6 +38,12 @@ class Agent:
         hold_until_turn: int = 2,
     ) -> None:
         load_project_env()
+        # Robustness-first integration decision (Role A): ship the calibrated
+        # reranker weights by default. Measured trade vs `default`, items 1&3
+        # applied: realistic/esci +0.076 mean technical, official -0.030 mean
+        # (concentrated on public200-official). setdefault keeps it fully
+        # reversible — an explicit RERANK_WEIGHTS in the shell or .env wins.
+        os.environ.setdefault("RERANK_WEIGHTS", "calibrated")
         self.retriever = CatalogRetriever(catalog_path)
         self.manager = StateManager(hold_until_turn=hold_until_turn)
         # The rules extractor is authoritative. The LLM layer, when enabled,
@@ -68,6 +75,13 @@ class Agent:
         current_state = self.manager.get(session_id)
         previous_constraints = dict(current_state.slots)
         previous_no_preference = sorted(current_state.no_preference)
+        # Record the user's words BEFORE extraction/state export so
+        # build_search_context() can fold them into the turn-1 query. Otherwise
+        # real-phrasing sessions whose template extraction is empty search an
+        # empty string on turn 1 and waste it (C -> A request in REQUESTS.md).
+        # The assistant reply is still recorded after it is built, so there is
+        # exactly one record per message.
+        self.manager.record_message(session_id, "user", user_message, turn)
         extracted = self.extractor.extract(user_message, current_state)
         self.manager.update(session_id, extracted, turn)
         state = self.manager.export(session_id)
@@ -88,13 +102,13 @@ class Agent:
                     state["no_preference"],
                     top_k=top_k,
                     raw_constraints=state["raw_constraints"],
+                    user_profile=self._profiles.get(session_id),
                 )
             ]
         else:
             recommendations = []
 
         message = self._message(ask_attribute, bool(recommendations))
-        self.manager.record_message(session_id, "user", user_message, turn)
         self.manager.record_message(session_id, "assistant", message, turn)
         diagnostics = self.retriever.last_diagnostics if recommendations else {}
         trace_event = {
