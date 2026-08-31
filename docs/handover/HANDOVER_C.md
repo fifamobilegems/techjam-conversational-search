@@ -10,6 +10,9 @@ partial
   and exported event/demoted/negated retrieval views.
 - `state/clarification.py`: added typed, catalog-driven question-value policy;
   it deliberately excludes evaluator-privileged `other` when diagnostics exist.
+- `state/clarification.py`: reconciled D's live `attribute_stats` contract by
+  normalizing its entropy-in-bits instability signal; supports future measured
+  `answerability_by_mission` artifacts keyed by the current intent.
 
 ## Contracts I introduced or changed
 - `AttributeUpdate` / `ExtractedTurn` / raw span: `polarity="must"`,
