@@ -68,3 +68,10 @@ retriever's `last_diagnostics`: for each typed attribute, a `coverage` fraction,
 `StateManager.set_retrieval_diagnostics()` consumes this exact mapping. Existing
 `candidate_scores` already supports C's score/margin credibility calculation.
 Status: open
+
+### 2026-08-31 · C → A/D · Autonomy-patch assumption
+`origin/main` fetch could not complete because the host's Git SSL issuer is
+untrusted. The available `origin/main` ref has none of the requested Agent or
+retriever integrations, and the self-check still prints `''`; C proceeds with
+the current contracts and will reconcile against local `main` before merge.
+Status: done
