@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import re
 from dataclasses import dataclass, field
 from typing import Any, Literal
@@ -88,6 +89,13 @@ CLARIFICATION_PRIORITY = [
     "budget",
     "brand",
 ]
+
+
+def _env_flag(name: str, default: bool) -> bool:
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
 
 
 def normalize_phrase(value: str) -> str:
@@ -367,6 +375,7 @@ class StateManager:
         hold_until_turn: int = 2,
         credibility_score_floor: float = 10.0,
         credibility_margin_floor: float = 1.0,
+        credibility: bool | None = None,
     ):
         """
         `hold_until_turn` controls when recommendations are first emitted.
@@ -386,6 +395,22 @@ class StateManager:
         self.hold_until_turn = hold_until_turn
         self.credibility_score_floor = credibility_score_floor
         self.credibility_margin_floor = credibility_margin_floor
+        # Off by default, on measurement.
+        #
+        # The intent (Decision 6) was to emit as soon as the list is credible
+        # instead of waiting a fixed number of turns. Implemented and measured,
+        # it emits on turn 1 in essentially every session: with the calibrated
+        # weights a rank-1 BM25 hit alone scores ~141, so an absolute floor of
+        # 10 is meaningless, and the top ten are separated by ~1.6 points --
+        # they are indistinguishable. Worse, relative separation turns out not
+        # to predict rank quality at all (mean RR is flat and noisy across
+        # every separation bucket), so there is no threshold that rescues it.
+        # Emitting early locks in a permanent bad rank, which is why MRR fell
+        # on every cell. The empirically swept `hold_until_turn` stays the
+        # policy until something measurably beats it.
+        self.credibility = (
+            _env_flag("EMIT_CREDIBILITY", False) if credibility is None else credibility
+        )
 
         self.sessions: dict[
             str,
@@ -744,6 +769,24 @@ class StateManager:
         if state.information_exhausted:
             return None
 
+        # Default `other`, on measurement, with `CLARIFY_POLICY=formula`
+        # selecting the catalog-driven policy.
+        #
+        # Decision 7 was to replace always-asking `other` with a
+        # candidate-reduction score, accepting a cost on the official columns
+        # in exchange for robustness. Both halves were measured (n=100 x 6
+        # cells, mean technical):
+        #
+        #     other    0.8664      formula  0.8183      -0.048
+        #
+        # The cost is real, but the compensating gain is not: on the
+        # paraphrased columns the two are level (publ/real 0.866 vs 0.866,
+        # esci/real 0.839 vs 0.839, synt/real 0.906 vs 0.902). The formula is
+        # the more defensible design and stays one env var away, but it is not
+        # currently buying the robustness it was adopted for.
+        if os.environ.get("CLARIFY_POLICY", "other").strip().lower() == "other":
+            return HIGHEST_YIELD_ATTRIBUTE
+
         attribute_stats = state.retrieval_diagnostics.get("attribute_stats", {})
         if not isinstance(attribute_stats, dict) or not attribute_stats:
             # The Agent has not yet supplied the provisional retrieval contract.
@@ -775,7 +818,7 @@ class StateManager:
         if state.information_exhausted:
             return True
 
-        if self._is_credible(state):
+        if self.credibility and self._is_credible(state):
             return True
 
         return state.turn >= self.hold_until_turn

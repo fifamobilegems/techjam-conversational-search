@@ -422,15 +422,31 @@ class RerankConfig:
     # scoring lets one huge category match outrank a product that quietly
     # satisfies four disclosed constraints -- but the target is precisely the
     # thing that satisfies all of them.
-    coverage_bonus: bool = True
+    # Measured NEUTRAL (mean technical 0.8179 vs 0.8183 without, n=100 x 6
+    # cells). With few live spans most survivors satisfy all of them, so the
+    # term is near-constant across the pool and discriminates nothing. Kept,
+    # off, because it should earn its place again if span counts rise.
+    coverage_bonus: bool = False
     # Weight span evidence by catalog rarity. "cotton" matches thousands of
     # products and separates nothing; a model number matches one. Flat
     # weighting spends the same score on both.
-    idf_evidence: bool = True
+    # Measured NEGATIVE once paired with the better clarification policy:
+    # 0.8584 vs 0.8664 mean technical (n=100 x 6 cells). It looked marginally
+    # positive against the weaker `formula` policy (0.8219 vs 0.8183), which
+    # is the tell -- it was compensating for worse evidence, not adding
+    # signal. BM25 already applies IDF when selecting candidates, so
+    # re-applying it in the reranker double-counts term rarity the retrieval
+    # stage has priced in. Off.
+    idf_evidence: bool = False
     # Fuse this turn's ranking with earlier turns'. A product that stays near
     # the top all session is better evidence than one that spikes once on a
     # noisy query.
-    rank_consensus: bool = True
+    # Measured clearly HARMFUL: 0.7732 vs 0.8183 mean technical, MRR 0.5512
+    # vs 0.6815. It is a feedback loop -- reinforcing whatever ranked highly on
+    # earlier, less-informed turns entrenches exactly the early mistakes later
+    # constraints are supposed to correct. Off, and kept only as a documented
+    # negative result.
+    rank_consensus: bool = False
 
 
 def _env_flag(name: str, default: bool) -> bool:
