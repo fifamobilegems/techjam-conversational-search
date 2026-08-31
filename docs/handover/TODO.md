@@ -29,11 +29,11 @@ Owns: `tools/`, `scripts/measure_recall.py`, `docs/`, `starter/agent.py`, `start
 ## Role B · Extraction
 Owns: `starter/extractor.py`, `state/llm_extractor.py`, `scripts/build_lexicon.py`, `data/lexicon.json`
 
-- [ ] 2.1 Mine lexicon from catalog → `data/lexicon.json` (committed, deterministic)
-- [ ] 2.2 Restructure `extractor.py` as explicit Tier 0 / Tier 1 cascade
-- [ ] 2.2b Polarity/negation layer + multi-word false-friend guard
-- [ ] 2.3 Attach axes (`mission`, `dialogue_act`) + per-span provenance
-- [ ] 8 Wire LLM tier behind structural gate; tune on provenance; disclose usage
+- [x] 2.1 Mine lexicon from catalog → `data/lexicon.json` (committed, deterministic)
+- [x] 2.2 Restructure `extractor.py` as explicit Tier 0 / Tier 1 cascade
+- [x] 2.2b Polarity/negation layer + multi-word false-friend guard
+- [x] 2.3 Per-span provenance (axes deferred — see HANDOVER_B.md)
+- [x] 8 Wire LLM tier behind structural gate; tune on provenance; disclose usage
 
 ## Role C · State & Policy
 Owns: `state/state_manager.py`, `state/clarification.py`
