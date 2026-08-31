@@ -43,7 +43,7 @@ Owns: `state/state_manager.py`, `state/clarification.py`
 - [x] Schema freeze (first commit after 1.1): add `polarity`, `strength`,
   `confidence`, `superseded`, `provenance` with safe defaults so B/D can code
   against a stable shape
-- [ ] 3 Event-sourced state (append-only log authoritative, replay, keep demotion)
+- [x] 3 Event-sourced state (append-only log authoritative, replay, keep demotion)
 - [ ] 4 Adaptive clarification `question_value(a)` (answerability fitted, not guessed)
 - [ ] 5 Credibility emit policy (score floor / rank1–rank10 margin, re-swept)
 

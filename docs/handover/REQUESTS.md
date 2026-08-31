@@ -60,3 +60,11 @@ per-mission answerability suitable for `state/clarification.py`, and document
 how the fitted coefficient is selected. C will consume this artifact rather
 than hand-setting a value.
 Status: open
+
+### 2026-08-31 · C → D · Publish compact per-attribute provisional statistics
+For `state.clarification.question_value`, add `attribute_stats` to the
+retriever's `last_diagnostics`: for each typed attribute, a `coverage` fraction,
+`value_counts` over the provisional candidate set, and an `instability` value.
+`StateManager.set_retrieval_diagnostics()` consumes this exact mapping. Existing
+`candidate_scores` already supports C's score/margin credibility calculation.
+Status: open
