@@ -62,6 +62,7 @@ SCENARIO_ORDER = ("buying", "browsing", "intent_override", "boundary")
 
 
 def _dataset_supports(simulator: str, samples: list[dict]) -> bool:
+    """True when a dataset carries the field a simulator needs."""
     field = SIMULATOR_REQUIRES.get(simulator)
     if field is None:
         return True
@@ -95,6 +96,7 @@ def run_matrix(
     full_matrix: bool,
     hold_until_turn: int | None = None,
 ) -> dict:
+    """Score every dataset x simulator cell and return structured results."""
     catalog_ids, categories, products = catalog_index(catalog_path)
     build_started = time.perf_counter()
     # hold_until_turn is the emit policy's only live lever (the credibility test
@@ -159,6 +161,7 @@ def run_matrix(
 
 
 def _fmt(value: Any, spec: str = ".4f") -> str:
+    """Format a metric, or an em dash for a skipped cell."""
     if value is None:
         return "—"
     try:
@@ -168,6 +171,7 @@ def _fmt(value: Any, spec: str = ".4f") -> str:
 
 
 def render_markdown(result: dict) -> str:
+    """Render the bench matrix as markdown."""
     lines: list[str] = []
     lines.append(f"# Bench matrix — {result['generated_at']}")
     lines.append("")
@@ -221,6 +225,7 @@ def render_markdown(result: dict) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Command-line entry point for the bench matrix."""
     parser = argparse.ArgumentParser(description="Dataset x simulator bench matrix")
     parser.add_argument("--catalog", default="data/catalog.jsonl")
     parser.add_argument(

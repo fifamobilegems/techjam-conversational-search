@@ -186,6 +186,7 @@ _DEPARTMENT_CUES = {
 
 
 def _canonical_department(value: object) -> str | None:
+    """Map a free-text department to a canonical audience token."""
     text = str(value or "").strip().lower()
     if not text:
         return None
@@ -216,6 +217,11 @@ def _infer_department(text: str) -> str | None:
 
 
 def _department_conflicts(wanted: str | None, actual: str | None) -> bool:
+    """True when two departments cannot describe the same product.
+
+    Used as a hard signal: a menswear listing is not a near-miss for a
+    womenswear request, it is wrong.
+    """
     if wanted is None or actual is None:
         return False
     if wanted == actual:
@@ -299,9 +305,11 @@ class RerankWeights:
     profile_scale: float = 0.0
 
     def as_mapping(self) -> dict[str, float]:
+        """Expose the constraint set as a plain attribute -> value dict."""
         return {item.name: float(getattr(self, item.name)) for item in fields(self)}
 
     def with_values(self, values: dict[str, float]) -> "RerankWeights":
+        """Return a copy carrying replacement values, leaving the original intact."""
         return replace(self, **{key: float(value) for key, value in values.items()})
 
 
@@ -324,7 +332,7 @@ WEIGHT_NAMES: tuple[str, ...] = tuple(item.name for item in fields(RerankWeights
 #     public200/official   0.9022 -> 0.8474   -0.0548   <-- the cost
 #                                       mean  +0.0332
 #
-# NOT the default. `docs/ARCHITECTURE.md` names the ~0.89 official column "the
+# NOT the default. `README.md` names the official column "the
 # constraint to not destroy", and -0.0548 on the closest proxy to the official
 # leaderboard is a trade for the team to take deliberately, not one for the
 # retriever to take silently. Opt in with `RERANK_WEIGHTS=calibrated`.
@@ -462,6 +470,7 @@ class RerankConfig:
 
 
 def _env_flag(name: str, default: bool) -> bool:
+    """Read a boolean environment flag, defaulting when unset."""
     raw = os.environ.get(name)
     if raw is None:
         return default
@@ -469,6 +478,11 @@ def _env_flag(name: str, default: bool) -> bool:
 
 
 def config_from_env() -> RerankConfig:
+    """Build the retriever configuration, letting the environment override defaults.
+
+    Every knob is overridable so an ablation is one command and needs no
+    code edit.
+    """
     base = RerankConfig()
     return RerankConfig(
         staged=_env_flag("RERANK_STAGED", base.staged),
@@ -497,6 +511,11 @@ def config_from_env() -> RerankConfig:
 
 @dataclass(frozen=True)
 class ProductRecord:
+    """One catalog product, pre-tokenized for scoring.
+
+    Built once at startup; the normalized text fields exist so per-turn
+    scoring never re-tokenizes the same 50k products.
+    """
     parent_asin: str
     title: str
     categories: str
@@ -543,6 +562,7 @@ _NEUTRAL = Contribution("", "generic_miss", 0.0)
 
 
 def _text(value: object) -> str:
+    """Flatten any catalog value -- string, list or dict -- into searchable text."""
     if value is None:
         return ""
     if isinstance(value, dict):
@@ -553,6 +573,7 @@ def _text(value: object) -> str:
 
 
 def _terms(text: str) -> list[str]:
+    """Lowercase alphanumeric tokens, stopwords and single characters removed."""
     return [
         token.lower()
         for token in TOKEN_RE.findall(text)
@@ -561,14 +582,17 @@ def _terms(text: str) -> list[str]:
 
 
 def _normalized_text(text: str) -> str:
+    """Whitespace-joined `_terms`, for substring comparison."""
     return " ".join(_terms(text))
 
 
 def _is_boilerplate(value: object) -> bool:
+    """True for ubiquitous listing phrases that carry no discriminative signal."""
     return _normalized_text(str(value)) in BOILERPLATE_PHRASES
 
 
 def _remove_boilerplate(text: str) -> str:
+    """Strip boilerplate phrases from a query so they cannot dominate BM25."""
     result = text
     for phrase in BOILERPLATE_PHRASES:
         result = re.sub(rf"\b{re.escape(phrase)}\b", " ", result, flags=re.IGNORECASE)
@@ -576,6 +600,7 @@ def _remove_boilerplate(text: str) -> str:
 
 
 def _match_strength(value: object, text: str) -> float:
+    """Fraction of the needle's terms present in the haystack, 1.0 for a substring hit."""
     needle = _normalized_text(str(value))
     haystack = _normalized_text(text)
     return _match_strength_normalized(needle, haystack)
@@ -596,6 +621,7 @@ def _match_strength_normalized(needle: str, haystack: str) -> float:
 
 
 def _first_word_match(words: Iterable[str], value: object) -> str | None:
+    """First vocabulary word appearing in `value`, else None."""
     text = str(value).lower()
     for word in sorted(words):
         if re.search(rf"\b{re.escape(word)}\b", text):
@@ -604,6 +630,7 @@ def _first_word_match(words: Iterable[str], value: object) -> str | None:
 
 
 def _safe_float(value: object) -> float | None:
+    """Parse a float, returning None rather than raising on catalog junk."""
     if value in (None, ""):
         return None
     try:
@@ -613,6 +640,7 @@ def _safe_float(value: object) -> float | None:
 
 
 def _safe_int(value: object) -> int:
+    """Parse an int, tolerating floats and thousands separators."""
     if value in (None, ""):
         return 0
     try:
@@ -625,6 +653,7 @@ def _safe_int(value: object) -> int:
 
 
 def _budget_numbers(value: object) -> list[float]:
+    """Every number in a budget phrase, in order of appearance."""
     return [float(match) for match in re.findall(r"\d+(?:\.\d{1,2})?", str(value))]
 
 
@@ -643,6 +672,11 @@ class BudgetRule(NamedTuple):
 
 
 def _parse_budget(value: object) -> BudgetRule | None:
+    """Turn a budget phrase into a numeric range.
+
+    "under $50", "between 20 and 40" and "around $30" have different
+    semantics, so the comparison operator is parsed rather than assumed.
+    """
     numbers = _budget_numbers(value)
     if not numbers:
         return None
@@ -658,6 +692,7 @@ def _parse_budget(value: object) -> BudgetRule | None:
 
 
 def _budget_satisfied(rule: BudgetRule, price: float) -> bool:
+    """True when a price falls inside a parsed budget range."""
     if rule.low is not None and price < rule.low:
         return False
     return rule.high is None or price <= rule.high
@@ -670,6 +705,7 @@ def _budget_satisfied(rule: BudgetRule, price: float) -> bool:
 
 @dataclass(frozen=True)
 class TypedConstraint:
+    """One constraint with its attribute resolved and its value normalized."""
     attribute: str
     value: object
     soft: bool
@@ -702,6 +738,12 @@ class RetrievalPlan:
 
 
 class CatalogRetriever:
+    """Keyword retrieval plus staged constraint reranking over the frozen catalog.
+
+    Everything is in-process: an in-memory SQLite FTS5 index for BM25 and
+    plain Python scoring on top. No vector database, per the competition
+    scope.
+    """
     def __init__(
         self,
         catalog_path: str | Path = "data/catalog.jsonl",
@@ -709,6 +751,10 @@ class CatalogRetriever:
         config: RerankConfig | None = None,
         weights: RerankWeights | None = None,
     ) -> None:
+        """Load the catalog and build the in-memory search index.
+
+        Expensive and done once; a session reuses the same instance.
+        """
         self.catalog_path = Path(catalog_path)
         self.candidate_limit = candidate_limit
         self.config = config if config is not None else config_from_env()
@@ -741,6 +787,12 @@ class CatalogRetriever:
         user_profile: dict | None = None,
         prior_ranks: Mapping[str, float] | None = None,
     ) -> list[str]:
+        """Return up to `top_k` catalog ids for the current dialogue state.
+
+        The pipeline is: build a query, take a BM25 candidate pool, then rerank
+        in stages so hard-constraint coverage cannot be traded away by lexical
+        relevance.
+        """
         plan = self.build_plan(
             search_query, constraints, no_preference, raw_constraints, user_profile,
             prior_ranks,
@@ -1065,6 +1117,7 @@ class CatalogRetriever:
     def _category_contributions(
         self, record: ProductRecord, value: object, soft: bool
     ) -> list[Contribution]:
+        """Score a candidate against the requested product category."""
         strength = _match_strength(value, f"{record.categories} {record.title} {record.details}")
         if strength >= 0.8:
             return [Contribution("category", "category_exact", 1.0)]
@@ -1079,6 +1132,11 @@ class CatalogRetriever:
     def _brand_contributions(
         self, record: ProductRecord, value: object, soft: bool
     ) -> list[Contribution]:
+        """Score a candidate against a requested brand.
+
+        A brand mismatch is the harshest penalty in the reranker: brand is the
+        one attribute a shopper is almost never flexible about.
+        """
         store_strength = _match_strength(value, record.store)
         full_strength = _match_strength(value, f"{record.store} {record.title} {record.details}")
         if store_strength >= 0.8:
@@ -1099,6 +1157,11 @@ class CatalogRetriever:
         boost: str,
         soft: bool,
     ) -> list[Contribution]:
+        """Score a closed-vocabulary attribute such as colour or material.
+
+        A known vocabulary word that is absent from the listing is evidence of a
+        mismatch, not merely absence of evidence.
+        """
         explicit_word = _first_word_match(vocabulary, value)
         if explicit_word:
             if re.search(rf"\b{re.escape(explicit_word)}\b", record.all_text, flags=re.IGNORECASE):
@@ -1111,6 +1174,7 @@ class CatalogRetriever:
     def _generic_contributions(
         self, record: ProductRecord, value: object, boost: str, soft: bool
     ) -> list[Contribution]:
+        """Score a free-text attribute by term overlap with the listing."""
         if self.enable_boilerplate_filter and _is_boilerplate(value):
             return [_NEUTRAL]
         strength = _match_strength(value, record.all_text)
@@ -1127,6 +1191,7 @@ class CatalogRetriever:
     def _budget_contributions(
         self, record: ProductRecord, rule: BudgetRule | None, soft: bool
     ) -> list[Contribution]:
+        """Score a candidate's price against the requested budget range."""
         if rule is None:
             return []
         if record.price is None:
@@ -1304,6 +1369,7 @@ class CatalogRetriever:
         return kept[: self.candidate_limit], removed
 
     def _bm25_search(self, query_text: str, limit: int | None = None) -> list[str]:
+        """Run one field-weighted BM25 query and return candidate ids, best first."""
         terms = list(dict.fromkeys(_terms(query_text)))[:MAX_QUERY_TERMS]
         if not terms:
             return []
@@ -1317,6 +1383,11 @@ class CatalogRetriever:
         return [str(row[0]) for row in rows]
 
     def _add_popular_backfill(self, pool: dict[str, Contribution]) -> None:
+        """Top up a thin candidate pool with popular products.
+
+        Guarantees the agent always has something to show; a weak suggestion
+        scores better than an empty slate.
+        """
         needed = max(0, min(self.candidate_limit, 50) - len(pool))
         if needed == 0:
             return
@@ -1375,6 +1446,7 @@ class CatalogRetriever:
         return soft - hard
 
     def _query_text(self, search_query: str, constraints: dict, negated: Iterable[str]) -> str:
+        """Assemble the BM25 query from the accumulated dialogue state."""
         clean = _remove_boilerplate if self.enable_boilerplate_filter else str
         parts = [clean(search_query)]
         parts.extend(
@@ -1457,6 +1529,7 @@ class CatalogRetriever:
     _PRICE_BANDS = (15.0, 25.0, 40.0, 60.0, 100.0, 200.0)
 
     def _structured_value(self, record: ProductRecord, key: str) -> str:
+        """Read an attribute from a product's structured `details`, if present."""
         if key == "store":
             return record.store.strip().lower()[:40]
         if key == "_category":
@@ -1476,6 +1549,7 @@ class CatalogRetriever:
     # --------------------------------------------------------------- build
 
     def _build(self) -> None:
+        """Load every catalog row into the FTS5 index and the record table."""
         self._last_bm25_ids: list[str] = []
         self._last_prefilter_removed = 0
         self._bm25_rank: dict[str, int] = {}
@@ -1543,6 +1617,7 @@ class CatalogRetriever:
         return min(1.0, (sum(values) / len(values)) / self._idf_ceiling)
 
     def _iter_catalog(self) -> Iterable[dict]:
+        """Stream catalog rows, transparently handling a gzipped file."""
         if not self.catalog_path.exists():
             raise FileNotFoundError(f"Catalog not found: {self.catalog_path}")
         opener = gzip.open if self.catalog_path.suffix == ".gz" else open
@@ -1552,6 +1627,7 @@ class CatalogRetriever:
                     yield json.loads(line)
 
     def _record(self, product: dict) -> ProductRecord:
+        """Convert one raw catalog row into a scoring-ready `ProductRecord`."""
         price = _safe_float(product.get("price"))
         rating = _safe_float(product.get("average_rating")) or 0.0
         rating_count = _safe_int(product.get("rating_number"))
@@ -1596,6 +1672,7 @@ class CatalogRetriever:
         )
 
     def _quality_score(self, record: ProductRecord) -> float:
+        """Small rating and popularity bonus, used only to break ties."""
         rating_bonus = max(0.0, record.rating - 3.5) * self.weights.rating_coefficient
         popularity_bonus = (
             min(2.0, math.log1p(record.rating_count) / 6.0) * self.weights.popularity_scale
@@ -1603,6 +1680,11 @@ class CatalogRetriever:
         return rating_bonus + popularity_bonus
 
     def _sanitize(self, ranked_ids: Iterable[str], top_k: int) -> list[str]:
+        """Return the first `top_k` ids that are unique and present in the catalog.
+
+        The evaluator scores only valid unique ids, so this is the last gate
+        before a slate leaves the retriever.
+        """
         result: list[str] = []
         seen: set[str] = set()
         for parent_asin in ranked_ids:

@@ -12,6 +12,11 @@ from pathlib import Path
 
 
 def load_project_env(path: str | Path = ".env") -> None:
+    """Load `.env` into the environment without overriding the shell.
+
+    Shell variables win so a one-off run can override the file. Values are
+    never printed, which matters because this file holds API keys.
+    """
     env_path = Path(path)
     if not env_path.is_file():
         return

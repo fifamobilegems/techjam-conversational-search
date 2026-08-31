@@ -87,6 +87,7 @@ OUTPUT_SCHEMA = {
 
 
 def is_enabled() -> bool:
+    """True when the optional LLM tier has been switched on by env flag."""
     return os.environ.get(ENV_FLAG, "").strip().lower() in {"1", "true", "yes"}
 
 
@@ -94,6 +95,7 @@ class LLMTurnExtractor:
     """Wraps a deterministic extractor and augments its output."""
 
     def __init__(self, fallback: Any, model: str | None = None) -> None:
+        """Wrap a deterministic extractor and prepare the optional model client."""
         self.fallback = fallback
         # Read at construction time: Agent loads .env immediately before it
         # constructs this wrapper.
@@ -104,13 +106,14 @@ class LLMTurnExtractor:
             self.max_calls = int(os.environ.get("TECHJAM_LLM_MAX_CALLS", DEFAULT_MAX_CALLS))
         except ValueError:
             self.max_calls = DEFAULT_MAX_CALLS
-        # Escalation accounting, reported in the handover and available to
-        # anyone tuning the gate on provenance data.
+        # Escalation accounting: how often the gate fired and why it did not.
+        # This is the cost line for the token-usage disclosure.
         self.calls = 0
         self.gate_counts: Counter = Counter()
 
     @property
     def active(self) -> bool:
+        """True when a client was constructed -- not proof that a call will succeed."""
         return self._client is not None
 
     def should_escalate(self, state: object | None = None) -> bool:
@@ -158,6 +161,12 @@ class LLMTurnExtractor:
         # call's numbers in place re-reported one escalation on every
         # subsequent turn -- inflating the required token disclosure by
         # roughly the number of turns that followed each call.
+        """Run the deterministic extractor, then optionally augment it.
+
+        Strictly additive: the model may only add constraint spans the rules
+        missed. It can never delete a span, clear a slot, or change retrieval
+        timing, so the offline score never depends on it.
+        """
         self.last_usage = {"prompt_tokens": 0, "completion_tokens": 0}
 
         extracted = self.fallback.extract(user_message, state)
@@ -218,6 +227,11 @@ class LLMTurnExtractor:
         return extracted
 
     def _build_client(self):
+        """Construct the model client, or None if unavailable.
+
+        A missing package or missing credentials returns None rather than
+        raising, which keeps the deterministic path dependency-free.
+        """
         if not is_enabled():
             return None
         try:
@@ -244,6 +258,7 @@ class LLMTurnExtractor:
             return None
 
     def _call(self, user_message: str, state: object | None = None) -> list[dict]:
+        """Ask the model for constraint spans and return them as raw dicts."""
         conversation = getattr(state, "messages", [])
         context = "\n".join(
             f"{item.get('role', 'user')}: {item.get('content', '')}"

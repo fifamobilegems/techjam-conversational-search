@@ -14,10 +14,20 @@ from typing import Any
 
 
 def candidates_enabled() -> bool:
+    """True when per-turn candidate ids should be recorded.
+
+    Off by default: the id list is ~500 entries per turn and would dominate
+    the trace file.
+    """
     return os.environ.get("AGENT_TRACE_CANDIDATES", "").lower() in {"1", "true", "yes"}
 
 
 def write_trace(event: dict[str, Any]) -> None:
+    """Append one turn to the debug trace, if tracing is enabled.
+
+    Silently does nothing when `AGENT_DEBUG_LOG` is unset, so the scored path
+    never pays for diagnostics.
+    """
     configured_path = os.environ.get("AGENT_DEBUG_LOG", "").strip()
     if not configured_path:
         return

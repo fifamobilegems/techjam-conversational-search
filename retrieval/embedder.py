@@ -76,6 +76,7 @@ class SentenceTransformerEmbedder:
     """
 
     def __init__(self, model_name: str = DEFAULT_MODEL, device: str | None = None) -> None:
+        """Load the sentence-transformer model, preferring the local cache."""
         try:
             from sentence_transformers import SentenceTransformer
         except ImportError as error:  # pragma: no cover - environment dependent
@@ -107,13 +108,16 @@ class SentenceTransformerEmbedder:
 
     @property
     def name(self) -> str:
+        """Stable identifier recorded in the artifact manifest."""
         return f"sentence-transformer:{self.model_name}"
 
     @property
     def dimension(self) -> int:
+        """Length of one output vector."""
         return self._dimension
 
     def encode(self, texts: Sequence[str], batch_size: int = 64) -> np.ndarray:
+        """Encode texts into unit vectors, batched."""
         vectors = self._model.encode(
             list(texts),
             batch_size=batch_size,
@@ -139,23 +143,33 @@ class HashingEmbedder:
     """
 
     def __init__(self, dimension: int = 512, char_ngram: int = 4) -> None:
+        """Configure the hashed n-gram space."""
         self._dimension = int(dimension)
         self.char_ngram = int(char_ngram)
 
     @property
     def name(self) -> str:
+        """Stable identifier recorded in the artifact manifest."""
         return f"hashing:{self._dimension}d:{self.char_ngram}gram"
 
     @property
     def dimension(self) -> int:
+        """Length of one output vector."""
         return self._dimension
 
     def _bucket(self, term: str) -> tuple[int, float]:
+        """Map a term to a bucket and a sign.
+
+        Signed hashing lets collisions cancel in expectation rather than
+        accumulate. `blake2b` rather than `hash()` because the latter is
+        re-seeded per process and would invalidate yesterday's artifact.
+        """
         digest = hashlib.blake2b(term.encode("utf-8"), digest_size=8).digest()
         value = int.from_bytes(digest, "big")
         return value % self._dimension, 1.0 if value & (1 << 63) else -1.0
 
     def _features(self, text: str) -> Iterable[str]:
+        """Yield word tokens plus character n-grams for one text."""
         lowered = text.lower()
         tokens = TOKEN_RE.findall(lowered)
         yield from tokens
@@ -166,6 +180,7 @@ class HashingEmbedder:
                 yield f"#{token[start:start + self.char_ngram]}"
 
     def encode(self, texts: Sequence[str], batch_size: int = 64) -> np.ndarray:
+        """Encode texts into unit vectors with no model and no download."""
         matrix = np.zeros((len(texts), self._dimension), dtype=np.float32)
         for row, text in enumerate(texts):
             for term in self._features(text or ""):

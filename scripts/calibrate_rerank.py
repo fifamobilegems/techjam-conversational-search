@@ -92,6 +92,7 @@ class _RecordingRetriever:
     """
 
     def __init__(self) -> None:
+        """Wrap a retriever so its per-turn candidate scores can be captured."""
         self.calls: list[dict] = []
         self.last_diagnostics: dict = {}
 
@@ -104,6 +105,7 @@ class _RecordingRetriever:
         raw_constraints=(),
         user_profile: dict | None = None,
     ) -> list[str]:
+        """Retrieve as normal, recording the scored candidates for later replay."""
         self.calls.append({
             "search_query": search_query,
             "constraints": dict(constraints),
@@ -129,6 +131,7 @@ def capture_tapes(agent: Agent, samples, catalog_ids, categories, products, simu
     marks: list[int] = []
 
     def respond(self, session_id, user_message, turn, top_k):
+        """Run one agent turn and capture its candidate scores."""
         try:
             return original_respond(self, session_id, user_message, turn, top_k)
         finally:
@@ -175,9 +178,11 @@ def capture_tapes(agent: Agent, samples, catalog_ids, categories, products, simu
 
 
 class CompiledTurn:
+    """One turn frozen with its candidate scores, so weights can be re-scored offline."""
     __slots__ = ("scored", "dense", "soft", "violations", "target_index")
 
     def __init__(self, scored: bool, dense, soft, violations, target_index: int) -> None:
+        """Hold one turn's scored candidates."""
         self.scored = scored
         self.dense = dense
         self.soft = soft
@@ -383,6 +388,13 @@ def coordinate_search(
     names: tuple[str, ...],
     log,
 ) -> tuple[np.ndarray, float]:
+    """Search reranker weights one coordinate at a time.
+
+    Coordinate search rather than a trained model: fifteen hand weights are
+    in scope for the competition, a learned reranker is not, and fitting to
+    simulator-generated labels would reproduce the overfitting this project
+    is trying to avoid.
+    """
     current = start.copy()
     best = evaluate(compiled, current)["technical"]
     log(f"  start technical={best:.4f}")
@@ -414,6 +426,7 @@ def coordinate_search(
 
 
 def _load(spec: str, limit: int | None, select: str, gold_only: bool):
+    """Load and select the samples used for calibration."""
     dataset, simulator = spec.split("/")
     samples = load_jsonl(DATASETS[dataset])
     if gold_only:
@@ -424,6 +437,7 @@ def _load(spec: str, limit: int | None, select: str, gold_only: bool):
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Command-line entry point for weight calibration."""
     parser = argparse.ArgumentParser(description="Reranker weight calibration")
     parser.add_argument("--catalog", default="data/catalog.jsonl")
     parser.add_argument("--fit", default="synth800/realistic", help="dataset/simulator to fit on")

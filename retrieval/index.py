@@ -53,6 +53,7 @@ class VectorIndex:
     """Exact cosine nearest-neighbour search over an `EmbeddingStore`."""
 
     def __init__(self, store: EmbeddingStore, embedder: Embedder | None = None) -> None:
+        """Wrap a loaded store, optionally with an encoder for text queries."""
         self.store = store
         self._embedder = embedder
 
@@ -212,6 +213,7 @@ class VectorIndex:
     # ----------------------------------------------------------------
 
     def _as_vector(self, query: str | np.ndarray | Sequence[float]) -> np.ndarray:
+        """Coerce a query -- text or raw vector -- into a unit vector of the right size."""
         if isinstance(query, str):
             return self.encode_query(query)
         vector = np.asarray(query, dtype=np.float32).reshape(-1)
@@ -224,6 +226,7 @@ class VectorIndex:
         return l2_normalize(vector.reshape(1, -1))[0]
 
     def _scores_all(self, vector: np.ndarray) -> np.ndarray:
+        """Cosine score every product, in chunks to bound peak memory."""
         total = len(self.store)
         scores = np.empty(total, dtype=np.float32)
         for start in range(0, total, CHUNK_ROWS):

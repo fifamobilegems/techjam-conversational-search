@@ -56,6 +56,7 @@ KS = (100, 500)
 
 
 def _dataset_supports(simulator: str, samples: list[dict]) -> bool:
+    """True when a dataset carries the field a simulator needs."""
     field = SIMULATOR_REQUIRES.get(simulator)
     if field is None:
         return True
@@ -91,6 +92,7 @@ def _pipeline_query_turn1(extractor: HeuristicTurnExtractor, message: str) -> st
 
 
 def _blank_acc() -> dict:
+    """Fresh accumulator for one dataset x simulator cell."""
     return {
         "n": 0,
         "gold_n": 0,
@@ -102,6 +104,7 @@ def _blank_acc() -> dict:
 
 
 def _fold(acc: dict, raw: dict, pipe: dict, is_gold: bool) -> None:
+    """Fold one sample's raw and pipeline results into the accumulator."""
     acc["n"] += 1
     if is_gold:
         acc["gold_n"] += 1
@@ -121,6 +124,12 @@ def measure_turn1(
     samples: list[dict],
     simulator: str,
 ) -> dict:
+    """Compare BM25 recall for the raw message against the built query.
+
+    The divergence between those two columns is the diagnostic: when the
+    extractor matches no template the built query is empty and recall
+    collapses, even though the raw words would have found the target.
+    """
     extractor = HeuristicTurnExtractor()
     acc = _blank_acc()
     for sample in samples:
@@ -168,10 +177,12 @@ def measure_end_of_session(
 
 
 def _rate(num: int, den: int) -> float:
+    """Safe ratio, 0.0 when the denominator is zero."""
     return round(num / den, 4) if den else 0.0
 
 
 def summarise_cell(dataset: str, simulator: str, phase: str, acc: dict) -> dict:
+    """Turn one cell's accumulator into reportable rates."""
     n = acc["n"]
     cell = {
         "dataset": dataset,
@@ -190,6 +201,7 @@ def summarise_cell(dataset: str, simulator: str, phase: str, acc: dict) -> dict:
 
 
 def render_markdown(result: dict) -> str:
+    """Render the recall table as markdown."""
     lines: list[str] = []
     lines.append(f"# BM25 recall gate — {result['generated_at']}")
     lines.append("")
@@ -232,6 +244,7 @@ def render_markdown(result: dict) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Command-line entry point for the recall gate."""
     parser = argparse.ArgumentParser(description="BM25 recall: raw message vs build_search_context()")
     parser.add_argument("--catalog", default="data/catalog.jsonl")
     parser.add_argument("--datasets", nargs="+", choices=tuple(DATASETS), default=list(DATASETS))

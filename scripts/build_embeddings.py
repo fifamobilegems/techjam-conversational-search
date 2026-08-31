@@ -55,6 +55,7 @@ def iter_catalog(path: Path) -> Iterator[dict]:
 
 
 def _shards(rows: Iterable[dict], size: int) -> Iterator[list[dict]]:
+    """Group rows into fixed-size batches for encoding."""
     shard: list[dict] = []
     for row in rows:
         shard.append(row)
@@ -76,7 +77,9 @@ def build(
     out: Path | None,
     quiet: bool = False,
 ) -> Path:
+    """Embed the catalog and write the artifact directory."""
     def report(message: str) -> None:
+        """Print progress unless running quietly."""
         if not quiet:
             print(message, flush=True)
 
@@ -140,6 +143,7 @@ def build(
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Command-line entry point for the embedding build."""
     load_project_env()
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)

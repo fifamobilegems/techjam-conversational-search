@@ -10,10 +10,4 @@ Each session contains a safe aggregate `user_profile` and public labels for loca
 
 Download `catalog.jsonl.gz` from the GitHub Release and decompress it as `catalog.jsonl` in this directory. Expected row count: 50,000.
 
-## `embeddings/`
-
-Build products written by `python -m scripts.build_embeddings`, one directory
-per encoder. Gitignored and reproducible from the frozen catalog -- never
-committed, never edited by hand. See `docs/rag_foundation.md`.
-
 Never place API keys, private evaluation data, or participant outputs in this directory.

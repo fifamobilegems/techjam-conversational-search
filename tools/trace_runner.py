@@ -119,6 +119,7 @@ def agent_state_snapshot(agent: Any, session_id: str) -> dict | None:
 
 
 def state_history(agent: Any, session_id: str) -> list[dict]:
+    """Snapshot the agent's dialogue state for the trace."""
     manager = getattr(agent, "manager", None)
     if manager is None or not hasattr(manager, "get"):
         return []
@@ -139,6 +140,7 @@ class OfficialCustomer:
     kind = "official"
 
     def __init__(self, effective_sample: dict, coarse: str) -> None:
+        """Wrap the official simulator for one session."""
         self.sample = effective_sample
         self.coarse = coarse
         self.disclosed: set[str] = set()
@@ -147,9 +149,11 @@ class OfficialCustomer:
         self.override_turn = int(self._override.get("turn", 3)) if self._override else None
 
     def opening(self) -> str:
+        """First message from the official simulator."""
         return initial_message(self.sample, self.coarse, self.disclosed)
 
     def override_message(self) -> tuple[str, str]:
+        """The scripted mid-session intent override."""
         new_value = str(self._override.get("new_value", ""))
         if new_value:
             self.disclosed.add(new_value)
@@ -157,12 +161,14 @@ class OfficialCustomer:
         return message, new_value
 
     def reply(self, ask_attribute: object) -> str:
+        """Official simulator's reply to one clarification question."""
         message, self.boundary_used = customer_reply(
             self.sample, ask_attribute, self.disclosed, self.boundary_used
         )
         return message
 
     def describe(self) -> dict:
+        """Short label naming which simulator this is."""
         return {
             "intent_card": self.sample.get("intent_card"),
             "behavior": self.sample.get("behavior"),
@@ -175,6 +181,7 @@ class RealisticCustomerAdapter:
     kind = "realistic"
 
     def __init__(self, sample: dict, product: dict, coarse: str) -> None:
+        """Adapt the paraphrasing customer to the trace-runner contract."""
         self.inner = RealisticCustomer(sample, product, coarse)
         self.override_turn = (
             self.inner.override_turn if sample.get("scenario_type") == "intent_override" else None
@@ -182,18 +189,23 @@ class RealisticCustomerAdapter:
 
     @property
     def boundary_used(self) -> bool:
+        """True once the customer has declined an attribute."""
         return self.inner.boundary_used
 
     def opening(self) -> str:
+        """First message from the paraphrasing customer."""
         return self.inner.opening()
 
     def override_message(self) -> tuple[str, str]:
+        """The mid-session change of mind."""
         return self.inner.override_message()
 
     def reply(self, ask_attribute: object) -> str:
+        """Paraphrased reply to one clarification question."""
         return self.inner.reply(ask_attribute)
 
     def describe(self) -> dict:
+        """Short label naming which simulator this is."""
         return {
             "intent_card": {
                 "target_category": self.inner.category,
@@ -220,6 +232,7 @@ class EsciCustomerAdapter(RealisticCustomerAdapter):
     kind = "esci"
 
     def __init__(self, sample: dict, product: dict, coarse: str) -> None:
+        """Adapt the ESCI customer to the trace-runner contract."""
         self.inner = EsciCustomer(sample, product, coarse)
         self.override_turn = (
             self.inner.override_turn if sample.get("scenario_type") == "intent_override" else None
@@ -227,6 +240,7 @@ class EsciCustomerAdapter(RealisticCustomerAdapter):
         self._sample = sample
 
     def describe(self) -> dict:
+        """Short label naming which simulator this is."""
         described = super().describe()
         described["esci_query"] = self._sample.get("esci_query")
         described["provenance"] = self._sample.get("provenance")
@@ -240,6 +254,12 @@ def build_customer(
     target: str,
     coarse: str,
 ) -> OfficialCustomer | RealisticCustomerAdapter:
+    """Construct the simulated customer for one session.
+
+    The three simulators differ only in phrasing -- official recites catalog
+    metadata, realistic paraphrases it, esci replays real search queries --
+    so the same target product can be asked for three ways.
+    """
     if simulator == "realistic":
         return RealisticCustomerAdapter(sample, products.get(target, {}), coarse)
     if simulator == "esci":
@@ -429,6 +449,7 @@ def run_session(
 
 
 def summarize(traces: list[dict]) -> dict:
+    """Aggregate traces into the official metrics."""
     sessions = [
         {
             "sample_id": trace["sample_id"],
@@ -468,6 +489,7 @@ def summarize(traces: list[dict]) -> dict:
 
 
 def render_transcript(trace: dict) -> str:
+    """Render one session as a readable transcript."""
     lines: list[str] = []
     header = f"## {trace['sample_id']} · {trace['scenario_type']} · {trace.get('difficulty_bucket') or '-'}"
     lines.append(header)
@@ -531,6 +553,7 @@ def render_transcript(trace: dict) -> str:
 
 
 def configure_logging(log_path: Path, verbose: bool) -> None:
+    """Set up file and console logging for a run."""
     log_path.parent.mkdir(parents=True, exist_ok=True)
     LOGGER.setLevel(logging.DEBUG)
     LOGGER.handlers.clear()
@@ -558,6 +581,7 @@ def run(
     out_dir: Path,
     simulator: str = "official",
 ) -> dict:
+    """Replay sessions and write traces, transcripts and a summary."""
     catalog_ids, categories, products = catalog_index(catalog_path)
     LOGGER.info("catalog indexed: %d products | simulator=%s", len(catalog_ids), simulator)
 
@@ -599,6 +623,7 @@ def run(
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Command-line entry point for the trace runner."""
     parser = argparse.ArgumentParser(description="Run labelled sessions and log full conversation history")
     parser.add_argument("--catalog", default="data/catalog.jsonl")
     parser.add_argument("--dataset", default="data/public_set.jsonl")

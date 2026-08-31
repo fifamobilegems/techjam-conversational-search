@@ -56,6 +56,7 @@ PROFILE_RATING_STYLE = ("usually positive", "critical", "balanced")
 
 
 def _iter_catalog(path: Path):
+    """Stream catalog rows."""
     with path.open(encoding="utf-8") as handle:
         for line in handle:
             if line.strip():
@@ -63,6 +64,7 @@ def _iter_catalog(path: Path):
 
 
 def _safe_int(value: object) -> int:
+    """Parse an int, tolerating catalog junk."""
     try:
         return int(float(str(value).replace(",", "")))
     except (TypeError, ValueError):
@@ -70,6 +72,7 @@ def _safe_int(value: object) -> int:
 
 
 def _title_tokens(title: str) -> list[str]:
+    """Distinctive tokens from a product title."""
     return [token.lower() for token in TOKEN_RE.findall(title) if len(token) > 2]
 
 
@@ -98,6 +101,7 @@ def difficulty_features(
 
 
 def _zscore(values: list[float]) -> list[float]:
+    """Standard scores for a list of values."""
     if not values:
         return []
     mean = sum(values) / len(values)
@@ -129,6 +133,11 @@ def build(
     seed: int,
     pool_size: int,
 ) -> list[dict]:
+    """Generate held-out synthetic sessions from the frozen catalog.
+
+    Used for evaluation only. Fitting to generated sessions would learn the
+    generator, not the task.
+    """
     excluded = {
         str(json.loads(line)["ground_truth"]["parent_asin"])
         for line in public_path.read_text(encoding="utf-8").splitlines()
@@ -219,6 +228,7 @@ def build(
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Command-line entry point for synthetic-set generation."""
     parser = argparse.ArgumentParser(description="Build a synthetic development set from the frozen catalog")
     parser.add_argument("--catalog", default="data/catalog.jsonl")
     parser.add_argument("--public", default="data/public_set.jsonl")

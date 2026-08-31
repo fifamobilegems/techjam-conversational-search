@@ -49,6 +49,7 @@ WHITESPACE_RE = re.compile(r"\s+")
 
 
 def _clean(value: object, limit: int | None = None) -> str:
+    """Collapse whitespace and optionally truncate; empty for None."""
     if value in (None, ""):
         return ""
     text = WHITESPACE_RE.sub(" ", str(value)).strip()
@@ -58,6 +59,7 @@ def _clean(value: object, limit: int | None = None) -> str:
 
 
 def _as_list(value: object) -> list[str]:
+    """Flatten any catalog value into a list of strings."""
     if value in (None, "", []):
         return []
     if isinstance(value, (list, tuple)):
@@ -68,6 +70,7 @@ def _as_list(value: object) -> list[str]:
 
 
 def _details(details: object) -> list[str]:
+    """Keep the discriminative `details` entries, dropping ubiquitous keys."""
     if not isinstance(details, dict):
         return _as_list(details)[:DETAIL_LIMIT]
     kept: list[str] = []

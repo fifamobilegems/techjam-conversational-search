@@ -28,6 +28,7 @@ from evaluator.local_evaluator import (
 
 
 def load_catalog(path: Path) -> dict[str, dict]:
+    """Load the catalog into a parent_asin -> product map."""
     opener = gzip.open if path.suffix == ".gz" else open
     with opener(path, mode="rt", encoding="utf-8") as handle:
         return {
@@ -37,6 +38,11 @@ def load_catalog(path: Path) -> dict[str, dict]:
 
 
 def measure(dataset: Path, catalog: Path) -> dict:
+    """Measure how often each attribute is answerable from the catalog.
+
+    Feeds the clarification policy: asking about an attribute that few
+    products carry wastes a turn.
+    """
     products = load_catalog(catalog)
     samples = [json.loads(line) for line in dataset.open(encoding="utf-8") if line.strip()]
 
@@ -75,6 +81,7 @@ def measure(dataset: Path, catalog: Path) -> dict:
 
 
 def main() -> None:
+    """Command-line entry point for attribute-yield measurement."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", default="data/public_set.jsonl")
     parser.add_argument("--catalog", default="catalog.jsonl.gz")

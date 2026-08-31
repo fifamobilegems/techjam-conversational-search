@@ -26,10 +26,12 @@ from starter.retriever import CatalogRetriever
 
 
 def read_jsonl(path: Path) -> list[dict]:
+    """Read a JSONL trace file into a list of events."""
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
 def candidate_explanation(event: dict, parent_asin: object, retriever: CatalogRetriever | None) -> dict | None:
+    """Recompute why one product scored as it did on a given turn."""
     score = event.get("candidate_scores", {}).get(str(parent_asin))
     if isinstance(score, dict):
         return {
@@ -50,6 +52,7 @@ def candidate_explanation(event: dict, parent_asin: object, retriever: CatalogRe
 
 
 def main(argv: list[str]) -> int:
+    """Command-line entry point for trace analysis."""
     if len(argv) not in {2, 4}:
         print(__doc__.strip())
         return 2

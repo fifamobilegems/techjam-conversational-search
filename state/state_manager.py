@@ -92,6 +92,7 @@ CLARIFICATION_PRIORITY = [
 
 
 def _env_flag(name: str, default: bool) -> bool:
+    """Read a boolean environment flag, defaulting when unset."""
     raw = os.environ.get(name)
     if raw is None:
         return default
