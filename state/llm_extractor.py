@@ -52,6 +52,53 @@ MAX_TURNS = 10
 # gate. Override with TECHJAM_LLM_MAX_CALLS.
 DEFAULT_MAX_CALLS = 250
 
+# --- escalation gate modes -------------------------------------------------
+#
+# `empty` is the Phase 8 gate: escalate only where the deterministic cascade
+# is structurally silent. `low_confidence` adds one more opening -- a Tier 1
+# gazetteer hit that explained only a fraction of the message.
+#
+# The distinction that keeps this auditable is that both modes are still
+# *structural*. Neither reads a learned confidence score. `low_confidence`
+# asks a second observable question ("how many content words did the cascade
+# leave unaccounted for?") rather than a modelled one, so the escalation rate
+# stays predictable and reproducible -- which is what the cost disclosure
+# needs.
+GATE_EMPTY = "empty"
+GATE_LOW_CONFIDENCE = "low_confidence"
+GATE_MODES = (GATE_EMPTY, GATE_LOW_CONFIDENCE)
+
+# Escalate a Tier 1 turn only when the cascade explained at most this fraction
+# of the message's content words.
+DEFAULT_GATE_COVERAGE = 0.5
+
+# ...and only when at least this many content words are left unexplained. One
+# stray adjective is not worth a call; it is usually a word with no catalog
+# meaning rather than a missed requirement.
+DEFAULT_GATE_RESIDUAL = 2
+
+
+def gate_mode() -> str:
+    """Which escalation gate is active. Unknown names fall back to `empty`."""
+    value = os.environ.get("TECHJAM_LLM_GATE", GATE_EMPTY).strip().lower()
+    return value if value in GATE_MODES else GATE_EMPTY
+
+
+def _gate_float(name: str, default: float) -> float:
+    """Read a float threshold from the environment, ignoring unusable values."""
+    try:
+        return float(os.environ.get(name, default))
+    except (TypeError, ValueError):
+        return default
+
+
+def _gate_int(name: str, default: int) -> int:
+    """Read an integer threshold from the environment, ignoring unusable values."""
+    try:
+        return int(os.environ.get(name, default))
+    except (TypeError, ValueError):
+        return default
+
 SYSTEM_PROMPT = """You extract shopping constraints from one customer message.
 
 Return every distinct requirement the customer states, copied VERBATIM from
@@ -113,6 +160,9 @@ class LLMTurnExtractor:
             self.max_calls = int(os.environ.get("TECHJAM_LLM_MAX_CALLS", DEFAULT_MAX_CALLS))
         except ValueError:
             self.max_calls = DEFAULT_MAX_CALLS
+        self.gate = gate_mode()
+        self.gate_coverage = _gate_float("TECHJAM_LLM_GATE_COVERAGE", DEFAULT_GATE_COVERAGE)
+        self.gate_residual = _gate_int("TECHJAM_LLM_GATE_RESIDUAL", DEFAULT_GATE_RESIDUAL)
         # Escalation accounting: how often the gate fired and why it did not.
         # This is the cost line for the token-usage disclosure.
         self.calls = 0
@@ -124,17 +174,33 @@ class LLMTurnExtractor:
         return self._client is not None
 
     def should_escalate(self, state: object | None = None) -> bool:
-        """Structural gate -- deliberately not a confidence score.
+        """Structural gate -- deliberately not a learned confidence score.
 
-        Escalate only when the deterministic cascade has structurally nothing
-        to say: Tier 0 produced no operations, Tier 1 produced no operations,
-        and the message matched no known template. Those three facts are
-        observable in `HeuristicTurnExtractor.last_trace`, so the decision is
-        auditable and reproducible.
+        Two openings, both observable in `HeuristicTurnExtractor.last_trace`
+        and so both auditable and reproducible:
 
-        A learned confidence model was the alternative. On 200 labelled
+        `empty`
+            The Phase 8 gate. Tier 0 produced no operations, Tier 1 produced no
+            operations, and the message matched no known template -- the
+            cascade has structurally nothing to say.
+
+        `low_confidence`
+            Adds Tier 1 turns whose gazetteer hit explained only a fraction of
+            the message. A single-word colour match on a two-clause sentence
+            is *an* extraction, not a complete reading of it, and the original
+            gate could not tell those apart: it only asked whether the cascade
+            emitted anything at all.
+
+        Tier 0 still blocks unconditionally in both modes. Template phrasing is
+        the property worth 0.84 on the official column, and a turn a template
+        already read is not a turn with a gap in it.
+
+        A learned confidence model remains the road not taken. On 200 labelled
         sessions it would overfit, and it would make the escalation rate --
         which is the cost line in the submission disclosure -- unpredictable.
+        Residual coverage is a count, not a prediction: the same message always
+        produces the same decision, and the rate can be measured offline
+        without spending a call (`python3 -m scripts.measure_gate`).
         """
 
         trace = getattr(self.fallback, "last_trace", None)
@@ -144,14 +210,22 @@ class LLMTurnExtractor:
             self.gate_counts["no_trace"] += 1
             return False
 
-        if trace.get("tier0_operations") or trace.get("tier1_operations"):
-            self.gate_counts["blocked_tiers_produced_output"] += 1
+        if trace.get("tier0_operations"):
+            self.gate_counts["blocked_tier0"] += 1
             return False
         if trace.get("template_matched"):
             # A template matched but yielded nothing: that is Tier 0 correctly
             # recognising "no preference for colour" and friends, not a gap.
             self.gate_counts["blocked_template_matched"] += 1
             return False
+
+        reason = self._opening(trace)
+        if reason is None:
+            return False
+
+        # Budget checks come last so the counters separate "the gate declined"
+        # from "the gate fired and the budget refused it". Ordered the other
+        # way the two are indistinguishable after a run.
         if int(getattr(state, "turn", 0) or 0) >= MAX_TURNS:
             self.gate_counts["blocked_turn_budget"] += 1
             return False
@@ -159,8 +233,32 @@ class LLMTurnExtractor:
             self.gate_counts["blocked_call_budget"] += 1
             return False
 
+        self.gate_counts[reason] += 1
         self.gate_counts["escalated"] += 1
         return True
+
+    def _opening(self, trace: dict) -> str | None:
+        """Name the opening this turn qualifies for, or None, recording why not."""
+
+        if not trace.get("tier1_operations"):
+            return "escalated_empty"
+
+        if self.gate != GATE_LOW_CONFIDENCE:
+            self.gate_counts["blocked_tiers_produced_output"] += 1
+            return None
+
+        # Both conditions are needed. Coverage alone escalates a two-word
+        # message where one word was matched (coverage 0.5, one residual
+        # token), which is a complete reading of a short request rather than a
+        # gap. The residual floor is what distinguishes them.
+        if int(trace.get("residual_tokens", 0)) < self.gate_residual:
+            self.gate_counts["blocked_residual_floor"] += 1
+            return None
+        if float(trace.get("coverage", 1.0)) > self.gate_coverage:
+            self.gate_counts["blocked_coverage"] += 1
+            return None
+
+        return "escalated_low_confidence"
 
     def extract(self, user_message: str, state: object | None = None) -> ExtractedTurn:
         # Usage is per-turn, not cumulative. The Agent reports this dict on

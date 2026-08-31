@@ -19,7 +19,11 @@ from starter.extractor import (
     LexiconTagger,
     PolarityScanner,
 )
-from state.llm_extractor import LLMTurnExtractor
+from state.llm_extractor import (
+    GATE_EMPTY,
+    GATE_LOW_CONFIDENCE,
+    LLMTurnExtractor,
+)
 
 
 LEXICON = {
@@ -260,6 +264,101 @@ class EscalationGateTest(unittest.TestCase):
         self.assertIsNone(self.wrapper._client)
         result = self.wrapper.extract("a burgundy top", self._State())
         self.assertEqual([item.value for item in result.operations], ["burgundy"])
+
+
+class LowConfidenceGateTest(unittest.TestCase):
+    """The widened opening: a Tier 1 hit that explained little of the message."""
+
+    def setUp(self) -> None:
+        self._temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._temp.cleanup)
+        self.base = HeuristicTurnExtractor(write_lexicon(Path(self._temp.name)))
+        self.wrapper = LLMTurnExtractor(self.base)
+        self.wrapper.gate = GATE_LOW_CONFIDENCE
+
+    class _State:
+        def __init__(self, turn: int = 1) -> None:
+            self.turn = turn
+
+    def _escalates(self, message: str, turn: int = 1) -> bool:
+        state = self._State(turn)
+        self.base.extract(message, state)
+        return self.wrapper.should_escalate(state)
+
+    def test_thin_tier1_read_now_escalates(self) -> None:
+        # One colour matched; "waterproof", "commuting" and "panniers" are
+        # requirements the gazetteer has no entry for.
+        self.assertTrue(
+            self._escalates("burgundy waterproof commuting panniers rack")
+        )
+
+    def test_one_stray_word_does_not_escalate(self) -> None:
+        # Coverage is only 0.5 here, but a single unexplained word is a word
+        # with no catalog meaning far more often than it is a missed
+        # requirement. The residual floor is what separates the two.
+        self.assertFalse(self._escalates("a burgundy top"))
+
+    def test_tier0_still_blocks_unconditionally(self) -> None:
+        # Template phrasing is the official column. Widening must not touch it.
+        self.assertFalse(
+            self._escalates(
+                "I'm looking for shoes. A key requirement is: leather "
+                "waterproof commuting panniers rack"
+            )
+        )
+
+    def test_residual_floor_blocks_a_single_stray_word(self) -> None:
+        self.wrapper.gate_residual = 5
+        self.assertFalse(
+            self._escalates("burgundy waterproof commuting panniers rack")
+        )
+
+    def test_coverage_threshold_is_respected(self) -> None:
+        self.wrapper.gate_coverage = 0.0
+        self.assertFalse(
+            self._escalates("burgundy waterproof commuting panniers rack")
+        )
+
+    def test_empty_mode_leaves_the_same_turn_alone(self) -> None:
+        self.wrapper.gate = GATE_EMPTY
+        self.assertFalse(
+            self._escalates("burgundy waterproof commuting panniers rack")
+        )
+
+    def test_filler_only_message_reports_no_residual(self) -> None:
+        # "hi there thanks" is not an unexplained requirement, and counting it
+        # as one would spend a call on every greeting.
+        self.base.extract("hi there thanks", self._State())
+        self.assertEqual(self.base.last_trace["residual_tokens"], 0)
+        self.assertEqual(self.base.last_trace["coverage"], 1.0)
+
+
+class CoverageTraceTest(unittest.TestCase):
+    """`last_trace` has to describe the message, not just count operations."""
+
+    def setUp(self) -> None:
+        self._temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._temp.cleanup)
+        self.extractor = HeuristicTurnExtractor(write_lexicon(Path(self._temp.name)))
+
+    def test_full_coverage_when_every_content_word_is_matched(self) -> None:
+        self.extractor.extract("a burgundy", None)
+        self.assertEqual(self.extractor.last_trace["coverage"], 1.0)
+        self.assertEqual(self.extractor.last_trace["residual_tokens"], 0)
+
+    def test_residual_counts_unexplained_content_words(self) -> None:
+        self.extractor.extract("burgundy waterproof commuting panniers", None)
+        trace = self.extractor.last_trace
+        self.assertGreaterEqual(trace["residual_tokens"], 3)
+        self.assertLess(trace["coverage"], 1.0)
+
+    def test_stopwords_are_not_content(self) -> None:
+        self.extractor.extract("I would like to have some of the", None)
+        self.assertEqual(self.extractor.last_trace["content_tokens"], 0)
+
+    def test_evidence_strength_is_reported(self) -> None:
+        self.extractor.extract("a burgundy", None)
+        self.assertGreaterEqual(self.extractor.last_trace["tier1_max_words"], 1)
 
 
 if __name__ == "__main__":

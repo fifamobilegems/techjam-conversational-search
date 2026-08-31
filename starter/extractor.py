@@ -243,6 +243,27 @@ TIER1_ATTRIBUTES = tuple(
 # be stored in the slot while the shopper's own wording survives as raw_text.
 TOKEN_SPAN_RE = re.compile(r"[a-z0-9]+")
 
+# Words that carry no product requirement, so leaving them unexplained is not
+# evidence that extraction missed anything. The retrieval stopword list is the
+# seed; the extras are conversational filler the shopper wraps a request in
+# ("hi, I need something for ..."). Kept local to this module because the
+# escalation gate is an extraction concern and must not import a retrieval
+# constant -- the layers stay independently testable.
+RESIDUAL_STOPWORDS = frozenset({
+    "a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "from", "i",
+    "in", "is", "it", "looking", "me", "my", "of", "on", "or", "please", "some",
+    "that", "the", "this", "to", "want", "with", "would", "you",
+    # conversational filler
+    "about", "actually", "also", "am", "any", "anything", "can", "could", "do",
+    "does", "get", "getting", "give", "going", "good", "have", "hello", "help",
+    "hey", "hi", "just", "kind", "know", "like", "maybe", "more", "much",
+    "need", "needs", "not", "now", "one", "really", "right", "s", "see",
+    "something", "sort", "sure", "thanks", "there", "they", "thing", "things",
+    "think", "thinking", "up", "us", "ve", "we", "well", "what", "when",
+    "where", "which", "will", "yes",
+})
+
+
 # Structural templates Tier 0 keys on. Used only by the Phase 8 escalation
 # gate, which asks "did the message look like anything we know?" -- not by
 # extraction itself.
@@ -619,6 +640,7 @@ class HeuristicTurnExtractor:
         self.tier_counts["tier1_turns"] += 1 if tier1_count else 0
         self.tier_counts["empty_turns"] += 0 if turn.operations else 1
 
+        coverage = self._coverage(user_message, turn.operations, matches)
         self.last_trace = {
             "tier0_operations": tier0_count,
             "tier1_operations": tier1_count,
@@ -627,8 +649,71 @@ class HeuristicTurnExtractor:
             "negated_operations": sum(
                 1 for item in turn.operations if getattr(item, "polarity", "must") == "negate"
             ),
+            **coverage,
         }
         return turn
+
+    @staticmethod
+    def _coverage(
+        user_message: str,
+        operations: list[AttributeUpdate],
+        matches: list[LexiconMatch],
+    ) -> dict[str, object]:
+        """How much of the message the deterministic cascade actually explained.
+
+        The Phase 8 gate could only ask "did the cascade emit anything?". That
+        treats a one-word gazetteer hit on a two-clause sentence as a complete
+        reading of it. These four numbers make the weaker question askable:
+        which content words did the cascade account for, and how strong was the
+        evidence behind the ones it did?
+
+        Coverage is computed over token *strings*, not offsets, because an
+        operation carries the shopper's wording in ``raw_text`` without a
+        position -- a template span is assembled, not sliced. A repeated token
+        therefore counts as covered wherever it appears, which errs toward
+        *less* escalation and keeps the gate conservative.
+
+        Unemitted lexicon matches count as covered on purpose. Tier 1 emits one
+        operation per attribute, so a dropped second colour is still vocabulary
+        the cascade recognised, and a model would add nothing there.
+        """
+
+        content = [
+            token
+            for token in TOKEN_SPAN_RE.findall(user_message.lower())
+            if token not in RESIDUAL_STOPWORDS and len(token) > 1
+        ]
+        if not content:
+            return {
+                "content_tokens": 0,
+                "residual_tokens": 0,
+                "coverage": 1.0,
+                "tier1_max_df": 0,
+                "tier1_max_words": 0,
+            }
+
+        covered: set[str] = set()
+        for match in matches:
+            covered.update(TOKEN_SPAN_RE.findall(match.text.lower()))
+        for operation in operations:
+            for field in (operation.raw_text, operation.value):
+                if field:
+                    covered.update(TOKEN_SPAN_RE.findall(str(field).lower()))
+
+        residual = [token for token in content if token not in covered]
+        tier1 = [item for item in matches if item.attribute in set(TIER1_ATTRIBUTES)]
+        return {
+            "content_tokens": len(content),
+            "residual_tokens": len(residual),
+            "coverage": round(1.0 - len(residual) / len(content), 4),
+            # Document frequency of the *most common* surface Tier 1 relied on.
+            # "black" matches thousands of products and separates nothing; a
+            # model number matches one. A high value means weak evidence.
+            "tier1_max_df": max((item.df for item in tier1), default=0),
+            # A multi-word gazetteer hit ("merino wool") is far stronger
+            # evidence than a single common adjective.
+            "tier1_max_words": max((item.word_count for item in tier1), default=0),
+        }
 
     def _tier1_operations(self, matches: list[LexiconMatch]) -> list[AttributeUpdate]:
         """Turn lexicon matches into at most one operation per attribute.
