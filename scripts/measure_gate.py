@@ -109,9 +109,12 @@ def measure_cell(
 
     counts = dict(extractor.gate_counts)
     sessions = len(samples)
+    # An escalation increments both its reason key and the "escalated" total,
+    # so summing every counter would count those turns twice.
+    turns = sum(value for key, value in counts.items() if key != "escalated")
     return {
         "sessions": sessions,
-        "turns": sum(counts.values()),
+        "turns": turns,
         "escalations": extractor.calls,
         "per_session": round(extractor.calls / sessions, 4) if sessions else 0.0,
         "empty": counts.get("escalated_empty", 0),

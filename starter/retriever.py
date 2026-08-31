@@ -456,11 +456,76 @@ ESCI_TRAINED_WEIGHTS = RerankWeights(
 ESCI_TRAINED_SOFT_WEIGHTS = replace(ESCI_TRAINED_WEIGHTS, soft_scale=1.0)
 
 
+
+
+# `python3 -m scripts.train_reranker --anchor 0.5 --freeze soft_scale`.
+#
+# The free fit above is a measured regression on every bench cell, so this is
+# the same human labels asked a narrower question: not "what do you say?" but
+# "what do you say that is worth overruling a session-level calibration for?"
+# The anchor penalises drift from `CALIBRATED_WEIGHTS` relative to each
+# coordinate's own magnitude, and `soft_scale` is frozen because every training
+# example is a turn-1 query and that coordinate multiplies exactly the Tier 1
+# constraints only a multi-turn session accumulates.
+#
+# Held out on ESCI's test split: MRR 0.2220 -> 0.2550 at epoch 273 of 500,
+# so the labels still carry signal once the soft stage is protected -- the
+# free fit's gain was not merely the side effect of deleting it.
+#
+# What survives the anchor: BM25 fusion down (774 -> 643) with quality up
+# (rating 0.070 -> 0.113, popularity 0.24 -> 0.60), `color_boost` and
+# `style_boost` collapsed, and `department_miss` almost eliminated
+# (-55 -> -2). That last one is the interesting disagreement -- it is the
+# penalty `CALIBRATED_WEIGHTS` deliberately made *stronger* on the grounds
+# that Department is the best-covered field in the catalog, and real shopper
+# queries say it costs more than it earns.
+ESCI_ANCHORED_WEIGHTS = RerankWeights(
+    fusion_scale=643.1958,
+    backfill_scale=0.2,
+    rating_coefficient=0.1133,
+    popularity_scale=0.6047,
+    category_exact=50.625,
+    category_partial=18.0,
+    category_weak=4.4,
+    category_miss=-44.0,
+    brand_store=29.274,
+    brand_text=28.1837,
+    brand_weak=12.0,
+    brand_miss=-50.0,
+    material_boost=31.1058,
+    color_boost=0.5147,
+    size_boost=31.5714,
+    feature_boost=3.5789,
+    use_case_boost=10.0,
+    style_boost=23.8778,
+    other_boost=22.0,
+    vocabulary_miss=-5.2908,
+    generic_miss=0.0,
+    budget_within=27.4577,
+    budget_over=-60.0,
+    budget_near=12.0,
+    budget_near_miss=-56.0,
+    budget_loose=2.4,
+    budget_loose_miss=0.0,
+    budget_unpriced=-7.7857,
+    department_miss=-1.9899,
+    department_match=0.1206,
+    soft_scale=1.0,
+    demoted_exact=7.2,
+    demoted_partial=8.0,
+    coverage_scale=22.0,
+    idf_evidence_scale=16.0,
+    consensus_scale=9.0,
+    profile_scale=0.1,
+)
+
+
 WEIGHT_PRESETS: dict[str, RerankWeights] = {
     "default": RerankWeights(),
     "calibrated": CALIBRATED_WEIGHTS,
     "esci": ESCI_TRAINED_WEIGHTS,
     "esci_soft": ESCI_TRAINED_SOFT_WEIGHTS,
+    "esci_anchored": ESCI_ANCHORED_WEIGHTS,
 }
 
 

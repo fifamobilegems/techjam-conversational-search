@@ -1,0 +1,1001 @@
+{
+  "generated_at": "2026-08-31T21:08:26.834199+00:00",
+  "limit": 200,
+  "cells": [
+    {
+      "gate": "empty",
+      "coverage": 0.0,
+      "residual": 0,
+      "dataset": "public200",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 622,
+      "escalations": 57,
+      "per_session": 0.285,
+      "empty": 57,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 498,
+        "blocked_template_matched": 10,
+        "escalated_empty": 57,
+        "escalated": 57
+      }
+    },
+    {
+      "gate": "empty",
+      "coverage": 0.0,
+      "residual": 0,
+      "dataset": "public200",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 551,
+      "escalations": 48,
+      "per_session": 0.24,
+      "empty": 48,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 397,
+        "escalated_empty": 48,
+        "escalated": 48,
+        "blocked_tiers_produced_output": 57,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "empty",
+      "coverage": 0.0,
+      "residual": 0,
+      "dataset": "synth800",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 548,
+      "escalations": 34,
+      "per_session": 0.17,
+      "empty": 34,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 474,
+        "blocked_template_matched": 6,
+        "escalated_empty": 34,
+        "escalated": 34
+      }
+    },
+    {
+      "gate": "empty",
+      "coverage": 0.0,
+      "residual": 0,
+      "dataset": "synth800",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 537,
+      "escalations": 78,
+      "per_session": 0.39,
+      "empty": 78,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 312,
+        "blocked_tiers_produced_output": 69,
+        "escalated_empty": 78,
+        "escalated": 78
+      }
+    },
+    {
+      "gate": "empty",
+      "coverage": 0.0,
+      "residual": 0,
+      "dataset": "esci1000",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 606,
+      "escalations": 59,
+      "per_session": 0.295,
+      "empty": 59,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 478,
+        "blocked_template_matched": 10,
+        "escalated_empty": 59,
+        "escalated": 59
+      }
+    },
+    {
+      "gate": "empty",
+      "coverage": 0.0,
+      "residual": 0,
+      "dataset": "esci1000",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 558,
+      "escalations": 76,
+      "per_session": 0.38,
+      "empty": 76,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 319,
+        "blocked_tiers_produced_output": 86,
+        "escalated_empty": 76,
+        "escalated": 76,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "empty",
+      "coverage": 0.0,
+      "residual": 0,
+      "dataset": "esci1000",
+      "simulator": "esci",
+      "sessions": 200,
+      "turns": 738,
+      "escalations": 226,
+      "per_session": 1.13,
+      "empty": 226,
+      "low_confidence": 0,
+      "gate_counts": {
+        "escalated_empty": 226,
+        "escalated": 226,
+        "blocked_tiers_produced_output": 120,
+        "blocked_tier0": 164,
+        "blocked_template_matched": 2
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 2,
+      "dataset": "public200",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 622,
+      "escalations": 57,
+      "per_session": 0.285,
+      "empty": 57,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 498,
+        "blocked_template_matched": 10,
+        "escalated_empty": 57,
+        "escalated": 57
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 2,
+      "dataset": "public200",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 587,
+      "escalations": 84,
+      "per_session": 0.42,
+      "empty": 48,
+      "low_confidence": 36,
+      "gate_counts": {
+        "blocked_tier0": 397,
+        "escalated_empty": 48,
+        "escalated": 84,
+        "blocked_coverage": 20,
+        "escalated_low_confidence": 36,
+        "blocked_residual_floor": 1,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 2,
+      "dataset": "synth800",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 548,
+      "escalations": 34,
+      "per_session": 0.17,
+      "empty": 34,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 474,
+        "blocked_template_matched": 6,
+        "escalated_empty": 34,
+        "escalated": 34
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 2,
+      "dataset": "synth800",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 572,
+      "escalations": 113,
+      "per_session": 0.565,
+      "empty": 78,
+      "low_confidence": 35,
+      "gate_counts": {
+        "blocked_tier0": 312,
+        "blocked_coverage": 27,
+        "escalated_low_confidence": 35,
+        "escalated": 113,
+        "escalated_empty": 78,
+        "blocked_residual_floor": 7
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 2,
+      "dataset": "esci1000",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 606,
+      "escalations": 59,
+      "per_session": 0.295,
+      "empty": 59,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 478,
+        "blocked_template_matched": 10,
+        "escalated_empty": 59,
+        "escalated": 59
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 2,
+      "dataset": "esci1000",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 608,
+      "escalations": 126,
+      "per_session": 0.63,
+      "empty": 76,
+      "low_confidence": 50,
+      "gate_counts": {
+        "blocked_tier0": 319,
+        "escalated_low_confidence": 50,
+        "escalated": 126,
+        "escalated_empty": 76,
+        "blocked_coverage": 27,
+        "blocked_residual_floor": 9,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 2,
+      "dataset": "esci1000",
+      "simulator": "esci",
+      "sessions": 200,
+      "turns": 777,
+      "escalations": 265,
+      "per_session": 1.325,
+      "empty": 226,
+      "low_confidence": 39,
+      "gate_counts": {
+        "escalated_empty": 226,
+        "escalated": 265,
+        "blocked_residual_floor": 60,
+        "escalated_low_confidence": 39,
+        "blocked_tier0": 164,
+        "blocked_coverage": 21,
+        "blocked_template_matched": 2
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 2,
+      "dataset": "public200",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 622,
+      "escalations": 57,
+      "per_session": 0.285,
+      "empty": 57,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 498,
+        "blocked_template_matched": 10,
+        "escalated_empty": 57,
+        "escalated": 57
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 2,
+      "dataset": "public200",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 599,
+      "escalations": 96,
+      "per_session": 0.48,
+      "empty": 48,
+      "low_confidence": 48,
+      "gate_counts": {
+        "blocked_tier0": 397,
+        "escalated_empty": 48,
+        "escalated": 96,
+        "escalated_low_confidence": 48,
+        "blocked_coverage": 8,
+        "blocked_residual_floor": 1,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 2,
+      "dataset": "synth800",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 548,
+      "escalations": 34,
+      "per_session": 0.17,
+      "empty": 34,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 474,
+        "blocked_template_matched": 6,
+        "escalated_empty": 34,
+        "escalated": 34
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 2,
+      "dataset": "synth800",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 585,
+      "escalations": 126,
+      "per_session": 0.63,
+      "empty": 78,
+      "low_confidence": 48,
+      "gate_counts": {
+        "blocked_tier0": 312,
+        "escalated_low_confidence": 48,
+        "escalated": 126,
+        "blocked_coverage": 14,
+        "escalated_empty": 78,
+        "blocked_residual_floor": 7
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 2,
+      "dataset": "esci1000",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 606,
+      "escalations": 59,
+      "per_session": 0.295,
+      "empty": 59,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 478,
+        "blocked_template_matched": 10,
+        "escalated_empty": 59,
+        "escalated": 59
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 2,
+      "dataset": "esci1000",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 626,
+      "escalations": 144,
+      "per_session": 0.72,
+      "empty": 76,
+      "low_confidence": 68,
+      "gate_counts": {
+        "blocked_tier0": 319,
+        "escalated_low_confidence": 68,
+        "escalated": 144,
+        "escalated_empty": 76,
+        "blocked_coverage": 9,
+        "blocked_residual_floor": 9,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 2,
+      "dataset": "esci1000",
+      "simulator": "esci",
+      "sessions": 200,
+      "turns": 796,
+      "escalations": 284,
+      "per_session": 1.42,
+      "empty": 226,
+      "low_confidence": 58,
+      "gate_counts": {
+        "escalated_empty": 226,
+        "escalated": 284,
+        "blocked_residual_floor": 60,
+        "escalated_low_confidence": 58,
+        "blocked_tier0": 164,
+        "blocked_template_matched": 2,
+        "blocked_coverage": 2
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 2,
+      "dataset": "public200",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 622,
+      "escalations": 57,
+      "per_session": 0.285,
+      "empty": 57,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 498,
+        "blocked_template_matched": 10,
+        "escalated_empty": 57,
+        "escalated": 57
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 2,
+      "dataset": "public200",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 604,
+      "escalations": 101,
+      "per_session": 0.505,
+      "empty": 48,
+      "low_confidence": 53,
+      "gate_counts": {
+        "blocked_tier0": 397,
+        "escalated_empty": 48,
+        "escalated": 101,
+        "escalated_low_confidence": 53,
+        "blocked_coverage": 3,
+        "blocked_residual_floor": 1,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 2,
+      "dataset": "synth800",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 548,
+      "escalations": 34,
+      "per_session": 0.17,
+      "empty": 34,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 474,
+        "blocked_template_matched": 6,
+        "escalated_empty": 34,
+        "escalated": 34
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 2,
+      "dataset": "synth800",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 592,
+      "escalations": 133,
+      "per_session": 0.665,
+      "empty": 78,
+      "low_confidence": 55,
+      "gate_counts": {
+        "blocked_tier0": 312,
+        "escalated_low_confidence": 55,
+        "escalated": 133,
+        "blocked_coverage": 7,
+        "escalated_empty": 78,
+        "blocked_residual_floor": 7
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 2,
+      "dataset": "esci1000",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 606,
+      "escalations": 59,
+      "per_session": 0.295,
+      "empty": 59,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 478,
+        "blocked_template_matched": 10,
+        "escalated_empty": 59,
+        "escalated": 59
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 2,
+      "dataset": "esci1000",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 633,
+      "escalations": 151,
+      "per_session": 0.755,
+      "empty": 76,
+      "low_confidence": 75,
+      "gate_counts": {
+        "blocked_tier0": 319,
+        "escalated_low_confidence": 75,
+        "escalated": 151,
+        "escalated_empty": 76,
+        "blocked_residual_floor": 9,
+        "blocked_coverage": 2,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 2,
+      "dataset": "esci1000",
+      "simulator": "esci",
+      "sessions": 200,
+      "turns": 798,
+      "escalations": 286,
+      "per_session": 1.43,
+      "empty": 226,
+      "low_confidence": 60,
+      "gate_counts": {
+        "escalated_empty": 226,
+        "escalated": 286,
+        "blocked_residual_floor": 60,
+        "escalated_low_confidence": 60,
+        "blocked_tier0": 164,
+        "blocked_template_matched": 2
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 3,
+      "dataset": "public200",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 622,
+      "escalations": 57,
+      "per_session": 0.285,
+      "empty": 57,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 498,
+        "blocked_template_matched": 10,
+        "escalated_empty": 57,
+        "escalated": 57
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 3,
+      "dataset": "public200",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 582,
+      "escalations": 79,
+      "per_session": 0.395,
+      "empty": 48,
+      "low_confidence": 31,
+      "gate_counts": {
+        "blocked_tier0": 397,
+        "escalated_empty": 48,
+        "escalated": 79,
+        "blocked_coverage": 13,
+        "escalated_low_confidence": 31,
+        "blocked_residual_floor": 13,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 3,
+      "dataset": "synth800",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 548,
+      "escalations": 34,
+      "per_session": 0.17,
+      "empty": 34,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 474,
+        "blocked_template_matched": 6,
+        "escalated_empty": 34,
+        "escalated": 34
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 3,
+      "dataset": "synth800",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 563,
+      "escalations": 104,
+      "per_session": 0.52,
+      "empty": 78,
+      "low_confidence": 26,
+      "gate_counts": {
+        "blocked_tier0": 312,
+        "blocked_residual_floor": 35,
+        "escalated_low_confidence": 26,
+        "escalated": 104,
+        "blocked_coverage": 8,
+        "escalated_empty": 78
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 3,
+      "dataset": "esci1000",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 606,
+      "escalations": 59,
+      "per_session": 0.295,
+      "empty": 59,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 478,
+        "blocked_template_matched": 10,
+        "escalated_empty": 59,
+        "escalated": 59
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 3,
+      "dataset": "esci1000",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 601,
+      "escalations": 119,
+      "per_session": 0.595,
+      "empty": 76,
+      "low_confidence": 43,
+      "gate_counts": {
+        "blocked_tier0": 319,
+        "escalated_low_confidence": 43,
+        "escalated": 119,
+        "escalated_empty": 76,
+        "blocked_residual_floor": 30,
+        "blocked_coverage": 13,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.34,
+      "residual": 3,
+      "dataset": "esci1000",
+      "simulator": "esci",
+      "sessions": 200,
+      "turns": 750,
+      "escalations": 238,
+      "per_session": 1.19,
+      "empty": 226,
+      "low_confidence": 12,
+      "gate_counts": {
+        "escalated_empty": 226,
+        "escalated": 238,
+        "blocked_residual_floor": 100,
+        "blocked_tier0": 164,
+        "escalated_low_confidence": 12,
+        "blocked_coverage": 8,
+        "blocked_template_matched": 2
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 3,
+      "dataset": "public200",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 622,
+      "escalations": 57,
+      "per_session": 0.285,
+      "empty": 57,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 498,
+        "blocked_template_matched": 10,
+        "escalated_empty": 57,
+        "escalated": 57
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 3,
+      "dataset": "public200",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 591,
+      "escalations": 88,
+      "per_session": 0.44,
+      "empty": 48,
+      "low_confidence": 40,
+      "gate_counts": {
+        "blocked_tier0": 397,
+        "escalated_empty": 48,
+        "escalated": 88,
+        "escalated_low_confidence": 40,
+        "blocked_coverage": 4,
+        "blocked_residual_floor": 13,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 3,
+      "dataset": "synth800",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 548,
+      "escalations": 34,
+      "per_session": 0.17,
+      "empty": 34,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 474,
+        "blocked_template_matched": 6,
+        "escalated_empty": 34,
+        "escalated": 34
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 3,
+      "dataset": "synth800",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 568,
+      "escalations": 109,
+      "per_session": 0.545,
+      "empty": 78,
+      "low_confidence": 31,
+      "gate_counts": {
+        "blocked_tier0": 312,
+        "blocked_residual_floor": 35,
+        "escalated_low_confidence": 31,
+        "escalated": 109,
+        "escalated_empty": 78,
+        "blocked_coverage": 3
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 3,
+      "dataset": "esci1000",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 606,
+      "escalations": 59,
+      "per_session": 0.295,
+      "empty": 59,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 478,
+        "blocked_template_matched": 10,
+        "escalated_empty": 59,
+        "escalated": 59
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 3,
+      "dataset": "esci1000",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 613,
+      "escalations": 131,
+      "per_session": 0.655,
+      "empty": 76,
+      "low_confidence": 55,
+      "gate_counts": {
+        "blocked_tier0": 319,
+        "escalated_low_confidence": 55,
+        "escalated": 131,
+        "escalated_empty": 76,
+        "blocked_residual_floor": 30,
+        "blocked_coverage": 1,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.5,
+      "residual": 3,
+      "dataset": "esci1000",
+      "simulator": "esci",
+      "sessions": 200,
+      "turns": 758,
+      "escalations": 246,
+      "per_session": 1.23,
+      "empty": 226,
+      "low_confidence": 20,
+      "gate_counts": {
+        "escalated_empty": 226,
+        "escalated": 246,
+        "blocked_residual_floor": 100,
+        "blocked_tier0": 164,
+        "escalated_low_confidence": 20,
+        "blocked_template_matched": 2
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 3,
+      "dataset": "public200",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 622,
+      "escalations": 57,
+      "per_session": 0.285,
+      "empty": 57,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 498,
+        "blocked_template_matched": 10,
+        "escalated_empty": 57,
+        "escalated": 57
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 3,
+      "dataset": "public200",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 595,
+      "escalations": 92,
+      "per_session": 0.46,
+      "empty": 48,
+      "low_confidence": 44,
+      "gate_counts": {
+        "blocked_tier0": 397,
+        "escalated_empty": 48,
+        "escalated": 92,
+        "escalated_low_confidence": 44,
+        "blocked_residual_floor": 13,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 3,
+      "dataset": "synth800",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 548,
+      "escalations": 34,
+      "per_session": 0.17,
+      "empty": 34,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 474,
+        "blocked_template_matched": 6,
+        "escalated_empty": 34,
+        "escalated": 34
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 3,
+      "dataset": "synth800",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 570,
+      "escalations": 111,
+      "per_session": 0.555,
+      "empty": 78,
+      "low_confidence": 33,
+      "gate_counts": {
+        "blocked_tier0": 312,
+        "blocked_residual_floor": 35,
+        "escalated_low_confidence": 33,
+        "escalated": 111,
+        "escalated_empty": 78,
+        "blocked_coverage": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 3,
+      "dataset": "esci1000",
+      "simulator": "official",
+      "sessions": 200,
+      "turns": 606,
+      "escalations": 59,
+      "per_session": 0.295,
+      "empty": 59,
+      "low_confidence": 0,
+      "gate_counts": {
+        "blocked_tier0": 478,
+        "blocked_template_matched": 10,
+        "escalated_empty": 59,
+        "escalated": 59
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 3,
+      "dataset": "esci1000",
+      "simulator": "realistic",
+      "sessions": 200,
+      "turns": 614,
+      "escalations": 132,
+      "per_session": 0.66,
+      "empty": 76,
+      "low_confidence": 56,
+      "gate_counts": {
+        "blocked_tier0": 319,
+        "escalated_low_confidence": 56,
+        "escalated": 132,
+        "escalated_empty": 76,
+        "blocked_residual_floor": 30,
+        "blocked_template_matched": 1
+      }
+    },
+    {
+      "gate": "low_confidence",
+      "coverage": 0.67,
+      "residual": 3,
+      "dataset": "esci1000",
+      "simulator": "esci",
+      "sessions": 200,
+      "turns": 758,
+      "escalations": 246,
+      "per_session": 1.23,
+      "empty": 226,
+      "low_confidence": 20,
+      "gate_counts": {
+        "escalated_empty": 226,
+        "escalated": 246,
+        "blocked_residual_floor": 100,
+        "blocked_tier0": 164,
+        "escalated_low_confidence": 20,
+        "blocked_template_matched": 2
+      }
+    }
+  ]
+}

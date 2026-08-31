@@ -283,8 +283,18 @@ def train(
     l2: float,
     init: str,
     seed: int,
+    anchor: float = 0.0,
+    freeze: tuple[str, ...] = (),
 ) -> dict:
-    """Fit the weight vector and return the best checkpoint plus the full curve."""
+    """Fit the weight vector and return the best checkpoint plus the full curve.
+
+    `anchor` turns the fit into a trust region around the starting vector. Free
+    fitting answers "what do the human labels say?"; anchored fitting answers
+    the different and more useful question "what do they say that is worth
+    overruling three prior rounds of session-level measurement for?" -- because
+    the shipped weights were not guessed, they were fitted against the metric
+    the agent is actually scored on.
+    """
     train_set = [batch for batch in batches if batch.split == "train"]
     test_set = [batch for batch in batches if batch.split == "test"]
     if not train_set or not test_set:
@@ -292,8 +302,9 @@ def train(
 
     start = initial_weights(init, seed)
     weights = start.clone().requires_grad_(True)
+    held = set(FROZEN) | set(freeze)
     frozen = torch.tensor(
-        [1.0 if name in FROZEN else 0.0 for name in WEIGHT_NAMES], dtype=torch.float32
+        [1.0 if name in held else 0.0 for name in WEIGHT_NAMES], dtype=torch.float32
     )
     optimizer = torch.optim.Adam([weights], lr=learning_rate)
 
@@ -304,6 +315,13 @@ def train(
         loss = listnet_loss(train_set, weights)
         if l2:
             loss = loss + l2 * (weights ** 2).sum()
+        if anchor:
+            # Scale-free: each coordinate is penalised relative to its own
+            # magnitude, so `fusion_scale` at 774 and `department_match` at 0.1
+            # are held equally tightly instead of the large ones absorbing the
+            # entire budget.
+            drift = (weights - start) / (start.abs() + 1.0)
+            loss = loss + anchor * (drift ** 2).sum()
         loss.backward()
         # Frozen coordinates have no gradient path anyway; zeroing is explicit
         # so a future feature that does touch them cannot drift silently.
@@ -367,7 +385,29 @@ def main() -> None:
     parser.add_argument("--features", default="data/rerank_features.npz")
     parser.add_argument("--epochs", type=int, default=500)
     parser.add_argument("--lr", type=float, default=0.5)
-    parser.add_argument("--l2", type=float, default=0.0)
+    parser.add_argument(
+        "--l2", type=float, default=0.0,
+        help=(
+            "plain L2 on the raw weights. Note the scale: `fusion_scale` sits "
+            "near 774, so its squared term is ~6e5 and even a small "
+            "coefficient dominates the ranking loss. Prefer --anchor, which "
+            "normalises per coordinate."
+        ),
+    )
+    parser.add_argument(
+        "--anchor", type=float, default=0.0,
+        help="trust-region strength toward --init; 0 fits freely",
+    )
+    parser.add_argument(
+        "--freeze", nargs="*", default=[],
+        help=(
+            "weight names to hold at their --init value. Use for coordinates "
+            "whose training distribution is known to be unrepresentative -- "
+            "`soft_scale` multiplies the Tier 1 constraints that only a "
+            "multi-turn session accumulates, and every training example here "
+            "is a turn-1 query."
+        ),
+    )
     parser.add_argument("--init", default="calibrated",
                         choices=("calibrated", "default", "random"))
     parser.add_argument("--seed", type=int, default=0)
@@ -400,7 +440,10 @@ def main() -> None:
         print(f"\nwrote {args.report}")
         return
 
-    result = train(batches, args.epochs, args.lr, args.l2, args.init, args.seed)
+    result = train(
+        batches, args.epochs, args.lr, args.l2, args.init, args.seed, args.anchor,
+        tuple(args.freeze),
+    )
 
     start_metrics = {
         "train": metrics([b for b in batches if b.split == "train"], result["start"]),
