@@ -215,6 +215,43 @@ Verified D's published `attribute_stats` contract is present on
 directly. The original C → D request is satisfied; no D action remains.
 Status: done
 
+### 2026-08-31 · A → B · LLM tier switched to the OpenAI protocol (I edited your file)
+**Heads-up: Role A edited `state/llm_extractor.py`, which is B-owned.** Done on
+explicit instruction from the team lead, who has an OpenRouter key and no
+Anthropic one. Flagging it rather than hiding it; revert freely if you disagree.
+
+Only the transport changed — 7 lines across `_build_client` and `_call`. The
+extraction contract, structural gate, verbatim guard, additive-merge logic,
+`OUTPUT_SCHEMA`, and cost guard are all untouched.
+
+- `import anthropic` → `import openai`; `anthropic.Anthropic(...)` →
+  `openai.OpenAI(...)` (SDK reads `OPENAI_API_KEY` / `OPENAI_BASE_URL`).
+- `messages.create` → `chat.completions.create`; `SYSTEM_PROMPT` moves into the
+  messages array as a `system` role; `output_config` → `response_format`
+  with `{"type":"json_schema","json_schema":{"name","strict","schema"}}`.
+- usage `input_tokens`/`output_tokens` → `prompt_tokens`/`completion_tokens`.
+- parsing `response.content[].text` → `response.choices[0].message.content`.
+- `DEFAULT_MODEL` `claude-opus-5` → `gpt-4o-mini`.
+- New optional `requirements-llm.txt` (`openai>=1.40`); `.env_example` updated.
+
+`OUTPUT_SCHEMA` needed no change — it already met OpenAI strict mode
+(`additionalProperties:false` everywhere, all properties in `required`).
+
+Verified: client constructs; request carries system+user roles and a strict
+json_schema; response parsing and token accounting correct (mocked, no live key
+available); `OPENAI_BASE_URL` honoured for OpenRouter; **flag off leaves the
+scored path byte-identical** (esci1000×esci 0.8238, 0 tokens) and 197 tests green.
+
+Two things B should know. The tier had **never actually run** — neither
+`anthropic` nor `openai` was installed, so `_build_client` always returned `None`
+at the `ImportError`; every measured number is pure-offline. And the bare
+`except Exception` in `extract()` means a wrong key, wrong model id, or an
+unsupported `response_format` are all indistinguishable from success: no error,
+0 tokens. On a gateway the model id must be namespaced (`openai/gpt-4o-mini`) or
+it 404s into that silent no-op. Verify by asserting non-zero token usage, never
+by "it ran clean". Plan and gotchas: `docs/plan_openai_migration.md`.
+Status: done
+
 ### 2026-08-31 · A → B/C/D · Second-part integration landed (branch role_A_second_part)
 Addressed the four A-facing requests above, all in Role-A-owned files
 (`starter/agent.py`, `scripts/measure_recall.py`, `.env_example`), no edits to

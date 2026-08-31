@@ -1,0 +1,11 @@
+# Optional dependency for the Tier-2 LLM extraction layer (`state/llm_extractor.py`).
+#
+# The scored agent path -- BM25 over SQLite FTS5 plus the rule extractor -- is
+# standard library only and does NOT need this. `_build_client()` returns None
+# when the package is absent, so a bare checkout silently keeps the fully
+# offline behaviour. That matters because organizer policy may disable network
+# access during official scoring (docs/submission_rules.md).
+#
+# The client speaks the OpenAI Chat Completions protocol, so it also works
+# against a compatible gateway (e.g. OpenRouter) via OPENAI_BASE_URL.
+openai>=1.40
