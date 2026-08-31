@@ -274,3 +274,28 @@ esci×esci 0.775→0.824, synth800-realistic 0.762→0.911, esci1000-realistic
 0.900→0.846, esci1000-official 0.869→0.848, synth800-official ≈flat. 197 tests
 green. Robustness-first trade is deliberate and reversible (`RERANK_WEIGHTS=default`).
 Status: done
+
+### 2026-08-31 · A → B · LLM tier measured and NOT recommended for scoring runs
+Role B's Tier-2 layer now works end to end against the OpenAI protocol (see the
+migration entry above). Measured on the real agent loop, esci1000 x esci,
+identical head-selected samples, `RERANK_WEIGHTS=calibrated`:
+
+| n | flag | technical | HR@10 | MRR | tokens | est. cost | wall clock |
+|--:|---|--:|--:|--:|--:|--:|--:|
+| 50 | on | 0.7911 | 0.900 | — | 46,893 | $0.009 | 96s |
+| 50 | off | 0.7572 | 0.860 | — | 0 | $0 | 7s |
+| 200 | on | 0.8206 | 0.920 | 0.6817 | 154,265 | $0.029 | 289s |
+| 200 | off | **0.8256** | **0.930** | 0.6754 | 0 | $0 | 18s |
+
+**The n=50 result (+0.034) did not replicate.** It rested on two extra sessions
+out of fifty. At n=200 the tier is neutral-to-slightly-negative: −0.005
+technical, −0.010 HR@10, +0.006 MRR, for 16x the wall clock and ~$0.14 per 1000
+sessions. Anyone re-running this: n=50 is far too small for a 0.03-scale claim
+on this metric.
+
+Recommendation: keep `TECHJAM_LLM_EXTRACTOR` unset for scoring and benchmarking.
+The gate, the verbatim guard and the additive-only design are all sound — the
+model simply is not adding spans that change ranking on this catalog. Nothing to
+fix in B's code; this is a deployment decision, and it is also a defensible
+submission story (tried, measured at n=200, rejected on evidence).
+Status: done (informational)
