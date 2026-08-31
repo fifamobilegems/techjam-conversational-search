@@ -50,8 +50,18 @@ Owns: `state/state_manager.py`, `state/clarification.py`
 ## Role D · Retrieval
 Owns: `starter/retriever.py`, `scripts/build_embeddings.py`
 
-- [ ] 6.1 Hard-constraint prefilter (filter where field present, penalty otherwise)
-- [ ] 6.2 Dense channel — build only if post-1.1 re-measure says recall is the bottleneck
-- [ ] 7.1 Staged rerank (coverage → relevance → soft → profile tie-break)
-- [ ] 7.2 Profile tie-breaker (Decision 9; `user_profile` currently unread)
-- [ ] 7.4 Weight calibration by coordinate search (not a trained model)
+- [x] 6.1 Hard-constraint prefilter (filter where field present, penalty otherwise)
+  — 3x BM25 over-fetch, survivor floor, three-valued predicates; negated spans
+  excluded and stripped from the query. Measures 0.0000 on 5 of 6 cells: the
+  existing penalties already decided these cases. See HANDOVER_D.md.
+- [x] 6.2 Dense channel — **gate not met, deliberately not built**. Re-measured
+  raw recall@500 = 0.830 on esci while end-to-end HR@10 = 0.915; multi-turn
+  accumulation already exceeds turn-1 recall, so there is no residual for a
+  dense channel to recover.
+- [x] 7.1 Staged rerank (coverage → relevance → soft → profile tie-break)
+- [x] 7.2 Profile tie-breaker (Decision 9; `user_profile` currently unread)
+  — implemented as a bounded stage-4 term and measured; Agent must pass
+  `user_profile` for it to be live (filed with A in REQUESTS.md).
+- [x] 7.4 Weight calibration by coordinate search (not a trained model)
+  — `scripts/calibrate_rerank.py`, held out **by generator**: fit on
+  synth800/realistic, evaluate on the 234 ESCI provenance=="gold" rows.

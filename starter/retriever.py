@@ -614,6 +614,11 @@ class CatalogRetriever:
             "candidate_ids": ranked_ids,
             "department": plan.department,
             "negated": list(plan.negated),
+            # The attributes a coverage metric should hold the Top-10 to.
+            # Soft (Tier 1 gazetteer) constraints are excluded: they are
+            # guesses, and scoring the list against a guess measures the
+            # extractor, not the ranker.
+            "hard_attributes": [c.attribute for c in plan.typed if not c.soft],
             "prefilter_removed": self._last_prefilter_removed,
             # Retained in memory for local inspection. The trace deliberately
             # does not serialize this 500-product mapping every turn; the
