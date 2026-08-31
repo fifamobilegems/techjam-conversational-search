@@ -34,12 +34,14 @@ from __future__ import annotations
 import gzip
 import json
 import math
+from collections import Counter
 import os
 import re
 import sqlite3
 from dataclasses import dataclass, fields, replace
 from pathlib import Path
-from typing import Iterable, NamedTuple
+from types import MappingProxyType
+from typing import Iterable, Mapping, NamedTuple
 
 
 TOKEN_RE = re.compile(r"[a-z0-9]+", re.IGNORECASE)
@@ -118,6 +120,13 @@ BOILERPLATE_PHRASES = {
 }
 
 FIELD_WEIGHTS = (0.0, 6.0, 5.0, 4.0, 2.5, 3.0, 1.0, 1.5)
+
+# Unique query terms passed to FTS5. Was 50, which a multi-turn session crosses
+# around turn 8 once the shopper's own words are part of the query -- silently
+# dropping the newest disclosures. FTS5 handles a wider OR comfortably, and
+# `state_manager.query_fragment` now removes the dialogue scaffolding that made
+# the old ceiling bind so early.
+MAX_QUERY_TERMS = 128
 
 # Fractions of the per-attribute boost awarded at partial match. Structural
 # shape rather than free parameters: calibrating both the boost and its
@@ -278,6 +287,14 @@ class RerankWeights:
     demoted_exact: float = 18.0
     demoted_partial: float = 8.0
 
+    # --- ranking experiments ---
+    # Coverage is a fraction in [0,1], so this is its full swing.
+    coverage_scale: float = 0.0
+    # IDF-weighted evidence, also normalized to [0,1] per span before scaling.
+    idf_evidence_scale: float = 0.0
+    # Session-level reciprocal-rank fusion, normalized to [0,1].
+    consensus_scale: float = 0.0
+
     # --- stage 4: profile tie-break ---
     profile_scale: float = 0.0
 
@@ -342,6 +359,12 @@ CALIBRATED_WEIGHTS = RerankWeights(
     department_match=0.1,
     demoted_exact=7.2,
     profile_scale=0.1,
+    # Part 2 ranking experiments. Sized against the fusion range: with
+    # fusion_scale=774 a rank-1 BM25 hit contributes ~12.7 and rank-500 ~1.4,
+    # so a full-coverage product gains roughly one BM25 rank-decade.
+    coverage_scale=22.0,
+    idf_evidence_scale=16.0,
+    consensus_scale=9.0,
 )
 
 WEIGHT_PRESETS: dict[str, RerankWeights] = {
@@ -389,6 +412,42 @@ class RerankConfig:
     # is worse than no filter at all.
     min_survivors: int = 50
 
+    # --- ranking experiments (Part 2). Each ablates independently. ---
+    #
+    # Every remaining miss is a *ranking* miss: the calibration harness shows
+    # the target inside the candidate pool in 100% of sessions. So these three
+    # change ordering only; none of them widens the net.
+    #
+    # Reward breadth of constraint satisfaction, not just depth. Additive
+    # scoring lets one huge category match outrank a product that quietly
+    # satisfies four disclosed constraints -- but the target is precisely the
+    # thing that satisfies all of them.
+    # Measured NEUTRAL (mean technical 0.8179 vs 0.8183 without, n=100 x 6
+    # cells). With few live spans most survivors satisfy all of them, so the
+    # term is near-constant across the pool and discriminates nothing. Kept,
+    # off, because it should earn its place again if span counts rise.
+    coverage_bonus: bool = False
+    # Weight span evidence by catalog rarity. "cotton" matches thousands of
+    # products and separates nothing; a model number matches one. Flat
+    # weighting spends the same score on both.
+    # Measured NEGATIVE once paired with the better clarification policy:
+    # 0.8584 vs 0.8664 mean technical (n=100 x 6 cells). It looked marginally
+    # positive against the weaker `formula` policy (0.8219 vs 0.8183), which
+    # is the tell -- it was compensating for worse evidence, not adding
+    # signal. BM25 already applies IDF when selecting candidates, so
+    # re-applying it in the reranker double-counts term rarity the retrieval
+    # stage has priced in. Off.
+    idf_evidence: bool = False
+    # Fuse this turn's ranking with earlier turns'. A product that stays near
+    # the top all session is better evidence than one that spikes once on a
+    # noisy query.
+    # Measured clearly HARMFUL: 0.7732 vs 0.8183 mean technical, MRR 0.5512
+    # vs 0.6815. It is a feedback loop -- reinforcing whatever ranked highly on
+    # earlier, less-informed turns entrenches exactly the early mistakes later
+    # constraints are supposed to correct. Off, and kept only as a documented
+    # negative result.
+    rank_consensus: bool = False
+
 
 def _env_flag(name: str, default: bool) -> bool:
     raw = os.environ.get(name)
@@ -407,6 +466,9 @@ def config_from_env() -> RerankConfig:
         department_penalty=_env_flag("RERANK_DEPARTMENT_PENALTY", base.department_penalty),
         department_gate=_env_flag("RERANK_DEPARTMENT_GATE", base.department_gate),
         profile_tiebreak=_env_flag("RERANK_PROFILE_TIEBREAK", base.profile_tiebreak),
+        coverage_bonus=_env_flag("RERANK_COVERAGE", base.coverage_bonus),
+        idf_evidence=_env_flag("RERANK_IDF", base.idf_evidence),
+        rank_consensus=_env_flag("RERANK_CONSENSUS", base.rank_consensus),
         overfetch=int(os.environ.get("RERANK_OVERFETCH", base.overfetch)),
         min_survivors=int(os.environ.get("RERANK_MIN_SURVIVORS", base.min_survivors)),
     )
@@ -617,6 +679,10 @@ class RetrievalPlan:
     brand_soft: bool
     profile_terms: frozenset[str]
     profile_rating: float | None
+    # Live (non-superseded) spans, pre-normalized with their rarity weight.
+    evidence: tuple[tuple[frozenset[str], float], ...] = ()
+    # parent_asin -> accumulated reciprocal rank from earlier turns, in [0,1].
+    prior_ranks: Mapping[str, float] = MappingProxyType({})
 
 
 class CatalogRetriever:
@@ -657,9 +723,11 @@ class CatalogRetriever:
         top_k: int = 10,
         raw_constraints: Iterable[dict] = (),
         user_profile: dict | None = None,
+        prior_ranks: Mapping[str, float] | None = None,
     ) -> list[str]:
         plan = self.build_plan(
-            search_query, constraints, no_preference, raw_constraints, user_profile
+            search_query, constraints, no_preference, raw_constraints, user_profile,
+            prior_ranks,
         )
         candidate_scores = self.score_pool(self._candidate_pool(plan), plan)
 
@@ -701,6 +769,7 @@ class CatalogRetriever:
         no_preference: Iterable[str] = (),
         raw_constraints: Iterable[dict] = (),
         user_profile: dict | None = None,
+        prior_ranks: Mapping[str, float] | None = None,
     ) -> RetrievalPlan:
         """Interpret one turn of conversation state into a retrieval plan."""
         no_preference_set = {str(item) for item in no_preference}
@@ -749,7 +818,26 @@ class CatalogRetriever:
             )
             profile_rating = _safe_float(user_profile.get("average_prior_rating"))
 
+        # Live spans, each paired with its catalog rarity. Superseded and
+        # negated spans are excluded: the first is stale, the second is
+        # something the shopper rejected.
+        evidence: list[tuple[frozenset[str], float]] = []
+        if self.config.coverage_bonus or self.config.idf_evidence:
+            seen_phrases: set[str] = set()
+            for span in spans:
+                if span.get("superseded") or str(span.get("polarity", "must")) == "negate":
+                    continue
+                phrase = _normalized_text(str(span.get("match_phrase") or span.get("text") or ""))
+                if not phrase or phrase in seen_phrases or _is_boilerplate(phrase):
+                    continue
+                seen_phrases.add(phrase)
+                terms = frozenset(phrase.split())
+                if terms:
+                    evidence.append((terms, self.term_rarity(terms)))
+
         return RetrievalPlan(
+            evidence=tuple(evidence),
+            prior_ranks=prior_ranks or MappingProxyType({}),
             query_text=query_text,
             typed=typed,
             negated=negated,
@@ -781,8 +869,15 @@ class CatalogRetriever:
         for parent_asin, generation in pool.items():
             record = self.products[parent_asin]
             stages = self.stage_contributions(record, plan)
-            stages["relevance"] = [generation, *stages["relevance"]]
-            scored[parent_asin] = self.assemble(stages, self.violations(record, plan), mapping)
+            stages["relevance"] = [
+                generation,
+                *self._consensus_contributions(parent_asin, plan),
+                *stages["relevance"],
+            ]
+            violations = self._violation_cache.get(parent_asin)
+            if violations is None:
+                violations = self.violations(record, plan)
+            scored[parent_asin] = self.assemble(stages, violations, mapping)
             scored[parent_asin]["bm25_rank"] = self._bm25_rank.get(parent_asin)
         return scored
 
@@ -879,6 +974,8 @@ class CatalogRetriever:
                 Contribution(attribute, weight_name, coefficient)
                 for _, weight_name, coefficient in terms
             )
+
+        relevance.extend(self._evidence_contributions(record, plan))
 
         demoted = self._demoted_contributions(record, plan) if self.enable_raw_phrase_scoring else []
         return {
@@ -1037,6 +1134,64 @@ class CatalogRetriever:
                 out.append(Contribution(key, "demoted_partial", weight))
         return out
 
+    def _evidence_contributions(
+        self, record: ProductRecord, plan: RetrievalPlan
+    ) -> list[Contribution]:
+        """Breadth of constraint satisfaction, and rarity of what matched.
+
+        Two separate ideas sharing one pass over the live spans:
+
+        `coverage` is the fraction of distinct disclosed spans this product
+        satisfies. Scoring is otherwise purely additive, so one large category
+        match can outrank a product that quietly satisfies four constraints --
+        yet the target is exactly the product that satisfies all of them.
+
+        `idf_evidence` weights each satisfied span by how rare its terms are in
+        the catalog. Matching "cotton" separates a product from almost nothing;
+        matching a model number separates it from everything.
+        """
+        if not plan.evidence:
+            return []
+
+        matched = 0
+        rarity_total = 0.0
+        rarity_available = 0.0
+        for terms, rarity in plan.evidence:
+            rarity_available += rarity
+            overlap = len(terms & record.all_terms) / len(terms)
+            if overlap >= 0.8:
+                matched += 1
+                rarity_total += rarity * overlap
+
+        out: list[Contribution] = []
+        if self.config.coverage_bonus:
+            out.append(Contribution(
+                "coverage", "coverage_scale", matched / len(plan.evidence)
+            ))
+        if self.config.idf_evidence and rarity_available > 0.0:
+            out.append(Contribution(
+                "idf_evidence", "idf_evidence_scale", rarity_total / rarity_available
+            ))
+        return out
+
+    def _consensus_contributions(
+        self, parent_asin: str, plan: RetrievalPlan
+    ) -> list[Contribution]:
+        """Reciprocal-rank fusion across the session's earlier turns.
+
+        Fusion already runs across channels within a turn; this runs it across
+        turns. A product held near the top by several different constraint
+        sets is stronger evidence than one lifted once by a noisy query, and
+        the evaluator records the FIRST turn the target surfaces -- so
+        stabilising rank-1 early is worth more than improving it late.
+        """
+        if not self.config.rank_consensus or not plan.prior_ranks:
+            return []
+        score = float(plan.prior_ranks.get(parent_asin, 0.0))
+        if score <= 0.0:
+            return []
+        return [Contribution("consensus", "consensus_scale", min(1.0, score))]
+
     def _profile_contributions(
         self, record: ProductRecord, plan: RetrievalPlan
     ) -> list[Contribution]:
@@ -1068,6 +1223,7 @@ class CatalogRetriever:
 
     def _candidate_pool(self, plan: RetrievalPlan) -> dict[str, Contribution]:
         """BM25 -> prefilter -> reciprocal-rank fusion contributions."""
+        self._violation_cache = {}
         fetch = self.candidate_limit * max(1, self.config.overfetch) if self.config.prefilter \
             else self.candidate_limit
         bm25_ids = self._bm25_search(plan.query_text, limit=fetch)
@@ -1094,17 +1250,20 @@ class CatalogRetriever:
         """
         if not self.config.prefilter or not bm25_ids:
             return bm25_ids[: self.candidate_limit], 0
-        kept = [
-            parent_asin for parent_asin in bm25_ids
-            if self.violations(self.products[parent_asin], plan) == 0
-        ]
+        # Cached so `score_pool` does not recompute the same predicates for
+        # every survivor: the prefilter already evaluated up to
+        # `candidate_limit * overfetch` products this turn.
+        counts = self._violation_cache
+        for parent_asin in bm25_ids:
+            counts[parent_asin] = self.violations(self.products[parent_asin], plan)
+        kept = [parent_asin for parent_asin in bm25_ids if counts[parent_asin] == 0]
         removed = len(bm25_ids) - len(kept)
         if len(kept) < min(self.config.min_survivors, len(bm25_ids)):
             return bm25_ids[: self.candidate_limit], 0
         return kept[: self.candidate_limit], removed
 
     def _bm25_search(self, query_text: str, limit: int | None = None) -> list[str]:
-        terms = list(dict.fromkeys(_terms(query_text)))[:50]
+        terms = list(dict.fromkeys(_terms(query_text)))[:MAX_QUERY_TERMS]
         if not terms:
             return []
         expression = " OR ".join(f'"{term}"' for term in terms)
@@ -1187,12 +1346,21 @@ class CatalogRetriever:
         return self._strip_negated(text, negated)
 
     def _strip_negated(self, text: str, negated: Iterable[str]) -> str:
+        """Remove each rejected phrase from the query, and nothing more.
+
+        The constituent-token loop this replaces deleted every word of a
+        multi-word phrase from the whole query: negating "underwire bra" also
+        removed "bra", the category the shopper actually wants. A single-word
+        phrase is unchanged by the fix; a multi-word one now loses only the
+        contiguous phrase, so the surrounding request survives.
+        """
         for phrase in negated:
             if not phrase:
                 continue
-            text = re.sub(rf"\b{re.escape(phrase)}\b", " ", text, flags=re.IGNORECASE)
-            for term in phrase.split():
-                text = re.sub(rf"\b{re.escape(term)}\b", " ", text, flags=re.IGNORECASE)
+            pattern = r"\s+".join(re.escape(term) for term in phrase.split())
+            if not pattern:
+                continue
+            text = re.sub(rf"\b{pattern}\b", " ", text, flags=re.IGNORECASE)
         return re.sub(r"\s+", " ", text).strip()
 
     def _attribute_stats(
@@ -1208,8 +1376,13 @@ class CatalogRetriever:
         if not sample:
             return {}
         stats: dict[str, dict[str, object]] = {}
+        # `category` and `budget` are derived rather than structured, but they
+        # are askable, so omitting them made their reduction and coverage terms
+        # structurally zero -- the clarification formula could never choose them
+        # however well they would split the pool.
         for attribute, key in (("color", "Color"), ("material", "Material"), ("size", "Size"),
-                               ("style", "Style"), ("brand", "store")):
+                               ("style", "Style"), ("brand", "store"),
+                               ("category", "_category"), ("budget", "_price_band")):
             counts: dict[str, int] = {}
             present = 0
             for parent_asin in sample:
@@ -1237,9 +1410,26 @@ class CatalogRetriever:
             }
         return stats
 
+    # Price bands for the `budget` split, in dollars. Coarse on purpose: the
+    # question is "would asking about budget divide these candidates", not
+    # "what exactly does each cost".
+    _PRICE_BANDS = (15.0, 25.0, 40.0, 60.0, 100.0, 200.0)
+
     def _structured_value(self, record: ProductRecord, key: str) -> str:
         if key == "store":
             return record.store.strip().lower()[:40]
+        if key == "_category":
+            # Last comma-separated leaf: the most specific label the catalog
+            # gives, and the one a category question would actually resolve.
+            leaves = [part.strip().lower() for part in record.categories.split(",") if part.strip()]
+            return leaves[-1][:40] if leaves else ""
+        if key == "_price_band":
+            if record.price is None:
+                return ""
+            for index, ceiling in enumerate(self._PRICE_BANDS):
+                if record.price < ceiling:
+                    return f"band{index}"
+            return f"band{len(self._PRICE_BANDS)}"
         return record.facets.get(key, "")
 
     # --------------------------------------------------------------- build
@@ -1248,6 +1438,7 @@ class CatalogRetriever:
         self._last_bm25_ids: list[str] = []
         self._last_prefilter_removed = 0
         self._bm25_rank: dict[str, int] = {}
+        self._violation_cache: dict[str, int] = {}
         cursor = self.connection.cursor()
         cursor.execute(
             "CREATE VIRTUAL TABLE products USING fts5("
@@ -1282,6 +1473,33 @@ class CatalogRetriever:
             key=lambda parent_asin: self._quality_score(self.products[parent_asin]),
             reverse=True,
         )
+        self._build_idf()
+
+    def _build_idf(self) -> None:
+        """Document frequency per term, for rarity-weighted span evidence.
+
+        One pass over `all_terms`, which is already materialized per record.
+        A term appearing in every product carries no information about which
+        product the shopper means; a model number appearing in one carries
+        almost all of it. Flat span weighting spends the same score on both.
+        """
+        document_frequency: Counter[str] = Counter()
+        for record in self.products.values():
+            document_frequency.update(record.all_terms)
+        total = max(1, len(self.products))
+        self._idf = {
+            term: math.log(total / count)
+            for term, count in document_frequency.items()
+        }
+        # Normalizer: the rarest possible term scores log(N/1).
+        self._idf_ceiling = math.log(total) or 1.0
+
+    def term_rarity(self, terms: Iterable[str]) -> float:
+        """Mean IDF of a span, normalized to [0, 1]."""
+        values = [self._idf.get(term, self._idf_ceiling) for term in terms]
+        if not values:
+            return 0.0
+        return min(1.0, (sum(values) / len(values)) / self._idf_ceiling)
 
     def _iter_catalog(self) -> Iterable[dict]:
         if not self.catalog_path.exists():

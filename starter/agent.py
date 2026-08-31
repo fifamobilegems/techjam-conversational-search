@@ -6,7 +6,7 @@ from pathlib import Path
 from starter.debug import candidates_enabled, write_trace
 from starter.env import load_project_env
 from starter.extractor import HeuristicTurnExtractor
-from starter.retriever import CatalogRetriever
+from starter.retriever import CALIBRATED_WEIGHTS, WEIGHT_PRESETS, CatalogRetriever
 from state.llm_extractor import LLMTurnExtractor, is_enabled as llm_enabled
 from state.state_manager import StateManager
 
@@ -43,8 +43,18 @@ class Agent:
         # applied: realistic/esci +0.076 mean technical, official -0.030 mean
         # (concentrated on public200-official). setdefault keeps it fully
         # reversible — an explicit RERANK_WEIGHTS in the shell or .env wins.
-        os.environ.setdefault("RERANK_WEIGHTS", "calibrated")
-        self.retriever = CatalogRetriever(catalog_path)
+        # Passed explicitly rather than via os.environ.setdefault. Writing to
+        # the process environment made "unset means default" untrue for every
+        # later reader in the same process, so a bench sweeping presets scored
+        # both arms with the calibrated weights. An explicit RERANK_WEIGHTS in
+        # the shell or .env still wins, which is what keeps it reversible.
+        self.retriever = CatalogRetriever(
+            catalog_path,
+            weights=WEIGHT_PRESETS.get(
+                os.environ.get("RERANK_WEIGHTS", "calibrated").strip().lower(),
+                CALIBRATED_WEIGHTS,
+            ),
+        )
         self.manager = StateManager(hold_until_turn=hold_until_turn)
         # The rules extractor is authoritative. The LLM layer, when enabled,
         # only adds spans the rules missed -- scoring must not depend on it,
@@ -84,6 +94,36 @@ class Agent:
         self.manager.record_message(session_id, "user", user_message, turn)
         extracted = self.extractor.extract(user_message, current_state)
         self.manager.update(session_id, extracted, turn)
+
+        # Provisional retrieval runs BEFORE export, on every turn.
+        #
+        # Both dialogue policies score the live candidate set: the
+        # clarification formula needs per-attribute statistics over the
+        # products still in play, and the credibility test needs this turn's
+        # scores. Exporting first left `retrieval_diagnostics` empty forever,
+        # so both silently fell back to their legacy branches -- the agent
+        # asked "other" every turn and never emitted early. Retrieval is the
+        # same call either way; only whether the list is *exposed* is a
+        # decision, and that is made below.
+        live = self.manager.get(session_id)
+        ranked = self.retriever.retrieve_and_rerank(
+            self.manager.build_search_context(session_id),
+            dict(live.slots),
+            sorted(live.no_preference),
+            top_k=top_k,
+            raw_constraints=[dict(span) for span in live.raw_constraints],
+            user_profile=self._profiles.get(session_id),
+            # Earlier turns only: read before this turn's ranking is folded in
+            # below, so the fusion carries independent evidence.
+            prior_ranks=self.manager.prior_ranks(session_id),
+        )
+        self.manager.set_retrieval_diagnostics(
+            session_id, self.retriever.last_diagnostics
+        )
+        candidate_ids = self.retriever.last_diagnostics.get("candidate_ids") or []
+        if isinstance(candidate_ids, list):
+            self.manager.remember_ranking(session_id, [str(x) for x in candidate_ids])
+
         state = self.manager.export(session_id)
 
         ask_attribute = state["ask_attribute"]
@@ -93,24 +133,15 @@ class Agent:
         # Asking and retrieving are not alternatives: the contract carries
         # both fields and the evaluator reads both every turn. The only
         # decision is whether the ranking is worth a permanent rank record.
-        if state["should_emit_recommendations"]:
-            recommendations = [
-                {"parent_asin": parent_asin}
-                for parent_asin in self.retriever.retrieve_and_rerank(
-                    state["search_query"],
-                    state["constraints"],
-                    state["no_preference"],
-                    top_k=top_k,
-                    raw_constraints=state["raw_constraints"],
-                    user_profile=self._profiles.get(session_id),
-                )
-            ]
-        else:
-            recommendations = []
+        recommendations = (
+            [{"parent_asin": parent_asin} for parent_asin in ranked]
+            if state["should_emit_recommendations"]
+            else []
+        )
 
         message = self._message(ask_attribute, bool(recommendations))
         self.manager.record_message(session_id, "assistant", message, turn)
-        diagnostics = self.retriever.last_diagnostics if recommendations else {}
+        diagnostics = self.retriever.last_diagnostics
         trace_event = {
             "session_id": session_id,
             "run_index": self._runs.get(session_id, 0),

@@ -1,0 +1,28 @@
+{
+  "sample_count": 200,
+  "constraint_count": 800,
+  "yield_by_attribute": {
+    "other": 800,
+    "feature": 404,
+    "material": 302,
+    "color": 60,
+    "style": 19,
+    "size": 11,
+    "use_case": 4,
+    "brand": 0,
+    "budget": 0,
+    "category": 0
+  },
+  "clarification_priority": [
+    "other",
+    "feature",
+    "material",
+    "color",
+    "style",
+    "size",
+    "use_case",
+    "brand",
+    "budget",
+    "category"
+  ]
+}

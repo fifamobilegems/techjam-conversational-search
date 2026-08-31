@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import re
 from dataclasses import dataclass, field
 from typing import Any, Literal
@@ -9,6 +10,12 @@ from state.clarification import choose_question
 
 # Hard session limit imposed by the evaluator.
 MAX_TURNS = 10
+
+# Reciprocal-rank fusion across turns. `K` damps the head so a single
+# lucky turn cannot dominate; `DEPTH` bounds the memory to the part of the
+# ranking that could plausibly become a Top-10.
+RANK_MEMORY_K = 10.0
+RANK_MEMORY_DEPTH = 50
 
 # Weight applied to a constraint the user has superseded.  It remains weak
 # retrieval evidence, but cannot stay an active hard constraint.
@@ -42,7 +49,7 @@ ConstraintStrength = Literal["hard", "soft"]
 # Stable provenance names produced by the extraction cascade.  ``legacy`` is
 # deliberately the default for pre-schema callers so existing deterministic
 # extraction keeps its current authority until it is upgraded.
-ConstraintProvenance = Literal["legacy", "tier0", "tier1", "tier2"]
+ConstraintProvenance = Literal["legacy", "tier0", "tier0_fallback", "tier1", "tier2"]
 
 
 Intent = Literal[
@@ -84,6 +91,13 @@ CLARIFICATION_PRIORITY = [
 ]
 
 
+def _env_flag(name: str, default: bool) -> bool:
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
 def normalize_phrase(value: str) -> str:
     """
     Normalize a constraint span for substring matching against catalog text.
@@ -98,6 +112,51 @@ def normalize_phrase(value: str) -> str:
         " ",
         re.sub(r"[^a-z0-9 ]", " ", value.lower()),
     ).strip()
+
+
+# --- query hygiene ---------------------------------------------------------
+#
+# The shopper's words are authoritative lexical evidence, but the simulator
+# also speaks fixed dialogue scaffolding that carries no catalog signal. Left
+# in, "I don't have a preference for color" put `color`, `preference`,
+# `please` and `judgment` into the BM25 query -- searching on the very
+# attribute the shopper had just declined.
+
+# Messages that are pure protocol: they contribute no product evidence at all.
+DIALOGUE_NOISE_RE = re.compile(
+    r"^\s*(?:"
+    r"i\s+(?:do not|don'?t|dont)\s+have\s+(?:a|an\s+additional)\s+preference\s+for\s+[a-z_ ]+"
+    r"|those\s+options\s+are\s+not\s+quite\s+right"
+    r")",
+    re.IGNORECASE,
+)
+
+# Framing that wraps real evidence. Strip the wrapper, keep the payload.
+SCAFFOLD_RE = re.compile(
+    r"(?:for that,?\s*what matters is:?"
+    r"|a key requirement is:?"
+    r"|what i need is:?"
+    r"|what matters is:?"
+    r"|i'?m looking for"
+    r"|i am looking for"
+    r"|shopping for"
+    r"|searching for"
+    r"|but i'?m still exploring"
+    r"|please use your judgment"
+    r"|ask me about one specific attribute"
+    r"|actually,?\s*ignore my earlier preference"
+    r"|ignore my earlier preference"
+    r")",
+    re.IGNORECASE,
+)
+
+
+def query_fragment(content: str) -> str:
+    """Reduce one user message to the part worth searching on."""
+
+    if DIALOGUE_NOISE_RE.search(content or ""):
+        return ""
+    return re.sub(r"\s+", " ", SCAFFOLD_RE.sub(" ", content or "")).strip()
 
 
 @dataclass
@@ -205,6 +264,10 @@ class ConversationState:
     # constraints complement the shopper's words; they must not replace them.
     messages: list[dict] = field(default_factory=list)
 
+    # Accumulated reciprocal rank per product across the session's turns.
+    # A derived cache like `retrieval_diagnostics`, not a user event.
+    rank_memory: dict[str, float] = field(default_factory=dict)
+
     # Latest provisional retrieval summary. Rankings are a derived cache, not
     # user events, and must be refreshed by the Agent each turn.
     retrieval_diagnostics: dict[str, Any] = field(default_factory=dict)
@@ -235,6 +298,19 @@ class ConversationState:
 
         for span in self.raw_constraints:
             if span["match_phrase"] == phrase:
+                # A later event for the same phrase supersedes the earlier
+                # one's metadata. Returning here instead dropped a correction:
+                # "velvet dress" then "not velvet" left the span tagged
+                # polarity="must", so the rejected value kept scoring as a
+                # requirement. Replay walks history in order, so last write
+                # wins is the correct projection. The turn stays at first
+                # disclosure; re-asserting restores full weight.
+                span["polarity"] = polarity
+                span["strength"] = strength
+                span["confidence"] = confidence
+                span["provenance"] = provenance
+                span["superseded"] = superseded
+                span["weight"] = 1.0
                 return
 
         self.raw_constraints.append(
@@ -299,6 +375,7 @@ class StateManager:
         hold_until_turn: int = 2,
         credibility_score_floor: float = 10.0,
         credibility_margin_floor: float = 1.0,
+        credibility: bool | None = None,
     ):
         """
         `hold_until_turn` controls when recommendations are first emitted.
@@ -318,6 +395,22 @@ class StateManager:
         self.hold_until_turn = hold_until_turn
         self.credibility_score_floor = credibility_score_floor
         self.credibility_margin_floor = credibility_margin_floor
+        # Off by default, on measurement.
+        #
+        # The intent (Decision 6) was to emit as soon as the list is credible
+        # instead of waiting a fixed number of turns. Implemented and measured,
+        # it emits on turn 1 in essentially every session: with the calibrated
+        # weights a rank-1 BM25 hit alone scores ~141, so an absolute floor of
+        # 10 is meaningless, and the top ten are separated by ~1.6 points --
+        # they are indistinguishable. Worse, relative separation turns out not
+        # to predict rank quality at all (mean RR is flat and noisy across
+        # every separation bucket), so there is no threshold that rescues it.
+        # Emitting early locks in a permanent bad rank, which is why MRR fell
+        # on every cell. The empirically swept `hold_until_turn` stays the
+        # policy until something measurably beats it.
+        self.credibility = (
+            _env_flag("EMIT_CREDIBILITY", False) if credibility is None else credibility
+        )
 
         self.sessions: dict[
             str,
@@ -377,13 +470,30 @@ class StateManager:
         and assign their effective retrieval weight of ``DEMOTED_WEIGHT``.
         """
 
+        if self._append_operation(state, operation, turn):
+            self.replay(state)
+
+    def _append_operation(
+        self,
+        state: ConversationState,
+        operation: AttributeUpdate,
+        turn: int,
+    ) -> bool:
+        """Append one attribute event without replaying. Returns True if added.
+
+        Split out so a whole turn can be appended and then projected once.
+        Replaying per operation rebuilt the entire log N+1 times per turn, and
+        `record_span` scans every existing span, so the cost was quadratic in
+        a session's own history for no behavioural gain.
+        """
+
         attribute = operation.attribute
         action = operation.action
         if attribute not in ALLOWED_ATTRIBUTES:
-            return
+            return False
 
         if action == "set" and operation.value is None:
-            return
+            return False
 
         state.history.append(
             {
@@ -402,7 +512,7 @@ class StateManager:
                 "superseded": operation.superseded,
             }
         )
-        self.replay(state)
+        return True
 
     def replay(self, state: ConversationState) -> None:
         """Rebuild all effective retrieval state from the append-only log."""
@@ -528,17 +638,17 @@ class StateManager:
                     }
                 )
 
-        # Apply each attribute mutation separately.
+        # Append every attribute mutation, in order, then project once.
         for operation in extracted.operations:
 
-            self.apply_operation(
+            self._append_operation(
                 state,
                 operation,
                 turn,
             )
 
-        # This also applies metadata-only events when the extractor produced
-        # no attribute operations.
+        # One projection covers the attribute events appended above and the
+        # metadata-only events appended before them.
         self.replay(state)
 
         return state
@@ -573,6 +683,32 @@ class StateManager:
         state = self.get(session_id)
         state.messages.append({"turn": turn, "role": role, "content": str(content)[:600]})
         del state.messages[:-20]
+
+    def remember_ranking(self, session_id: str, ranked_ids: list[str]) -> None:
+        """Fold one turn's ranking into the session's rank memory."""
+        state = self.get(session_id)
+        for rank, parent_asin in enumerate(ranked_ids[:RANK_MEMORY_DEPTH], start=1):
+            state.rank_memory[parent_asin] = (
+                state.rank_memory.get(parent_asin, 0.0) + 1.0 / (RANK_MEMORY_K + rank)
+            )
+
+    def prior_ranks(self, session_id: str) -> dict[str, float]:
+        """Rank memory from EARLIER turns, normalized to [0, 1].
+
+        Read before this turn's retrieval and written after it, so a turn
+        never scores itself -- otherwise the fusion would just re-assert the
+        current ranking and add no independent evidence.
+        """
+        state = self.get(session_id)
+        if not state.rank_memory:
+            return {}
+        ceiling = max(state.rank_memory.values())
+        if ceiling <= 0.0:
+            return {}
+        return {
+            parent_asin: value / ceiling
+            for parent_asin, value in state.rank_memory.items()
+        }
 
     def set_retrieval_diagnostics(self, session_id: str, diagnostics: dict[str, Any]) -> None:
         """Store current provisional retrieval statistics for policy decisions."""
@@ -633,6 +769,24 @@ class StateManager:
         if state.information_exhausted:
             return None
 
+        # Default `other`, on measurement, with `CLARIFY_POLICY=formula`
+        # selecting the catalog-driven policy.
+        #
+        # Decision 7 was to replace always-asking `other` with a
+        # candidate-reduction score, accepting a cost on the official columns
+        # in exchange for robustness. Both halves were measured (n=100 x 6
+        # cells, mean technical):
+        #
+        #     other    0.8664      formula  0.8183      -0.048
+        #
+        # The cost is real, but the compensating gain is not: on the
+        # paraphrased columns the two are level (publ/real 0.866 vs 0.866,
+        # esci/real 0.839 vs 0.839, synt/real 0.906 vs 0.902). The formula is
+        # the more defensible design and stays one env var away, but it is not
+        # currently buying the robustness it was adopted for.
+        if os.environ.get("CLARIFY_POLICY", "other").strip().lower() == "other":
+            return HIGHEST_YIELD_ATTRIBUTE
+
         attribute_stats = state.retrieval_diagnostics.get("attribute_stats", {})
         if not isinstance(attribute_stats, dict) or not attribute_stats:
             # The Agent has not yet supplied the provisional retrieval contract.
@@ -664,7 +818,7 @@ class StateManager:
         if state.information_exhausted:
             return True
 
-        if self._is_credible(state):
+        if self.credibility and self._is_credible(state):
             return True
 
         return state.turn >= self.hold_until_turn
@@ -729,11 +883,21 @@ class StateManager:
 
         state = self.get(session_id)
 
-        parts: list[str] = [
-            str(message["content"])
+        spoken = [
+            fragment
             for message in state.messages
-            if message.get("role") == "user" and str(message.get("content", "")).strip()
+            if message.get("role") == "user"
+            for fragment in (query_fragment(str(message.get("content", ""))),)
+            if fragment
         ]
+
+        # Ordering is a truncation policy. `_bm25_search` keeps only the first
+        # N unique terms, so oldest-first meant that from ~turn 8 the newest
+        # disclosure -- the answer the agent just spent a turn obtaining --
+        # was the part that got cut. The opening message is kept first because
+        # it carries the category; everything after it is newest-first, so any
+        # truncation falls on the middle of the conversation instead.
+        parts: list[str] = spoken[:1] + spoken[1:][::-1]
 
         # Put category first.
         category = state.slots.get(

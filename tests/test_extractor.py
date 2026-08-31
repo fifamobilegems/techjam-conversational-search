@@ -29,14 +29,33 @@ class ExtractorTest(unittest.TestCase):
         self.assertIn(("color", "no_preference", None), operations_of(extracted))
         self.assertFalse(extracted.information_exhausted)
 
-    def test_no_additional_preference_signals_exhaustion_not_no_preference(self) -> None:
-        # "no ADDITIONAL preference" ends the questioning. It does not mean
-        # the field is irrelevant, so it must not blacklist the attribute.
+    def test_no_additional_preference_is_scoped_to_the_named_attribute(self) -> None:
+        # "no ADDITIONAL preference for <typed attribute>" ends questioning
+        # about THAT attribute, not the conversation.
+        #
+        # This test previously asserted global exhaustion here. That was only
+        # ever right because the policy asked `other` every turn, so the named
+        # attribute was always the universal question. Once the clarification
+        # formula started asking typed questions, latching global exhaustion on
+        # the first unanswerable attribute ended sessions after one question --
+        # measured at 0.852 -> 0.222 technical on public200/official.
         extracted = HeuristicTurnExtractor().extract(
             "I don't have an additional preference for material."
         )
-        self.assertTrue(extracted.information_exhausted)
-        self.assertNotIn(("material", "no_preference", None), operations_of(extracted))
+        self.assertFalse(extracted.information_exhausted)
+        self.assertIn(("material", "no_preference", None), operations_of(extracted))
+
+    def test_no_additional_preference_for_other_still_exhausts(self) -> None:
+        # `other` is answered without being classified, so having nothing more
+        # to say about it means having nothing more to say at all.
+        for message in (
+            "I don't have an additional preference for other.",
+            "I don't have an additional preference.",
+        ):
+            with self.subTest(message=message):
+                extracted = HeuristicTurnExtractor().extract(message)
+                self.assertTrue(extracted.information_exhausted)
+                self.assertEqual(operations_of(extracted), [])
 
     def test_override_demotes_instead_of_clearing(self) -> None:
         class FakeState:

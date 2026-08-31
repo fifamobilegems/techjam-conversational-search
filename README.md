@@ -138,6 +138,21 @@ evaluator/local_evaluator.py      public-set simulator and scorer
 - Organizer private release checklist: `organizer/private_release_checklist.md`
 - Judging day operations SOP: `organizer/JUDGING_DAY_SOP.md`
 
+## Dense Retrieval (present, deliberately unused)
+
+The `retrieval/` package and `scripts/build_embeddings.py` implement a local
+dense-retrieval channel. It is **not wired into the scored path** and does not
+contribute to any reported number.
+
+That is a measured decision, not an omission. Splitting every miss into "target
+never entered the candidate pool" versus "target was in the pool and out-ranked"
+gives 100% reachability and zero recall misses on both `synth800/realistic`
+(n=200) and the human-labelled `esci1000` gold rows (n=234) -- every remaining
+miss is a ranking miss. A dense channel buys candidates, and there are no
+candidates left to buy. The code is kept, tested and ready in case the gate
+flips; re-run `python3 -m scripts.calibrate_rerank` after any material change to
+the extractor or the query builder.
+
 ## Data Source
 
 The catalog and sessions are derived from Amazon Reviews 2023 by McAuley Lab, UCSD. See `DATA_ATTRIBUTION.md` before using or redistributing the data.
