@@ -27,3 +27,4 @@ tests/test_organizer_pipeline.py
 *.log
 debug/
 results_*.json
+catalog.jsonl.gz
