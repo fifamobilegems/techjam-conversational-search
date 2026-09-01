@@ -1,0 +1,118 @@
+<!doctype html>
+<meta charset="utf-8"><title>Code scroll — Beat 3b</title>
+<style>
+  :root{--amber:#D29922;--text:#E6EDF3;--muted:#6E7681;--rule:#21262D;--bg:#0D1117;
+        --kw:#FF7B72;--str:#A5D6FF;--com:#8B949E;--fn:#D2A8FF;}
+  html,body{margin:0;background:var(--bg);overflow:hidden}
+  #fit{width:100vw;height:100vh;display:grid;place-items:center;overflow:hidden}
+  #stage{position:relative;width:1920px;height:1080px;overflow:hidden;
+         transform:scale(var(--s,1));transform-origin:center;
+         -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 12%,#000 88%,transparent 100%)}
+  /* Starts with code already filling frame; scrolls to the end of the reel.
+     Trim or retime in the editor -- 18s is a readable pace at 26px. */
+  #reel{position:absolute;left:160px;width:1600px;top:60px;
+        animation:scroll 18s linear forwards}
+  @keyframes scroll{from{transform:translateY(0)}
+                    to{transform:translateY(calc(-100% + 960px))}}
+  section{margin-bottom:90px}
+  .lbl{font:600 24px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+       letter-spacing:.2em;color:var(--amber);padding-bottom:14px;
+       border-bottom:1px solid var(--rule);margin-bottom:28px}
+  .path{float:right;letter-spacing:0;font-weight:400;color:var(--muted);font-size:20px}
+  pre{margin:0;font:26px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      color:var(--text);white-space:pre-wrap}
+  .k{color:var(--kw)} .s{color:var(--str)} .c{color:var(--com)} .f{color:var(--fn)}
+</style>
+<div id="fit"><div id="stage"><div id="reel">
+<section><div class="lbl">01 EXTRACT<span class="path">starter/extractor.py</span></div><pre>    def extract(self, user_message: str, state: object | None = None) -&gt; ExtractedTurn:
+        &quot;&quot;&quot;Run the cascade and tag every operation with its origin.&quot;&quot;&quot;
+
+        turn = self._extract_tier0(user_message, state)
+        for operation in turn.operations:
+            # `_extract_tier0` already distinguishes template spans (&quot;tier0&quot;)
+            # from its terminal gazetteer sweep (&quot;tier0_fallback&quot;). Only
+            # untagged operations need the default.
+            if operation.provenance == &quot;legacy&quot;:
+                operation.provenance = &quot;tier0&quot;
+
+        tier0_count = len(turn.operations)
+        tier1_count = 0
+
+        # The lexicon scan runs unconditionally, but only *emits* when Tier 0
+        # came back empty. The matches themselves are needed either way: the
+        # polarity layer uses them as its false-friend guard, and a cue sitting
+        # inside &quot;no show socks&quot; must be recognised as part of a product name
+        # even on a turn where Tier 0 did all the work.
+        matches = self.tagger.scan(user_message)
+
+        if not turn.operations:
+            for operation in self._tier1_operations(matches):
+                turn.operations.append(operation)
+            tier1_count = len(turn.operations)
+
+        self.polarity.apply(user_message, turn.operations, matches)</pre></section>
+<section><div class="lbl">02 REMEMBER<span class="path">state/state_manager.py</span></div><pre>    def replay(self, state: ConversationState) -&gt; None:
+        &quot;&quot;&quot;Rebuild all effective retrieval state from the append-only log.&quot;&quot;&quot;
+
+        state.intent = &quot;unknown&quot;
+        state.slots = {}
+        state.no_preference = set()
+        state.raw_constraints = []
+        state.information_exhausted = False
+        state.scenario = &quot;unknown&quot;
+
+        for event in state.history:
+            event_type = event.get(&quot;event_type&quot;)
+            if event_type == &quot;intent&quot;:
+                state.intent = event[&quot;new_value&quot;]
+                continue
+            if event_type == &quot;scenario&quot;:
+                if state.scenario == &quot;unknown&quot;:
+                    state.scenario = event[&quot;value&quot;]
+                continue
+            if event_type == &quot;exhausted&quot;:
+                state.information_exhausted = True
+                continue
+            if event_type != &quot;attribute&quot;:
+                continue
+
+            attribute = event[&quot;attribute&quot;]
+            action = event[&quot;action&quot;]
+            value = event.get(&quot;value&quot;)</pre></section>
+<section><div class="lbl">03 RANK<span class="path">starter/retriever.py</span></div><pre>        self._violation_cache: dict[str, int] = {}
+        cursor = self.connection.cursor()
+        cursor.execute(
+            &quot;CREATE VIRTUAL TABLE products USING fts5(&quot;
+            &quot;parent_asin UNINDEXED, title, categories, features, details, store, description, price_text, &quot;
+            &quot;tokenize=&#x27;unicode61 remove_diacritics 2&#x27;)&quot;
+        )
+        batch: list[tuple[str, str, str, str, str, str, str, str]] = []
+        for product in self._iter_catalog():
+            record = self._record(product)
+            self.products[record.parent_asin] = record</pre></section>
+</div></div></div>
+<script>
+  // Line-oriented Python highlighting. Sequential regexes over already-tagged
+  // HTML produced malformed nesting, so each line is classified once: a comment
+  // line is coloured whole, anything else gets strings then keywords.
+  const KW=/\b(def|class|return|if|elif|else|for|in|not|and|or|None|True|False|self|import|from|while|with|as|try|except|raise|is)\b/g;
+  const esc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  document.querySelectorAll('pre').forEach(pre=>{
+    pre.innerHTML = pre.textContent.split('\n').map(line=>{
+      if(/^\s*#/.test(line)) return '<span class="c">'+esc(line)+'</span>';
+      // Strings are masked before the keyword pass: `class` is both a Python
+      // keyword and the HTML attribute, so highlighting it inside an already
+      // emitted <span class="s"> corrupts the tag.
+      const strs=[];
+      let h = esc(line)
+        .replace(/(&quot;){3}[\s\S]*?(&quot;){3}|&quot;[^\n]*?&quot;|&#39;[^\n]*?&#39;/g,
+                 m=>{strs.push(m); return '\u0000'+(strs.length-1)+'\u0000';})
+        .replace(KW, m=>'<span class="k">'+m+'</span>')
+        .replace(/\u0000(\d+)\u0000/g,(_,i)=>'<span class="s">'+strs[i]+'</span>');
+      return h.replace(/(<span class="k">def<\/span>\s+)(\w+)/g,'$1<span class="f">$2</span>');
+    }).join('\n');
+  });
+  const fit=()=>document.getElementById('stage').style
+      .setProperty('--s',Math.min(innerWidth/1920,innerHeight/1080));
+  fit(); addEventListener('resize',fit);
+</script>
