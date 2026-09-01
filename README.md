@@ -382,6 +382,7 @@ can only teach a model to imitate it.
 ## Repository layout
 
 ```text
+submission/                Recommended-layout façade (see submission/README.md)
 starter/agent.py           Agent API entry point — reset() / respond()
 starter/extractor.py       Tier 0 templates, Tier 1 gazetteer, polarity layer
 starter/retriever.py       BM25 candidates, prefilter, 4-stage reranker

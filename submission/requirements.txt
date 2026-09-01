@@ -1,0 +1,9 @@
+# Submission dependency manifest.
+#
+# Includes the repository manifests rather than duplicating them, so there is
+# one source of truth and the pinned versions cannot drift apart.
+#
+# The scored deterministic path needs NONE of these -- it is Python standard
+# library only. Install these to enable the optional Tier-2 LLM extractor and
+# the dense-retrieval package.
+-r ../requirements-llm.txt
