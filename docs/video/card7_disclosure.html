@@ -13,11 +13,9 @@
      regardless of how tall the numeral renders. */
   .val{font-size:88px;line-height:1;color:var(--text);font-weight:600;
        letter-spacing:-.01em;font-variant-numeric:tabular-nums}
-  /* Amber marks the claim, matching the accent used on the other cards. The
-     zero-cost pair carries the argument; the lower two are supporting stats
-     and stay white so the emphasis reads as deliberate. */
-  .val.claim{color:var(--amber)}
-  .lab{font-size:24px;line-height:1;color:var(--muted);letter-spacing:.2em;
+  /* Labels carry the deck accent; values stay white so the numerals read as
+     data and the accent runs along the caption line. */
+  .lab{font-size:24px;line-height:1;color:var(--amber);letter-spacing:.2em;
        font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 
   #footer{left:160px;top:860px;font-size:26px;color:var(--muted)}
@@ -34,15 +32,14 @@
 <script>
   // value, label, X, Y  — 2x2 at X 160/1000, Y 320/600.
   // The 0 and the $0.00 are the claim of this card; they stay at 88px.
-  // trailing flag: true marks it as the claim and renders it amber.
   const BLOCKS=[
-    ["0",      "TOKENS USED",      160, 320, true ],
-    ["$0.00",  "MODEL COST",      1000, 320, true ],
-    ["24ms",   "MEDIAN PER TURN",  160, 600, false],
-    ["198",    "TESTS PASSING",   1000, 600, false],
+    ["0",      "TOKENS USED",      160, 320],
+    ["$0.00",  "MODEL COST",      1000, 320],
+    ["24ms",   "MEDIAN PER TURN",  160, 600],
+    ["198",    "TESTS PASSING",   1000, 600],
   ];
   const host=document.getElementById('blocks');
-  BLOCKS.forEach(([v,l,x,y,claim],i)=>{
+  BLOCKS.forEach(([v,l,x,y],i)=>{
     const add=(cls,txt,dy)=>{
       const d=document.createElement('div');
       d.className='abs blk '+cls;
@@ -50,7 +47,7 @@
       d.style.animationDelay=(0.12+i*0.10)+'s';
       d.textContent=txt; host.appendChild(d);
     };
-    add('val'+(claim?' claim':''),v,0); add('lab',l,110);
+    add('val',v,0); add('lab',l,110);
   });
   const fit=()=>document.getElementById('stage').style
     .setProperty('--s',Math.min(innerWidth/1920,innerHeight/1080));
