@@ -1,0 +1,93 @@
+<!doctype html>
+<meta charset="utf-8"><title>Card 6 — Results matrix</title>
+<style>
+  :root{--text:#E6EDF3;--muted:#6E7681;--rule:#21262D;--bg:#0D1117;
+        --signal:#3FB950;--amber:#D29922;}
+  html,body{margin:0;background:var(--bg)}
+  #fit{width:100vw;height:100vh;display:grid;place-items:center;overflow:hidden}
+  #stage{position:relative;width:1920px;height:1080px;background:var(--bg);
+    font-family:"SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    transform:scale(var(--s,1));transform-origin:center}
+  .abs{position:absolute}
+  #title{left:160px;top:140px;font-size:40px;color:var(--text)}
+  #sub{left:160px;top:196px;font-size:24px;color:var(--muted)}
+
+  /* Column geometry, straight from the spec. Numerics right-aligned so the
+     decimal points stack and the eye can compare down a column. */
+  .c-name{left:160px;width:520px;text-align:left}
+  .c-hr  {left:760px;width:180px;text-align:right}
+  .c-mrr {left:980px;width:180px;text-align:right}
+  .c-mttc{left:1200px;width:180px;text-align:right}
+  .c-tech{left:1420px;width:340px;text-align:right}
+
+  .hdr{top:270px;font-size:22px;letter-spacing:.2em;color:var(--muted);
+       font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  #hdr-rule{left:160px;top:312px;width:1600px;height:1px;background:var(--rule)}
+
+  .row{font-size:26px;color:var(--text);
+       font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+  .row .ds{color:var(--text)}
+  .row .ph{color:var(--muted)}          /* phrasing reads as secondary          */
+  .signal, .signal .ds, .signal .ph{color:var(--signal)}  /* the claim row      */
+
+  #mean-rule{left:160px;top:788px;width:1600px;height:1px;background:var(--rule)}
+  .mean{top:800px;font-size:26px;color:var(--muted);
+        font-variant-numeric:tabular-nums}
+  #callout{left:160px;top:870px;font-size:30px;color:var(--amber)}
+
+  /* Fade only. A table that slides is unreadable for its first second. */
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .row{opacity:0;animation:fade .7s cubic-bezier(.16,1,.3,1) forwards}
+  :target ~ #fit .row{animation:none;opacity:1}
+</style>
+<span id="end"></span>
+<div id="fit"><div id="stage">
+
+  <div class="abs" id="title">1,400 scored sessions</div>
+  <div class="abs" id="sub">Three datasets, three phrasings, every cell.</div>
+
+  <div class="abs hdr c-name">SIMULATOR</div>
+  <div class="abs hdr c-hr">HR@10</div>
+  <div class="abs hdr c-mrr">MRR</div>
+  <div class="abs hdr c-mttc">MTTC</div>
+  <div class="abs hdr c-tech">TECHNICAL</div>
+  <div class="abs" id="hdr-rule"></div>
+
+  <div id="rows"></div>
+
+  <div class="abs" id="mean-rule"></div>
+  <div class="abs mean c-mttc" style="top:800px">mean</div>
+  <div class="abs mean c-tech" style="top:800px" id="mean-val">0.8775</div>
+
+  <div class="abs" id="callout">Spread across phrasings: 0.04. It used to be 0.83.</div>
+
+</div></div>
+<script>
+  // dataset, phrasing, HR@10, MRR, MTTC, TECHNICAL
+  const ROWS = [
+    ["public200","official",   "0.9500","0.6840","2.875","0.8427"],
+    ["public200","realistic",  "0.9950","0.7084","2.520","0.8796"],
+    ["synth800", "official",   "0.9700","0.7491","2.600","0.8777"],
+    ["synth800", "realistic",  "1.0000","0.7981","2.295","0.9135"],
+    ["esci1000", "official",   "0.9500","0.7909","2.785","0.8766"],
+    ["esci1000", "realistic",  "0.9950","0.7257","2.415","0.8869"],
+    ["esci1000", "real queries","0.9850","0.6818","2.575","0.8655"],
+  ];
+  const TOP=340, H=64, COLS=["c-hr","c-mrr","c-mttc","c-tech"];
+  const host=document.getElementById('rows');
+  ROWS.forEach((r,i)=>{
+    const y=TOP+i*H, last=i===ROWS.length-1;
+    const mk=(cls,html)=>{
+      const d=document.createElement('div');
+      d.className='abs row '+cls+(last?' signal':'');
+      d.style.top=y+'px';
+      d.style.animationDelay=(0.12+i*0.09)+'s';
+      d.innerHTML=html; host.appendChild(d);
+    };
+    mk('c-name', `<span class="ds">${r[0]}</span>&nbsp;&nbsp;<span class="ph">${r[1]}</span>`);
+    r.slice(2).forEach((v,j)=>mk(COLS[j], v));
+  });
+  const fit=()=>document.getElementById('stage').style
+    .setProperty('--s',Math.min(innerWidth/1920,innerHeight/1080));
+  fit(); addEventListener('resize',fit);
+</script>
