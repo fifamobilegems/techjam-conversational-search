@@ -47,10 +47,6 @@ generic chatbot advice:
 - Shoppers value a useful outcome more than chat. The agent stays
   action-oriented: ranked results and at most one decision-relevant follow-up.
 
-This is not a claim of a production TikTok Shop integration. It is a buildable
-retrieval-and-dialogue core, evaluated on the competition's Amazon-derived
-catalog, for the same conversational discovery problem.
-
 ## Design: three independently testable layers
 
 We decomposed the agent into **extraction**, **state management**, and
