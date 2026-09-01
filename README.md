@@ -1,4 +1,4 @@
-# Constraint Compass — Conversational E-Commerce Search Agent
+# Goated Agent — Conversational E-Commerce Search Agent
 
 **A stateful shopping-search agent for the way shoppers actually decide.** It
 helps a TikTok Shop-style shopper move from an incomplete request to a ranked
